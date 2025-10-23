@@ -30,7 +30,8 @@ def setup_logging(level: int = logging.INFO, log_dir: str = 'logs') -> None:
         handlers=[
             logging.StreamHandler(),
             logging.FileHandler(log_path, encoding="utf-8")
-        ]
+        ],
+        force=True
     )
 
     logging.info(f'Logging started. File: {log_path}')
