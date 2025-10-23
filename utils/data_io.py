@@ -1,4 +1,5 @@
 import os
+import requests
 import pandas as pd
 import matplotlib.pyplot as plt
 import dataframe_image as dfi
