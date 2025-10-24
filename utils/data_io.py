@@ -7,12 +7,21 @@ import dataframe_image as dfi
 def load_files(base_url, files, target_folder='data'):
     """Download Excel files from a given URL and save locally."""
     os.makedirs(target_folder, exist_ok=True)
+    saved_files = []
+    
     for f in files:
         url = base_url + f
+        
         r = requests.get(url)
         r.raise_for_status()
+        
         with open(os.path.join(target_folder, f), 'wb') as file:
             file.write(r.content)
+
+        logging.info(f'File "{f}" downloaded to {path}')
+        saved_files.append(path)
+
+    return saved_files
 
 
 def save_table_as_png(df, name, subfolder=None, folder='figures'):
