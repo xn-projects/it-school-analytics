@@ -6,7 +6,9 @@ import matplotlib.pyplot as plt
 import dataframe_image as dfi
 
 def load_files(base_url, files, target_folder='data'):
-    """Download Excel files from a given URL and save locally."""
+    """
+    Download Excel files from a given URL and save locally.
+    """
     os.makedirs(target_folder, exist_ok=True)
     saved_files = []
     
