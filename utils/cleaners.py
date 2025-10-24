@@ -1,6 +1,7 @@
+import re
+import logging
 import pandas as pd
 import numpy as np
-import re
 
 
 def clean_duplicates(df, name, subset=None, ignore_first_col=True, preview=True):
