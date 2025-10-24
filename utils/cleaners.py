@@ -4,33 +4,25 @@ import pandas as pd
 import numpy as np
 
 
-def clean_duplicates(df, name, subset=None, ignore_first_col=True, preview=True):
+def clean_duplicates(df, name, subset=None, ignore_first_col=True, preview=False):
     """
-    Remove duplicate rows from a DataFrame and optionally preview them.
+    Remove duplicate rows from a DataFrame and and log summary info.
     """
     if subset is None:
         subset = df.columns[1:] if ignore_first_col else df.columns
 
-    before = len(df)
+    before = df.shape[0]
     duplicates = df[df.duplicated(subset=subset, keep=False)]
+    after = df.drop_duplicates(subset=subset, keep='first').shape[0]
+    removed = before - after
 
-    if not duplicates.empty:
-        logging.info(f'{name}: {duplicates.shape[0]} duplicates found.')
-        if preview:
-            logging.info(f'Preview of duplicate rows in {name} (up to 5):')
-            logging.info('\n' + str(duplicates.head(5)))
-    else:
-        logging.info(f'{name}: No duplicate rows found.')
+    logging.info(f'{name}: {removed} duplicates removed ({after} rows left)')
 
-    df = df.drop_duplicates(subset=subset, keep='first')
-    after = len(df)
+    if preview and not duplicates.empty:
+        logging.debug(f"Preview of duplicate rows in {name}:\n{duplicates.head(5)}")
 
-    logging.info(
-        f'{name}: {before - after} duplicates removed '
-        f'({after} rows remaining). Checked columns: {list(subset)}'
-    )
-    return df
-    
+    return df.drop_duplicates(subset=subset, keep='first')
+   
 
 def first_non_null(x):
     """
