@@ -68,7 +68,10 @@ def first_non_null(x):
     Returns the first non-null (non-empty) value within each group
     """
     nonnull = x.dropna()
-    return nonnull.iloc[0] if not nonnull.empty else np.nan
+    result = nonnull.iloc[0] if not nonnull.empty else np.nan
+
+    logging.info(f'Extracted first non-null value (dropped {len(x) - len(nonnull)} NaN).')
+    return result
 
 
 def clean_amount(value):
@@ -82,7 +85,10 @@ def clean_amount(value):
     value = re.sub(r'[€$\s]+', '', str(value))
     value = value.replace('.', '').replace(',', '.')
 
-    return pd.to_numeric(value, errors='coerce')
+    result = pd.to_numeric(value, errors='coerce')
+    
+    logging.info('Amount values successfully cleaned and converted to numeric.')
+    return result
 
 
 def normalize_german_level(value):
