@@ -1,31 +1,9 @@
 import pandas as pd
-import numpy as np
 
 class DataSummary:
     """
     Utility class for generating a quick overview of a pandas DataFrame.
-
-    Attributes
-    ----------
-    name : str
-        A custom name for the dataset (used in printed output).
-    df : pandas.DataFrame
-        The DataFrame to be analyzed.
-
-    Methods
-    -------
-    summary_info():
-        Prints the dataset name and shape, and returns a summary DataFrame
-    containing:
-        - non_nulls: number of non-missing values per column
-        - nulls: number of missing values per column
-        - null_pct: percentage of missing values per column
-        - dtype: inferred pandas dtype for each column
-        - column_types: variable types (numeric, datetime, category, object, etc.)
-        - nunique: number of unique values per column
-        - sample_values: up to the first 5 unique values for quick inspection
     """
-
     def __init__(self, name, df):
         self.name = name
         self.df = df
