@@ -4,6 +4,21 @@ import pandas as pd
 import numpy as np
 
 
+def find_duplicates(df, name, subset=None, ignore_first_col=True):
+    """
+    Find and log duplicate rows in a DataFrame.
+    """
+    if subset is None:
+        subset = df.columns[1:] if ignore_first_col else df.columns
+
+    duplicates = df[df.duplicated(subset=subset, keep=False)]
+    count = len(duplicates)
+
+    logging.info(f'{name}: Found {count} duplicate rows (checked {len(subset)} columns).')
+    
+    return duplicates
+    
+
 def clean_duplicates(df, name, subset=None, ignore_first_col=True, preview=False):
     """
     Remove duplicate rows from a DataFrame and and log summary info.
@@ -61,7 +76,6 @@ def clean_amount(value):
     Convert amount strings to numeric values.
     Removes currency symbols, spaces and fixes decimal separators.
     """
-
     if pd.isna(value):
         return np.nan
 
@@ -75,7 +89,6 @@ def normalize_german_level(value):
     """
     Determines the German language level (A0–C2)
     """
-
     if value is None or (isinstance(value, float) and np.isnan(value)):
         return 'Unknown'
 
