@@ -12,11 +12,12 @@ def load_files(base_url, files, target_folder='data'):
     
     for f in files:
         url = base_url + f
+        path = os.path.join(target_folder, f)
         
         r = requests.get(url)
         r.raise_for_status()
         
-        with open(os.path.join(target_folder, f), 'wb') as file:
+        with open(path, "wb") as file:
             file.write(r.content)
 
         logging.info(f'File "{f}" downloaded to {path}')
