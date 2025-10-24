@@ -38,7 +38,7 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
 
     path = os.path.join(path_dir, f'{name}.png')
     dfi.export(df, path, table_conversion='matplotlib')
-    print(f'Table saved as {path}')
+    logging.info(f'Table saved as {path}')
 
 
 def save_plot(name, subfolder=None, folder='figures', dpi=300, tight=True):
@@ -54,7 +54,7 @@ def save_plot(name, subfolder=None, folder='figures', dpi=300, tight=True):
         plt.tight_layout()
     plt.savefig(path, dpi=dpi, bbox_inches='tight')
     plt.close()
-    print(f'Plot saved as {path}')
+    logging.info(f'Plot saved as {path}')
 
 
 def save_clean_data(df, name, folder='datasets'):
@@ -64,4 +64,4 @@ def save_clean_data(df, name, folder='datasets'):
     os.makedirs(folder, exist_ok=True)
     path = os.path.join(folder, f'{name}.xlsx')
     df.to_excel(path, index=False)
-    print(f'Cleaned dataset saved as {path}')
+    logging.info(f'Cleaned dataset saved as {path}')
