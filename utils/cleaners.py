@@ -22,7 +22,31 @@ def clean_duplicates(df, name, subset=None, ignore_first_col=True, preview=False
         logging.debug(f"Preview of duplicate rows in {name}:\n{duplicates.head(5)}")
 
     return df.drop_duplicates(subset=subset, keep='first')
-   
+
+
+def convert_columns(df, datetime_cols=None, category_cols=None):
+    """
+    Convert selected columns in DataFrame to datetime or category types.
+    Logs only successful conversions.
+    """
+    if datetime_cols:
+        for col in datetime_cols:
+            if col in df.columns:
+                df[col] = pd.to_datetime(df[col], errors='coerce', dayfirst=True)
+                logging.info(f'Converted "{col}" to datetime.')
+            else:
+                logging.warning(f'Column "{col}" not found — skipped.')
+
+    if category_cols:
+        for col in category_cols:
+            if col in df.columns:
+                df[col] = df[col].astype('category')
+                logging.info(f'Converted "{col}" to category.')
+            else:
+                logging.warning(f'Column "{col}" not found — skipped.')
+
+    return df
+    
 
 def first_non_null(x):
     """
