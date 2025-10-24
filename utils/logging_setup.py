@@ -35,7 +35,9 @@ def show_df(df, name: str = 'DataFrame', max_rows: int = 5) -> None:
 
 
 def log_section(title):
-    """Write a visible header section into logs for better structure."""
+    """
+    Write a visible header section into logs for better structure.
+    """
     logging.info('=' * 50)
     logging.info(f'{title}')
     logging.info('=' * 50)
