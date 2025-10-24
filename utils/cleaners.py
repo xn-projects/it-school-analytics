@@ -2,6 +2,35 @@ import pandas as pd
 import numpy as np
 import re
 
+
+def clean_duplicates(df, name, subset=None, ignore_first_col=True, preview=True):
+    """
+    Remove duplicate rows from a DataFrame and optionally preview them.
+    """
+    if subset is None:
+        subset = df.columns[1:] if ignore_first_col else df.columns
+
+    before = len(df)
+    duplicates = df[df.duplicated(subset=subset, keep=False)]
+
+    if not duplicates.empty:
+        logging.info(f'{name}: {duplicates.shape[0]} duplicates found.')
+        if preview:
+            logging.info(f'Preview of duplicate rows in {name} (up to 5):')
+            logging.info('\n' + str(duplicates.head(5)))
+    else:
+        logging.info(f'{name}: No duplicate rows found.')
+
+    df = df.drop_duplicates(subset=subset, keep='first')
+    after = len(df)
+
+    logging.info(
+        f'{name}: {before - after} duplicates removed '
+        f'({after} rows remaining). Checked columns: {list(subset)}'
+    )
+    return df
+    
+
 def first_non_null(x):
     """
     Returns the first non-null (non-empty) value within each group
@@ -13,17 +42,7 @@ def first_non_null(x):
 def clean_amount(value):
     """
     Convert amount strings to numeric values.
-
     Removes currency symbols, spaces and fixes decimal separators.
-
-    Parameters
-    ----------
-    value : str | float | int | None
-
-    Returns
-    -------
-    float | None
-        Numeric value or NaN.
     """
 
     if pd.isna(value):
