@@ -63,14 +63,18 @@ def convert_columns(df, datetime_cols=None, category_cols=None):
     return df
     
 
-def first_non_null(x):
+def frequent_non_null(x):
     """
-    Returns the first non-null (non-empty) value within each group
+    Returns the most frequent non-null (mode) value within each group.
     """
     nonnull = x.dropna()
-    result = nonnull.iloc[0] if not nonnull.empty else np.nan
+    if nonnull.empty:
+        return np.nan
 
-    logging.info(f'Extracted first non-null value (dropped {len(x) - len(nonnull)} NaN).')
+    mode_val = nonnull.mode()
+    result = mode_val.iloc[0] if not mode_val.empty else np.nan
+
+    logging.info(f'Extracted mode value for group (dropped {len(x) - len(nonnull)} NaN).')
     return result
 
 
