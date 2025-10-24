@@ -4,7 +4,7 @@
 
 - **Id:** Unique identifier for each call.  
 - **Call Start Time:** The exact time when the call started.  
-- **Call Owner Name:** The name of the person responsible for the call.<br>  
+- **Call Owner Name:** The name of the person responsible for the call.<br>
 Possible values:<br>
 `John Doe`, `Jane Smith`, `Alice Johnson`, `Bob Brown`, `Charlie Davis`, `Diana Evans`, `Ethan Harris`, `Fiona Jackson`, `George King`, `Hannah Lee`, `Ian Miller`, `Julia Nelson`, `Kevin Parker`, `Laura Quinn`, `Mason Roberts`, `Nina Scott`, `Oliver Taylor`, `Paula Underwood`, `Quincy Vincent`, `Rachel White`, `Sam Young`, `Tina Zhang`, `Ulysses Adams`, `Victor Barnes`, `Wendy Clark`, `Xander Dean`, `Yara Edwards`, `Zachary Foster`, `Amy Green`, `Ben Hall`, `Cara Iverson`, `Derek James`, `Eva Kent`.  
 - **CONTACTID:** The unique identifier of the contact associated with this call.  
@@ -14,8 +14,7 @@ Possible values:<br>
 - **Call Duration (in seconds):** Duration of the call measured in seconds.  
 - **Call Status:** Final status of the call.<br>
   Possible values:<br>
-  `Received`, `Attended Dialled`, `Unattended Dialled`, `Missed`, `Cancelled`, `Scheduled Unattended`, `Overdue`, `Scheduled Unattended Delay`,  
-  `Scheduled Attended`, `Scheduled Attended Delay`, `Scheduled`.  
+  `Received`, `Attended Dialled`, `Unattended Dialled`, `Missed`, `Cancelled`, `Scheduled Unattended`, `Overdue`, `Scheduled Unattended Delay`, `Scheduled Attended`, `Scheduled Attended Delay`, `Scheduled`.  
 - **Dialled Number:** The phone number that was dialed.  
 - **Outgoing Call Status:** Status of the outgoing call. <br> 
   Possible values:<br>
