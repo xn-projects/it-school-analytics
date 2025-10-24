@@ -10,7 +10,7 @@ Includes:
 
 from .logging_setup import setup_logging, show_df, log_section
 from .data_summary import DataSummary
-from .cleaners import clean_duplicates, first_non_null, clean_amount, normalize_german_level
+from .cleaners import clean_duplicates, convert_columns, first_non_null, clean_amount, normalize_german_level
 from .data_io import load_files, save_table_as_png, save_plot, save_clean_data
 
 __all__ = [
@@ -19,6 +19,7 @@ __all__ = [
     'log_section',
     'DataSummary',
     'clean_duplicates',
+    'convert_columns'
     'first_non_null',
     'clean_amount',
     'normalize_german_level',    
