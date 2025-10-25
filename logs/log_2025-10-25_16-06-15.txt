@@ -154,3 +154,15 @@ Length: 5, dtype: datetime64[ns]
 2025-10-25 16:07:50,805 — [INFO] Table saved as ./figures/deals_missing_id.png
 2025-10-25 16:07:50,925 — [INFO] Plot saved as notebooks/figures/outlier_detection_iqr_vs_3sigma.png
 2025-10-25 16:07:50,926 — [INFO] All cleaned datasets and visualizations successfully saved in 40.16 sec.
+2025-10-25 17:04:19,080 — [INFO] Plot saved as notebooks/figures/outlier_detection_iqr_vs_3sigma.png
+2025-10-25 17:04:19,081 — [INFO] Outlier stats — mean: 170.18, std: 406.80, outliers: 2717
+2025-10-25 17:04:19,087 — [INFO] 
+count    2717.0
+mean     1973.9
+std       575.7
+min      1391.0
+25%      1573.0
+50%      1815.0
+75%      2193.0
+max      7625.0
+Name: Call Duration (in seconds), dtype: Float64
