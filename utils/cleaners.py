@@ -90,7 +90,6 @@ def clean_amount(value):
 
     result = pd.to_numeric(value, errors='coerce')
     
-    logging.info('Amount values successfully cleaned and converted to numeric.')
     return result
 
 
