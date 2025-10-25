@@ -115,7 +115,7 @@ Ensured consistent and realistic payment values across all deals.
 
 ---
 
-## 🔟 Filling Payment Type
+## 1️⃣0️⃣ Filling Payment Type
 
 Payment type was intelligently inferred based on transaction amounts:
 
@@ -130,14 +130,14 @@ Unknown cases were labeled `"Unknown"`.
 
 ---
 
-## 11️⃣ Correcting Logical Inconsistencies in Dates
+## 1️⃣1️⃣ Correcting Logical Inconsistencies in Dates
 
 In some records, `Created Time` appeared **later** than `Closing Date`.  
 These timestamps were swapped to maintain logical chronological order.
 
 ---
 
-## 12️⃣ Filling Missing Closing Dates
+## 1️⃣2️⃣ Filling Missing Closing Dates
 
 For deals with:
 - Equal `Months of study` and `Course duration`
@@ -148,7 +148,7 @@ For deals with:
 
 ---
 
-## 13️⃣ Normalizing German Language Level
+## 1️⃣3️⃣ Normalizing German Language Level
 
 The column `Level of Deutsch` was normalized into a new, standardized field — **`German Level`**.
 
@@ -159,7 +159,7 @@ After verification, the original `Level of Deutsch` column was removed.
 
 ---
 
-## 14️⃣ Outlier Removal — Abnormal Created Time
+## 1️⃣4️⃣ Outlier Removal — Abnormal Created Time
 
 Anomalous records with an **earlier-than-expected creation date (October 2022)** were isolated and removed.
 
@@ -168,7 +168,7 @@ Anomalous records with an **earlier-than-expected creation date (October 2022)**
 
 ---
 
-## 15️⃣ Column Quality Transformation
+## 1️⃣5️⃣ Column Quality Transformation
 
 The `Quality` column contained inconsistent and multi-symbol formats.  
 It was standardized by:
@@ -179,7 +179,7 @@ It was standardized by:
 
 ---
 
-## 16️⃣ SLA Standardization and Conversion
+## 1️⃣6️⃣ SLA Standardization and Conversion
 
 The `SLA` column was unified to a single time format and converted into total seconds (`SLA Seconds`).
 
@@ -192,7 +192,7 @@ This standardization enables direct quantitative SLA analysis.
 
 ---
 
-## 17️⃣ Filling Remaining Missing Fields
+## 1️⃣7️⃣ Filling Remaining Missing Fields
 
 For categorical columns such as:
 `Lost Reason`, `Education Type`, `Deal Owner Name`, `Content`, `Term`, `Campaign`, `Contact Name`  
@@ -200,7 +200,7 @@ For categorical columns such as:
 
 ---
 
-## 18️⃣ Data Type Conversion
+## 1️⃣8️⃣ Data Type Conversion
 
 Converted to `Int64`:
 - `Course duration`
@@ -215,7 +215,7 @@ Optimized memory and grouping performance:
 
 ---
 
-## 19️⃣ Final Data Summary
+## 1️⃣9️⃣ Final Data Summary
 
 A new summary table confirmed the successful transformation and consistency of all fields.
 
@@ -223,7 +223,7 @@ A new summary table confirmed the successful transformation and consistency of a
 
 ---
 
-## 20️⃣ Results and Exports
+## 2️⃣0️⃣ Results and Exports
 
 | Step | Description |
 |------|--------------|
