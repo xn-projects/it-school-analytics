@@ -74,7 +74,6 @@ def frequent_non_null(x):
     mode_val = nonnull.mode()
     result = mode_val.iloc[0] if not mode_val.empty else np.nan
 
-    logging.info(f'Extracted mode value for group (dropped {len(x) - len(nonnull)} NaN).')
     return result
 
 
