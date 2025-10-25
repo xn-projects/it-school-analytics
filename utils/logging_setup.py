@@ -38,6 +38,7 @@ def show_df(df, name: str = 'DataFrame', max_rows: int = 5) -> None:
     display(HTML(f'<b>{name}</b> ({df.shape[0]} rows × {df.shape[1]} columns)'))
     display(df.head(max_rows))
 
+
 def log_section(title):
     """
     Write a visible header section into logs for better structure.
