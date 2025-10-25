@@ -8,7 +8,7 @@ This document describes the **data cleaning process** for the `Contacts` dataset
 
 The raw dataset was explored using the `DataSummary` class, which generated a detailed overview of column types, missing values, unique counts, and example entries.
 
-![Contacts Info Raw](notebooks/contacts_info_raw.png)
+![Contacts Info Raw](figures/contacts_info_raw.png)
 
 ---
 
