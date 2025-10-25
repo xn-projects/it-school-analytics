@@ -19,10 +19,10 @@ def load_files(base_url, files, target_folder='data/raw'):
         r = requests.get(url)
         r.raise_for_status()
         
-        with open(path, "wb") as file:
+        with open(path, 'wb') as file:
             file.write(r.content)
 
-        logging.info(f'File "{f}" downloaded to {path}')
+        logging.info(f'File {f} downloaded to {path}')
         saved_files.append(path)
 
     return saved_files
