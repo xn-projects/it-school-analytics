@@ -1,4 +1,4 @@
-# Deals Dataset Cleaning
+# Deals Dataset Cleaning (`01_data_cleaning.py`)
 
 This document provides a **comprehensive overview** of the data cleaning and transformation process for the `Deals` dataset.  
 
@@ -151,11 +151,18 @@ For deals with:
 ## 1️⃣3️⃣ Normalizing German Language Level
 
 The column `Level of Deutsch` was normalized into a new, standardized field — **`German Level`**.
-
+| German Level | Count |
+|--------------|--------|
+| A0 | 17 |
+| A1 | 22 |
+| A2 | 138 |
+| B1 | 697 |
+| B2 | 168 |
+| C1 | 26 |
+| C2 | 3 |
+| Unknown | 14958 |
 
 After verification, the original `Level of Deutsch` column was removed.
-
-✅ Consistent and analytical representation of German proficiency achieved.
 
 ---
 
