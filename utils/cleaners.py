@@ -1,5 +1,6 @@
 import re
 import logging
+import datetime
 import pandas as pd
 import numpy as np
 
@@ -245,3 +246,12 @@ def normalize_german_level(value):
         return 'C1'
 
     return 'Unknown'
+
+
+def convert_to_seconds(value):
+    if pd.isna(value):
+        return np.nan
+    elif isinstance(value, datetime.time):
+        return value.hour * 3600 + value.minute * 60 + value.second
+    elif isinstance(value, datetime.timedelta):
+        return value.total_seconds()
