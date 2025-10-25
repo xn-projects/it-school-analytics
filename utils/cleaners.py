@@ -80,18 +80,23 @@ def frequent_non_null(x):
 
 def clean_amount(value):
     """
-    Convert amount strings to numeric values.
-    Removes currency symbols, spaces and fixes decimal separators.
+    Convert amount strings to to float.
+    Removes currency symbols, spaces and normalizes decimal separators.
     """
     if pd.isna(value):
         return np.nan
+    if isinstance(value, (int, float)):
+        return float(value)
 
-    value = re.sub(r'[€$\s]+', '', str(value))
-    value = value.replace('.', '').replace(',', '.')
+    value = str(value).strip()
+    value = re.sub(r'[^\d,.-]', '', value)
 
-    result = pd.to_numeric(value, errors='coerce')
+    if ',' in value and '.' in value:
+        value = value.replace('.', '').replace(',', '.')
+    elif ',' in value:
+        value = value.replace(',', '.')
     
-    return result
+    return pd.to_numeric(value, errors='coerce')
 
 
 def normalize_german_level(value):
