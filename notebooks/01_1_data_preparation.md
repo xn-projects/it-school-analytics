@@ -1,4 +1,4 @@
-# Getting Started with Data Cleaning (`data_cleaning.ipynb`)
+# Getting Started with Data Cleaning (`data_cleaning.py`)
 
 This document describes the initial stage of data preparation and loading for further cleaning and analysis in the **IT School Analytics** project.
 
