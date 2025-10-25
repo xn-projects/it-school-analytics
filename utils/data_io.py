@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import dataframe_image as dfi
 
-def load_files(base_url, files, target_folder='data'):
+def load_files(base_url, files, target_folder='data/raw'):
     """
     Download Excel files from a given URL and save locally.
     """
@@ -57,9 +57,9 @@ def save_plot(name, subfolder=None, folder='figures', dpi=300, tight=True):
     logging.info(f'Plot saved as {path}')
 
 
-def save_clean_data(df, name, folder='datasets'):
+def save_clean_data(df, name, folder='data/clean'):
     """
-    Save a cleaned dataset as an Excel file (.xlsx) inside the datasets folder.
+    Save a cleaned dataset as an Excel file (.xlsx) inside the data/clean folder.
     """
     os.makedirs(folder, exist_ok=True)
     path = os.path.join(folder, f'{name}.xlsx')
