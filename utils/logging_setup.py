@@ -26,13 +26,17 @@ def setup_logging(level: int = logging.INFO, log_dir: str = 'logs') -> None:
 
 def show_df(df, name: str = 'DataFrame', max_rows: int = 5) -> None:
     """
-    Display a pandas DataFrame in Jupyter or Google Colab.
+    Display a pandas DataFrame or Series in Jupyter or Google Colab.
     Prints a short overview with the DataFrame name, shape, and a few sample rows.
     """
     from IPython.display import display, HTML
+    import pandas as pd
+
+    if isinstance(df, pd.Series):
+        df = df.to_frame(name=df.name or 'value')
+
     display(HTML(f'<b>{name}</b> ({df.shape[0]} rows × {df.shape[1]} columns)'))
     display(df.head(max_rows))
-
 
 def log_section(title):
     """
