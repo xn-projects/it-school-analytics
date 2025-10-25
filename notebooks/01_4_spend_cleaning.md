@@ -1,6 +1,6 @@
-# Spend Dataset Cleaning
+# Spend Dataset Cleaning (`01_data_cleaning.py`)
 
-This document provides a detailed explanation of the **data cleaning process** for the `Spend` dataset from `data_cleaning.py`.  
+This document provides a detailed explanation of the **data cleaning process** for the `Spend` dataset.  
 
 ---
 
