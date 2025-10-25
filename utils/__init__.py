@@ -23,7 +23,8 @@ __all__ = [
     'convert_columns'
     'frequent_non_null',
     'clean_amount',
-    'normalize_german_level',    
+    'normalize_german_level',
+    'convert_to_seconds',
     'load_files',
     'save_table_as_png',
     'save_plot',
