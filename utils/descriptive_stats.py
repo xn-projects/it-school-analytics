@@ -2,6 +2,7 @@ import logging
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from IPython.display import display, HTML
 from utils import cmap_cornflower, cmap_lime, cmap_tomato, cmap_yellow, cmap_lavender
 
