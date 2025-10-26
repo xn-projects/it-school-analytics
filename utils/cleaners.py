@@ -260,3 +260,23 @@ def convert_to_seconds(value):
         return value.hour * 3600 + value.minute * 60 + value.second
     elif isinstance(value, datetime.timedelta):
         return value.total_seconds()
+        
+
+def convert_to_minutes(value):
+    if pd.isna(value):
+        return np.nan
+    elif isinstance(value, datetime.time):
+        return (value.hour * 60) + value.minute + (value.second / 60)
+    elif isinstance(value, datetime.timedelta):
+        return value.total_seconds() / 60
+
+
+def convert_to_hours(value):
+    if pd.isna(value):
+        return np.nan
+    elif isinstance(value, datetime.time):
+      hour = round(value.hour + (value.minute / 60) + (value.second / 3600), 2)
+      return hour
+    elif isinstance(value, datetime.timedelta):
+      hour_new = round(value.total_seconds() / 3600, 2)
+      return hour_new
