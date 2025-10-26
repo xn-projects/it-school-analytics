@@ -30,3 +30,4 @@ cmap_lime = LinearSegmentedColormap.from_list('lime', get_my_palette(group='Lime
 cmap_tomato = LinearSegmentedColormap.from_list('tomato', get_my_palette(group='Tomato'))
 cmap_yellow = LinearSegmentedColormap.from_list('yellowsoft', get_my_palette(group='Yellowsoft'))
 cmap_lavender = LinearSegmentedColormap.from_list('lavender', get_my_palette(group='Lavender'))
+cmap_neutral = LinearSegmentedColormap.from_list('neutral', get_my_palette(group='Neutral'))
