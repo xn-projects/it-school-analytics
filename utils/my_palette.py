@@ -12,17 +12,14 @@ def get_my_palette(n=None, group=None, as_dict=False):
         'Lavender': ['#D9D6FF', '#BEB3FF', '#A18EFF', '#7E6BFF', '#5A4AE0'],
         'Neutral': ['#FFFFFF', '#FAFAFA', '#E6E6E6', '#CCCCCC', '#999999'],
     }
-
     if as_dict:
         return my_palette
-
     if group:
         if group not in my_palette:
             raise ValueError(f'Unknown group {group}. Choose from {list(my_palette.keys())}.')
         colors = my_palette[group]
     else:
         colors = [color for group_colors in my_palette.values() for color in group_colors]
-
     if n is not None:
         return colors[:n]
 
