@@ -5,7 +5,7 @@ from IPython.display import display, HTML
 from utils import cmap_cornflower, cmap_lime, cmap_tomato, cmap_yellow, cmap_lavender
 
 
-def describe_num(df, df_name='DataFrame', quantiles=True):
+def describe_num(df, df_name='DataFrame', quantiles=True, show=True):
     """
     Universal function for descriptive statistics of numeric columns in a DataFrame.
     """
@@ -46,16 +46,18 @@ def describe_num(df, df_name='DataFrame', quantiles=True):
         .background_gradient(cmap=cmap_lime, subset=['Min', 'Max', '5%', '25%', '50%', '75%', '95%'], axis=0)
         .set_properties(**{'text-align': 'center'})
         .format(precision=2)
-)
-
-    display(styled)
-    display(HTML('<br>'))
+    )
+    if show:
+        display(styled)
+        display(HTML('<br>'))
 
     logging.info(f'{df_name}: Processed {len(num_cols)} numeric columns successfully.')
     logging.info(f'Numeric columns: {", ".join(num_cols)}')
 
+    return stats_summary
 
-def describe_cat(df, df_name='DataFrame'):
+
+def describe_cat(df, df_name='DataFrame', show=True):
     """
     Descriptive statistics for categorical (object/string) columns.
     """
@@ -89,9 +91,11 @@ def describe_cat(df, df_name='DataFrame'):
         .set_properties(**{'text-align': 'center'})
         .format({'Percent': '{:.2f}%'})
     )
-
-    display(styled)
-    display(HTML('<br>'))
+    if show:
+        display(styled)
+        display(HTML('<br>'))
 
     logging.info(f'{df_name}: Processed {len(cat_cols)} categorical columns successfully.')
     logging.info(f'Categorical columns: {", ".join(cat_cols)}')
+
+    return summary
