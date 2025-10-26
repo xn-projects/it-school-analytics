@@ -223,9 +223,9 @@ axes[1].legend()
 
 fig.suptitle('Outlier Detection: IQR vs 3σ Rule', fontsize=14, fontweight='bold')
 plt.tight_layout()
-plt.show()
 
-save_plot('outlier_detection_iqr_vs_3sigma', subfolder='notebooks')
+save_plot('outlier_detection_iqr_vs_3sigma', subfolder='notebooks', fig=fig)
+plt.show()
 
 logging.info(
     f'Outlier stats — mean: {mean_duration:.2f}, std: {std_duration:.2f}, '
