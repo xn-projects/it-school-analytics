@@ -54,7 +54,7 @@ def describe_num(df, df_name='DataFrame', quantiles=True, show=True):
     logging.info(f'{df_name}: Processed {len(num_cols)} numeric columns successfully.')
     logging.info(f'Numeric columns: {", ".join(num_cols)}')
 
-    return stats_summary
+    return styled
 
 
 def describe_cat(df, df_name='DataFrame', show=True):
@@ -98,4 +98,4 @@ def describe_cat(df, df_name='DataFrame', show=True):
     logging.info(f'{df_name}: Processed {len(cat_cols)} categorical columns successfully.')
     logging.info(f'Categorical columns: {", ".join(cat_cols)}')
 
-    return summary
+    return styled
