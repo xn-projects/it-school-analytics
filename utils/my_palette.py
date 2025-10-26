@@ -1,4 +1,4 @@
-import plotly.graph_objects as go
+from matplotlib.colors import LinearSegmentedColormap
 
 def get_my_palette(n=None, group=None, as_dict=False):
     """
@@ -18,7 +18,7 @@ def get_my_palette(n=None, group=None, as_dict=False):
 
     if group:
         if group not in my_palette:
-            raise ValueError(f'Unknown group {group}. Choose from {list(palette.keys())}.)
+            raise ValueError(f'Unknown group {group}. Choose from {list(my_palette.keys())}.)
         colors = my_palette[group]
     else:
         colors = [color for group_colors in my_palette.values() for color in group_colors]
@@ -27,3 +27,9 @@ def get_my_palette(n=None, group=None, as_dict=False):
         return colors[:n]
 
     return colors
+
+cmap_cornflower = LinearSegmentedColormap.from_list('cornflower', get_my_palette(group='Cornflower'))
+cmap_lime = LinearSegmentedColormap.from_list('lime', get_my_palette(group='Lime Green'))
+cmap_tomato = LinearSegmentedColormap.from_list('tomato', get_my_palette(group='Tomato'))
+cmap_yellow = LinearSegmentedColormap.from_list('yellowsoft', get_my_palette(group='Yellowsoft'))
+cmap_lavender = LinearSegmentedColormap.from_list('lavender', get_my_palette(group='Lavender'))
