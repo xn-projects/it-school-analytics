@@ -37,9 +37,12 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
     os.makedirs(path_dir, exist_ok=True)
 
     path = os.path.join(path_dir, f'{name}.png')
-    dfi.export(df, path, table_conversion='matplotlib')
-    logging.info(f'Table saved as {path}')
-
+    try:
+        dfi.export(df, path, table_conversion='matplotlib', dpi=300)
+        logging.info(f'Table saved as {path}')
+    except Exception as e:
+        logging.error(f'Failed to save table {name}: {e}')
+        
 
 def save_plot(name, subfolder=None, folder='figures', dpi=300, tight=True, fig=None):
     """
