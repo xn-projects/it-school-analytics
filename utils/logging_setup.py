@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 
-def setup_logging(level: int = logging.INFO, log_dir: str = 'logs'):
+def setup_logging(level: int = logging.INFO, log_dir: str = 'logs') -> None:
     """
     Configure logging for the project. Create a folder and write logs to file + console.
     """
@@ -24,7 +24,7 @@ def setup_logging(level: int = logging.INFO, log_dir: str = 'logs'):
     logging.info(f'Logging started. File: {log_path}')
 
 
-def show_df(df, name: str = 'DataFrame', max_rows: int = 5):
+def show_df(df, name: str = 'DataFrame', max_rows: int = 5) -> None:
     """
     Display a pandas DataFrame or Series in Jupyter or Google Colab.
     """
