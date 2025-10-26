@@ -4,7 +4,6 @@ def get_my_palette(n=None, group=None, as_dict=False):
     """
     Returns color palette for the project.
     """
-
     my_palette = {
         'Cornflower': ['#dce8ff', '#bcd6fa', '#9ec0f7', '#7da7f2', '#6495ED'],
         'Lime Green': ['#EEFF99', '#E2FF66', '#C8FF00', '#9AC400', '#7EA600'],
