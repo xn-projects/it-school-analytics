@@ -41,7 +41,7 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
     logging.info(f'Table saved as {path}')
 
 
-def save_plot(name, subfolder=None, folder='figures', dpi=300, tight=True, , fig=None)):
+def save_plot(name, subfolder=None, folder='figures', dpi=300, tight=True, , fig=None):
     """
     Save the current matplotlib plot as a PNG.
     """
