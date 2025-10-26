@@ -93,5 +93,5 @@ def describe_cat(df, df_name='DataFrame'):
     display(styled)
     display(HTML('<br>'))
 
-    logging.info(f'\n{df_name}: Processed {len(cat_cols)} categorical columns successfully.')
+    logging.info(f'{df_name}: Processed {len(cat_cols)} categorical columns successfully.')
     logging.info(f'Categorical columns: {", ".join(cat_cols)}')
