@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 
-def setup_logging(level: int = logging.INFO, log_dir: str = 'logs') -> None:
+def setup_logging(level: int = logging.INFO, log_dir: str = 'logs'):
     """
     Configure logging for the project. Create a folder and write logs to file + console.
     """
@@ -24,10 +24,9 @@ def setup_logging(level: int = logging.INFO, log_dir: str = 'logs') -> None:
     logging.info(f'Logging started. File: {log_path}')
 
 
-def show_df(df, name: str = 'DataFrame', max_rows: int = 5) -> None:
+def show_df(df, name: str = 'DataFrame', max_rows: int = 5):
     """
     Display a pandas DataFrame or Series in Jupyter or Google Colab.
-    Prints a short overview with the DataFrame name, shape, and a few sample rows.
     """
     from IPython.display import display, HTML
     import pandas as pd
