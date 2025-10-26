@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from IPython.display import display, HTML
-from utils import cmap_cornflower, cmap_lime, cmap_tomato, cmap_yellow, cmap_lavender
+from utils import get_my_palette, cmap_cornflower, cmap_lime, cmap_tomato, cmap_yellow, cmap_lavender
 
 
 def describe_num(df, df_name='DataFrame', quantiles=True, show=True):
