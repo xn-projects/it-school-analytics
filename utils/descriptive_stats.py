@@ -189,21 +189,19 @@ def plot_change(compare, orig_label='Original', trans_label='Log', name='relativ
     return delta.round(2)
 
 
-def summarize_category(df, column, top_n=None):
+def summarize_category(df, column):
     """
     Returns a table with count, percentage, and cumulative percentage for categorical fields
     """
     if column not in df.columns:
-        logging.warning(f"Column '{column}' not found in DataFrame")
+        logging.warning(f'Column {column} not found in DataFrame')
         return pd.DataFrame()
-
     summary = (
         df[column]
         .value_counts(dropna=False)
         .reset_index()
         .rename(columns={'index': column, column: 'Count'})
     )
-
     if top_n is not None:
         summary = summary.head(top_n)
 
