@@ -103,62 +103,6 @@ def describe_cat(df, df_name='DataFrame', show=True):
     return styled
 
 
-def check_skewness(df, col_original, col_log, df_name='DataFrame'):
-    """
-    Compare skewness before and after log transformation.
-    """
-    if col_original not in df.columns or col_log not in df.columns:
-        logging.warning(f'{df_name}: Columns not found ({col_original}, {col_log})')
-        return None
-
-    skew_before = df[col_original].skew()
-    skew_after = df[col_log].skew()
-
-    logging.info(f'Skewness (before log transform): {skew_before:.2f}')
-    logging.info(f'Skewness (after log transform): {skew_after:.2f}')
-
-    if abs(skew_before) > 2 and abs(skew_after) < 1:
-        message = 'Log transformation successfully normalized the distribution.'
-        logging.info(message)
-    elif abs(skew_after) < abs(skew_before):
-        message = 'Log transformation reduced skewness, but distribution is still slightly asymmetric.'
-        logging.info(message)
-    else:
-        message = 'Log transformation did not significantly improve skewness.'
-        logging.warning(message)
-
-    summary = pd.DataFrame({
-        'Skewness Before': [round(skew_before, 2)],
-        'Skewness After': [round(skew_after, 2)],
-    })
-    summary.index = [df_name]
-
-    return summary
-
-
-def check_kurtosis(df, col_original, col_log, df_name='DataFrame'):
-    """
-    Compare kurtosis before and after log transformation.
-    """
-    if col_original not in df.columns or col_log not in df.columns:
-        logging.warning(f'{df_name}: Columns not found ({col_original}, {col_log})')
-        return None
-
-    kurt_before = df[col_original].kurt()
-    kurt_after = df[col_log].kurt()
-
-    logging.info(f'Kurtosis (before log transform): {kurt_before:.2f}')
-    logging.info(f'Kurtosis (after log transform): {kurt_after:.2f}')
-
-    summary = pd.DataFrame({
-        'Kurtosis Before': [round(kurt_before, 2)],
-        'Kurtosis After': [round(kurt_after, 2)],
-    })
-    summary.index = [df_name]
-
-    return summary
-
-
 def compare_distributions(df, col_original, col_transformed, df_name='DataFrame'):
     """
     Compare descriptive statistics before and after transformation.
