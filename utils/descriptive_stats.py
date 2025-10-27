@@ -199,11 +199,10 @@ def summarize_category(df, column):
     summary = (
         df[column]
         .value_counts(dropna=False)
-        .reset_index()
-        .rename(columns={'index': column, column: 'Count'})
+        .rename_axis('Category')
+        .reset_index(name='Count')
+        .rename(columns={'Category': col})
     )
-    if top_n is not None:
-        summary = summary.head(top_n)
 
     total = summary['Count'].sum()
     summary['Percent'] = (summary['Count'] / total * 100).round(2)
