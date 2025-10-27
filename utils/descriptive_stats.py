@@ -201,7 +201,7 @@ def summarize_category(df, column):
         .value_counts(dropna=False)
         .rename_axis('Category')
         .reset_index(name='Count')
-        .rename(columns={'Category': col})
+        .rename(columns={'Category': column})
     )
 
     total = summary['Count'].sum()
