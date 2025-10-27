@@ -39,13 +39,13 @@ def describe_num(df, df_name='DataFrame', quantiles=True, show=True):
         'Skewness': df[num_cols].skew(),
     })
 
-    stats_summary = stats_summary.applymap(lambda x: round(x, 2) if pd.notnull(x) else x)
-
     styled = (
     stats_summary.style
-        .background_gradient(cmap=cmap_cornflower, subset=['Count','Mean', 'Median', 'Mode' ], axis=0)
-        .background_gradient(cmap=cmap_yellow, subset=['Range','IQR', 'Std Dev', 'CoeffVar (%)','Skewness'], axis=0)
-        .background_gradient(cmap=cmap_lime, subset=['Min', 'Max', '5%', '25%', '50%', '75%', '95%'], axis=0)
+        .background_gradient(cmap=cmap_tomato, subset=['Count'], axis=1)
+        .background_gradient(cmap=cmap_cornflower, subset=['Mean', 'Median', 'Mode'], axis=1)
+        .background_gradient(cmap=cmap_yellow, subset=['Range', 'IQR', 'Std Dev'], axis=1)
+        .background_gradient(cmap=cmap_yellow, subset=[ 'CoeffVar (%)', 'Skewness'], axis=0)
+        .background_gradient(cmap=cmap_lime, subset=['Min', 'Max', '5%', '25%', '50%', '75%', '95%'], axis=1)
         .set_properties(**{'text-align': 'center'})
         .format(precision=2)
     )
