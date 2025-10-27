@@ -30,7 +30,7 @@ from utils import (
     load_files,
     save_table_as_png,
     save_plot,
-    save_clean_data,
+    save_clean_data
 )
 
 import logging
@@ -225,6 +225,7 @@ fig.suptitle('Outlier Detection: IQR vs 3σ Rule', fontsize=14, fontweight='bold
 plt.tight_layout()
 
 save_plot('outlier_detection_iqr_vs_3sigma', subfolder='notebooks', fig=fig)
+
 plt.show()
 
 logging.info(
@@ -326,6 +327,18 @@ for col in cols:
         clean_spend[col] = clean_spend[col].fillna('Unknown')
 logging.info(f'Filled missing values in {cols} with Unknown.')
 
+"""#### Cleaning and correcting amount values in spend"""
+
+cols_to_clean = ['Spend']
+
+for col in cols_to_clean:
+    before_clean = clean_spend[col].copy()
+
+    clean_spend[col] = clean_spend[col].apply(clean_amount)
+
+    changed = (before_clean != clean_spend[col]).sum()
+    logging.info(f'Cleaned and converted {col} — {changed} values changed.')
+
 """####  Convert to category types"""
 
 clean_spend = convert_columns(clean_spend, category_cols=['Source'])
@@ -346,7 +359,7 @@ summary_deals_info = deals_info.summary_info()
 
 display(summary_deals_info)
 
-"""#### Detecting duplicate contact names and filling missing Cities, Level of Deutsch and Deal Owner Name"""
+"""#### Detecting duplicate Contact names and filling missing Cities, Level of Deutsch and Deal Owner Name"""
 
 cols_to_fill = ['City', 'Level of Deutsch', 'Deal Owner Name']
 
@@ -449,13 +462,10 @@ important_cols = [
 ]
 
 empty_cols = clean_deals[important_cols].isna().all(axis=1)
-
 duplicates_cols = clean_deals['Contact Name'].duplicated(keep=False)
 
 before = len(clean_deals)
-
 clean_deals = clean_deals[~(duplicates_cols & empty_cols)].copy()
-
 after = len(clean_deals)
 removed = before - after
 
@@ -492,7 +502,6 @@ cols_to_clean = ['Initial Amount Paid', 'Offer Total Amount']
 
 for col in cols_to_clean:
     before_clean = clean_deals[col].copy()
-
     clean_deals[col] = clean_deals[col].apply(clean_amount)
 
     changed = (before_clean != clean_deals[col]).sum()
@@ -678,8 +687,13 @@ cols = [
 ]
 
 clean_deals[cols] = clean_deals[cols].fillna('Unknown')
-
 logging.info(f'Filled missing values with Unknown.')
+
+clean_deals['City'] = (
+    clean_deals['City']
+    .replace(['-', '', ' ', 'nan', 'NaN', 'None'], 'Unknown')
+)
+logging.info('Filled missing and "-" values in City column with Unknown.')
 
 """#### Convert columns to int and category types"""
 
