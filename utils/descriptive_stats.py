@@ -187,3 +187,20 @@ def plot_change(compare, orig_label='Original', trans_label='Log', name='relativ
 
     logging.info(f'Plot {name}.png saved successfully.')
     return delta.round(2)
+
+
+def summarize_category(df, column):
+    summary = (
+        df[column]
+        .value_counts(dropna=False)
+        .reset_index()
+        .rename(columns={'index': column, column: 'Count'})
+    )
+
+    summary['Count'] = pd.to_numeric(summary['Count'], errors='coerce').fillna(0).astype(int)
+
+    total = summary['Count'].sum()
+    summary['Percent'] = (summary['Count'] / total * 100).round(2)
+    summary['Cumulative %'] = summary['Percent'].cumsum().round(2)
+
+    return summary
