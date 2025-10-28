@@ -32,7 +32,7 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
     """
     Save a DataFrame as a PNG image using dataframe_image with matplotlib backend.
     """
-    df_exp = df.reset_index(drop=True)
+    df_exp = df.copy()
 
     if '__pad__' not in df_exp.columns:
         df_exp.insert(0, '__pad__', ' ')
