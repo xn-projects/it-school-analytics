@@ -44,22 +44,20 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
     path = os.path.join(path_dir, f'{name}.png')
 
     styled = (
-        df.style
-        .set_properties(
-            subset=df.columns,
-            **{
-                'white-space': 'pre-wrap',
-                'text-align': 'left',
-                'max-width': '280px'}))
+        df.style.set_properties(**{
+            'white-space': 'pre-wrap',
+            'text-align': 'left',
+            'font-size': '8pt'
+        })
+        .set_table_styles([
+            {'selector': 'th.col_heading', 'props': [('padding-left', '14px')]},
+            {'selector': 'td', 'props': [('padding-left', '0px')]}
+        ])
+    )
 
     try:
         plt.subplots_adjust(left=0.25, right=0.99)
-        dfi.export(
-            styled,
-            path,
-            table_conversion='matplotlib',
-            dpi=300
-        )
+        dfi.export(styled, path, table_conversion='matplotlib', dpi=300)
         plt.close('all')
         logging.info(f'Table saved as {path}')
     except Exception as e:
