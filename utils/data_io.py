@@ -4,6 +4,8 @@ import requests
 import pandas as pd
 import matplotlib.pyplot as plt
 import dataframe_image as dfi
+import textwrap
+
 
 def load_files(base_url, files, target_folder='data/raw'):
     """
@@ -32,11 +34,20 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
     """
     Save a DataFrame as a PNG image using dataframe_image with matplotlib backend.
     """ 
+    df = df.copy()
+
+    df.insert(
+        0,
+        '',
+        ['\n'.join(textwrap.wrap(str(i), 18)) if isinstance(i, str) else i
+         for i in df.index])
+    df.reset_index(drop=True, inplace=True)
+
     rows, cols = df.shape
     width = max(8, cols * 1.5)
     height = max(2, rows * 0.4)
     plt.rcParams['figure.figsize'] = (width, height)
-    plt.rcParams['figure.dpi'] = 200
+    plt.rcParams['figure.dpi'] = 300
 
     base_dir = subfolder if subfolder else '.'
     path_dir = os.path.join(base_dir, folder)
@@ -45,16 +56,18 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
 
     styled = (
         df.style
-        .format_index(lambda v: '\u00A0\u00A0' + str(v), axis=0)
         .set_properties(**{
             'white-space': 'pre-wrap',
             'text-align': 'left',
-            'font-size': '8pt'})
-        .set_table_styles([
-            {'selector': '.row_heading', 'props': [('padding-left', '14px')]}]))
+            'font-size': '7pt'}))
 
     try:
-        dfi.export(styled, path, table_conversion='matplotlib', dpi=300)
+        dfi.export(
+            styled,
+            path,
+            table_conversion='matplotlib',
+            dpi=300,
+            max_rows=-1)
         plt.close('all')
         logging.info(f'Table saved as {path}')
     except Exception as e:
