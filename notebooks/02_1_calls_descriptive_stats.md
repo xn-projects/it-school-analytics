@@ -1,4 +1,4 @@
-# Descriptive Statistics — Calls Data (02_descriptive_statistics.py)
+# Descriptive Statistics — Calls Data (`02_descriptive_statistics.py`)
 
 This analysis explores call data, focusing on **numeric** and **categorical** features.  
 The goal is to understand the distribution of call durations, evaluate the impact of logarithmic transformation, and examine ownership patterns among call handlers.
