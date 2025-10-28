@@ -33,7 +33,10 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
     Save a DataFrame as a PNG image using dataframe_image with matplotlib backend.
     """
     df_exp = df.reset_index(drop=True)
-    
+
+    if '__pad__' not in df_exp.columns:
+        df_exp.insert(0, '__pad__', ' ')
+        
     rows, cols = df_exp.shape
     width = max(8, cols * 1.2)
     height = max(2, rows * 0.4)
@@ -54,10 +57,7 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
             subset=df_exp.columns,
             **{
                 'white-space': 'pre-wrap',
-                'text-align': 'left',
-            }
-        )
-    )
+                'text-align': 'left'}))
 
     try:
         dfi.export(
