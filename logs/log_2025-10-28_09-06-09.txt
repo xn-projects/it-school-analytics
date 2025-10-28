@@ -1,0 +1,167 @@
+2025-10-28 09:06:09,991 — [INFO] Logging started. File: logs/log_2025-10-28_09-06-09.txt
+2025-10-28 09:06:09,994 — [INFO] Repository successfully loaded and ready
+2025-10-28 09:06:10,003 — [INFO] ==================================================
+2025-10-28 09:06:10,006 — [INFO] === Downloading source Excel files ===
+2025-10-28 09:06:10,009 — [INFO] ==================================================
+2025-10-28 09:06:10,250 — [INFO] File calls.xlsx downloaded to data/raw/calls.xlsx
+2025-10-28 09:06:10,401 — [INFO] File contacts.xlsx downloaded to data/raw/contacts.xlsx
+2025-10-28 09:06:10,579 — [INFO] File deals.xlsx downloaded to data/raw/deals.xlsx
+2025-10-28 09:06:10,725 — [INFO] File spend.xlsx downloaded to data/raw/spend.xlsx
+2025-10-28 09:06:10,727 — [INFO] Downloaded 4 files successfully.
+2025-10-28 09:06:10,737 — [INFO] ==================================================
+2025-10-28 09:06:10,738 — [INFO] === Reading Excel files ===
+2025-10-28 09:06:10,739 — [INFO] ==================================================
+2025-10-28 09:06:41,848 — [INFO] All files successfully loaded into DataFrames.
+2025-10-28 09:06:41,856 — [INFO] ==================================================
+2025-10-28 09:06:41,858 — [INFO] === Analyzing Calls dataset ===
+2025-10-28 09:06:41,860 — [INFO] ==================================================
+2025-10-28 09:06:42,461 — [INFO] Dropped irrelevant columns: Dialled Number, Tag.
+2025-10-28 09:06:42,587 — [INFO] calls_raw: Found 6382 duplicate rows (checked 8 columns).
+2025-10-28 09:06:42,832 — [INFO] calls_clean: 3257 duplicates removed (92617 rows left)
+2025-10-28 09:06:43,483 — [INFO] Converted Call Start Time to datetime.
+2025-10-28 09:06:43,517 — [INFO] Missing CONTACTID rows: 3802
+2025-10-28 09:06:43,645 — [INFO] Filled missing Call Duration values with 0 and added Is_duration_missing flag.
+2025-10-28 09:06:43,679 — [INFO] Missing Outgoing Call Status: 8813 rows
+2025-10-28 09:06:43,711 — [INFO] Filled missing Outgoing Call Status with Unknown.
+2025-10-28 09:06:43,729 — [INFO] Filled missing Scheduled in CRM with 0.0 and added boolean flag Is_schedule_missing.
+2025-10-28 09:06:47,915 — [INFO] Plot saved as notebooks/figures/outlier_detection_iqr_vs_3sigma.png
+2025-10-28 09:06:48,983 — [INFO] Outlier stats — mean: 170.18, std: 406.80, outliers: 2717
+2025-10-28 09:06:48,995 — [INFO] 
+count    2717.0
+mean     1973.9
+std       575.7
+min      1391.0
+25%      1573.0
+50%      1815.0
+75%      2193.0
+max      7625.0
+Name: Call Duration (in seconds), dtype: Float64
+2025-10-28 09:06:49,018 — [INFO] Converted Call Type to category.
+2025-10-28 09:06:49,033 — [INFO] Converted Call Status to category.
+2025-10-28 09:06:49,044 — [INFO] Converted Outgoing Call Status to category.
+2025-10-28 09:06:49,264 — [INFO] Calls cleaning completed in 7.40 sec.
+2025-10-28 09:06:49,274 — [INFO] ==================================================
+2025-10-28 09:06:49,279 — [INFO] === Analyzing Contacts dataset ===
+2025-10-28 09:06:49,281 — [INFO] ==================================================
+2025-10-28 09:06:49,383 — [INFO] contacts_raw: Found 71 duplicate rows (checked 3 columns).
+2025-10-28 09:06:49,421 — [INFO] contacts_clean: 38 duplicates removed (18510 rows left)
+2025-10-28 09:06:49,448 — [INFO] Rows with True/False in Contact Owner Name: 1
+2025-10-28 09:06:49,476 — [INFO] Removed invalid True/False Contact Owner Name values.
+2025-10-28 09:06:49,544 — [INFO] Converted Created Time to datetime.
+2025-10-28 09:06:49,612 — [INFO] Converted Modified Time to datetime.
+2025-10-28 09:06:49,620 — [INFO] No rows where Created Time > Modified Time.
+2025-10-28 09:06:49,676 — [INFO] Contacts cleaning completed in 0.39 sec.
+2025-10-28 09:06:49,683 — [INFO] ==================================================
+2025-10-28 09:06:49,687 — [INFO] === Analyzing Spend dataset ===
+2025-10-28 09:06:49,688 — [INFO] ==================================================
+2025-10-28 09:06:49,764 — [INFO] spend_raw: Found 1527 duplicate rows (checked 8 columns).
+2025-10-28 09:06:49,797 — [INFO] spend_clean: 917 duplicates removed (19862 rows left)
+2025-10-28 09:06:49,828 — [INFO] Found 262 test rows.
+2025-10-28 09:06:49,840 — [INFO] Rows after removing test data: 19600
+2025-10-28 09:06:49,853 — [INFO] Rows where 3 columns have 0: 3369
+2025-10-28 09:06:49,867 — [INFO] Rows after removing zero rows: 16231
+2025-10-28 09:06:49,885 — [INFO] Filled missing values in ['Campaign', 'AdGroup', 'Ad'] with Unknown.
+2025-10-28 09:06:49,912 — [INFO] Cleaned and converted Spend — 0 values changed.
+2025-10-28 09:06:49,920 — [INFO] Converted Source to category.
+2025-10-28 09:06:49,977 — [INFO] Spend cleaning completed in 0.29 sec.
+2025-10-28 09:06:49,986 — [INFO] ==================================================
+2025-10-28 09:06:49,988 — [INFO] === Analyzing Deals dataset ===
+2025-10-28 09:06:49,989 — [INFO] ==================================================
+2025-10-28 09:06:53,570 — [INFO] Filled 791 missing values in City
+2025-10-28 09:06:57,644 — [INFO] Filled 432 missing values in Level of Deutsch
+2025-10-28 09:07:03,371 — [INFO] Filled 6 missing values in Deal Owner Name
+2025-10-28 09:07:04,449 — [INFO] Filled 0 missing values in Course duration
+2025-10-28 09:07:04,506 — [INFO] deals_raw: Found 18 duplicate rows (checked 22 columns).
+2025-10-28 09:07:04,613 — [INFO] deals_clean: 9 duplicates removed (21586 rows left)
+2025-10-28 09:07:04,680 — [INFO] Rows with Lost Reason = Duplicate: 1767
+2025-10-28 09:07:04,704 — [INFO] Rows after removing Duplicate deals: 19819
+2025-10-28 09:07:04,719 — [INFO] Test rows found: 156
+2025-10-28 09:07:04,741 — [INFO] Rows after removing test rows: 19663
+2025-10-28 09:07:04,753 — [INFO] Found 2790 test rows in deals dataset.
+2025-10-28 09:07:04,774 — [INFO] Rows after removing test rows: 16873
+2025-10-28 09:07:04,787 — [INFO] Found 2 rows with missing Id.
+2025-10-28 09:07:04,830 — [INFO] Rows after removing rows with missing Id: 16871
+2025-10-28 09:07:04,841 — [INFO] Rows with target products: 4
+2025-10-28 09:07:04,864 — [INFO] Removed rows with products: ['Data Analytics', 'Find yourself in IT']. Remaining rows: 16867
+2025-10-28 09:07:04,888 — [INFO] Found 4201 duplicate rows for 1834 Contact Names.
+2025-10-28 09:07:04,967 — [INFO] Removed 838 duplicate rows with empty key fields.
+2025-10-28 09:07:05,051 — [INFO] Converted Created Time to datetime.
+2025-10-28 09:07:05,060 — [INFO] Converted Closing Date to datetime.
+2025-10-28 09:07:05,109 — [INFO] Normalized City names and applied 3 manual corrections.
+2025-10-28 09:07:05,134 — [INFO] Cleaned and converted Initial Amount Paid — 12722 values changed.
+2025-10-28 09:07:05,147 — [INFO] Cleaned and converted Offer Total Amount — 12708 values changed.
+2025-10-28 09:07:05,161 — [INFO] Swapped 45 rows where Offer Total Amount < Initial Amount Paid.
+2025-10-28 09:07:05,188 — [INFO] Payment Type counts after filling:
+         Payment Type  Count
+0  Recurring Payments  14739
+1         No Payments    808
+2         One Payment     43
+3         Reservation      8
+2025-10-28 09:07:05,192 — [INFO] Filled 15598 missing Payment Type values.
+2025-10-28 09:07:05,217 — [INFO] Rows where Created Time > Closing Date: 1987
+2025-10-28 09:07:05,227 — [INFO] Swapped 1987 rows where Created Time was later than Closing Date.
+2025-10-28 09:07:05,275 — [INFO] Filled 9 missing Closing Date values.
+2025-10-28 09:07:05,290 — [INFO] Temporary column Days_Diff removed after filling.
+2025-10-28 09:07:05,349 — [INFO] Created new column German Level with normalized values.
+2025-10-28 09:07:05,361 — [INFO] German Level distribution:
+German Level
+Unknown    14958
+B1           697
+B2           168
+A2           138
+C1            26
+A1            22
+A0            17
+C2             3
+Name: count, dtype: int64
+2025-10-28 09:07:05,381 — [INFO] Removed original column Level of Deutsch.
+2025-10-28 09:07:05,394 — [INFO] Earliest 5 unique Created Time values:
+<DatetimeArray>
+['2022-10-11 00:00:00', '2023-07-01 00:00:00', '2023-07-03 00:00:00',
+ '2023-07-03 20:17:00', '2023-07-03 20:39:00']
+Length: 5, dtype: datetime64[ns]
+2025-10-28 09:07:05,423 — [INFO] Removed 1 rows with Created Time = 2022-10-11 00:00:00
+2025-10-28 09:07:05,497 — [INFO] Unique values after transformation: ['Unknown' 'Non Target' 'Non Qualified' 'Medium' 'Low' 'High']
+2025-10-28 09:07:05,647 — [INFO] Failed to convert: 3901 (24.34%)
+2025-10-28 09:07:05,648 — [INFO] Converted successfully: 12127 rows (75.66%)
+2025-10-28 09:07:05,650 — [INFO] Min SLA: 3.0, Max SLA: 26908464.0
+2025-10-28 09:07:05,899 — [INFO] Failed to convert: 3901 (24.34%)
+2025-10-28 09:07:05,900 — [INFO] Converted successfully: 12127 rows (75.66%)
+2025-10-28 09:07:05,902 — [INFO] Min SLA: 0.05, Max SLA: 448474.4
+2025-10-28 09:07:05,955 — [INFO] Failed to convert: 3901 (24.34%)
+2025-10-28 09:07:05,957 — [INFO] Converted successfully: 12127 rows (75.66%)
+2025-10-28 09:07:05,959 — [INFO] Min SLA: 0.0, Max SLA: 7474.57
+2025-10-28 09:07:06,008 — [INFO] Filled missing values with Unknown.
+2025-10-28 09:07:06,025 — [INFO] Filled missing and "-" values in City column with Unknown.
+2025-10-28 09:07:06,036 — [INFO] Filled "_" values in Term column with Unknown.
+2025-10-28 09:07:06,057 — [INFO] Converted 2764 non-null values.
+2025-10-28 09:07:06,062 — [INFO] Converted 650 non-null values.
+2025-10-28 09:07:06,068 — [INFO] Converted 3322 non-null values.
+2025-10-28 09:07:06,074 — [INFO] Converted 3341 non-null values.
+2025-10-28 09:07:06,085 — [INFO] Converted Stage to category.
+2025-10-28 09:07:06,089 — [INFO] Converted Quality to category.
+2025-10-28 09:07:06,096 — [INFO] Converted Source to category.
+2025-10-28 09:07:06,101 — [INFO] Converted Product to category.
+2025-10-28 09:07:06,108 — [INFO] Converted Lost Reason to category.
+2025-10-28 09:07:06,113 — [INFO] Converted Education Type to category.
+2025-10-28 09:07:06,120 — [INFO] Converted German Level to category.
+2025-10-28 09:07:06,127 — [INFO] Converted Payment Type to category.
+2025-10-28 09:07:06,283 — [INFO] ==================================================
+2025-10-28 09:07:06,286 — [INFO] === Saving results ===
+2025-10-28 09:07:06,288 — [INFO] ==================================================
+2025-10-28 09:07:30,255 — [INFO] Cleaned dataset saved as data/clean/calls_clean.xlsx
+2025-10-28 09:07:32,336 — [INFO] Cleaned dataset saved as data/clean/contacts_clean.xlsx
+2025-10-28 09:07:41,944 — [INFO] Cleaned dataset saved as data/clean/deals_clean.xlsx
+2025-10-28 09:07:44,805 — [INFO] Cleaned dataset saved as data/clean/spend_clean.xlsx
+2025-10-28 09:07:45,722 — [INFO] Table saved as notebooks/figures/calls_info_raw.png
+2025-10-28 09:07:46,717 — [INFO] Table saved as notebooks/figures/calls_info_clean.png
+2025-10-28 09:07:47,089 — [INFO] Table saved as notebooks/figures/contacts_info_raw.png
+2025-10-28 09:07:47,500 — [INFO] Table saved as notebooks/figures/contacts_info_clean.png
+2025-10-28 09:07:47,977 — [INFO] Table saved as notebooks/figures/spend_info_raw.png
+2025-10-28 09:07:48,376 — [INFO] Table saved as notebooks/figures/spend_info_clean.png
+2025-10-28 09:07:49,533 — [INFO] Table saved as notebooks/figures/deals_info_raw.png
+2025-10-28 09:07:50,873 — [INFO] Table saved as notebooks/figures/deals_info_clean.png
+2025-10-28 09:07:50,943 — [INFO] Table saved as ./figures/contacts_bool_rows.png
+2025-10-28 09:07:51,217 — [INFO] Table saved as ./figures/deals_earliest_rows.png
+2025-10-28 09:07:51,523 — [INFO] Table saved as ./figures/deals_missing_id.png
+2025-10-28 09:07:51,524 — [INFO] All cleaned datasets and visualizations successfully saved in 45.23 sec.
