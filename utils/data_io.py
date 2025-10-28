@@ -32,13 +32,25 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
     """
     Save a DataFrame as a PNG image using dataframe_image with matplotlib backend.
     """
+    rows, cols = df.shape
+    width = max(8, cols * 1.2)
+    height = max(2, rows * 0.4)
+    plt.rcParams['figure.figsize'] = (width, height)
+
     base_dir = subfolder if subfolder else '.'
     path_dir = os.path.join(base_dir, folder)
     os.makedirs(path_dir, exist_ok=True)
 
     path = os.path.join(path_dir, f'{name}.png')
+
     try:
-        dfi.export(df, path, table_conversion='matplotlib', dpi=300)
+        dfi.export(
+            df,
+            path,
+            table_conversion='matplotlib',
+            dpi=300,
+            mpl_kwargs={'bbox_inches': 'tight', 'pad_inches': 0.3}
+        )
         logging.info(f'Table saved as {path}')
     except Exception as e:
         logging.error(f'Failed to save table {name}: {e}')
