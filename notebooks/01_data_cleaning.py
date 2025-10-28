@@ -310,13 +310,28 @@ duplicates = find_duplicates(df_spend, 'spend_raw', ignore_first_col=False)
 
 clean_spend = clean_duplicates(df_spend, 'spend_clean', ignore_first_col=False)
 
-"""#### Search and remove test rows"""
+"""#### Search and remove test rows
+
+
+"""
 
 test_rows = clean_spend[clean_spend['Source'] == 'Test']
 logging.info(f'Found {test_rows.shape[0]} test rows.')
 
 clean_spend = clean_spend.drop(test_rows.index)
 logging.info(f'Rows after removing test data: {clean_spend.shape[0]}')
+
+"""#### Search and remove 0 rows"""
+
+zero_rows = clean_spend[
+    (clean_spend['Impressions'] == 0) &
+    (clean_spend['Spend'] == 0) &
+    (clean_spend['Clicks'] == 0)
+]
+logging.info(f'Rows where 3 columns have 0: {len(zero_rows)}')
+
+clean_spend = clean_spend.drop(zero_rows.index)
+logging.info(f'Rows after removing zero rows: {clean_spend.shape[0]}')
 
 """#### Replace missing fields with Unknown"""
 
@@ -694,6 +709,10 @@ clean_deals['City'] = (
     .replace(['-', '', ' ', 'nan', 'NaN', 'None'], 'Unknown')
 )
 logging.info('Filled missing and "-" values in City column with Unknown.')
+
+clean_deals['Term'] = clean_deals['Term'].replace('_', 'Unknown')
+
+logging.info(f'Filled "_" values in Term column with Unknown.')
 
 """#### Convert columns to int and category types"""
 
