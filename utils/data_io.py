@@ -34,19 +34,23 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
     """
     rows, cols = df.shape
     width = max(8, cols * 1.2)
-    height = max(2, rows * 0.45)
+    height = max(2, rows * 0.4)
     plt.rcParams['figure.figsize'] = (width, height)
     plt.rcParams['figure.dpi'] = 200
 
     base_dir = subfolder if subfolder else '.'
     path_dir = os.path.join(base_dir, folder)
     os.makedirs(path_dir, exist_ok=True)
-
     path = os.path.join(path_dir, f'{name}.png')
+
+    styled = df.style.set_properties(**{
+        'white-space': 'pre-wrap',
+        'text-align': 'left'
+    })
 
     try:
         dfi.export(
-            df,
+            styled,
             path,
             table_conversion='matplotlib',
             dpi=300,
