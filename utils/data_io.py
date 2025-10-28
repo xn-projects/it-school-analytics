@@ -44,7 +44,9 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
     path = os.path.join(path_dir, f'{name}.png')
 
     styled = (
-        df.style.set_properties(**{
+        df.style
+        .format_index(lambda v: '\u00A0\u00A0' + str(v), axis=0)
+        .set_properties(**{
             'white-space': 'pre-wrap',
             'text-align': 'left',
             'font-size': '8pt'})
