@@ -34,12 +34,11 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
     """
     df_exp = df.reset_index(drop=True)
     
-    rows, cols = df.shape
+    rows, cols = df_exp.shape
     width = max(8, cols * 1.2)
     height = max(2, rows * 0.4)
     plt.rcParams['figure.figsize'] = (width, height)
     plt.rcParams['figure.dpi'] = 200
-
     plt.rcParams['savefig.bbox'] = 'tight'
     plt.rcParams['savefig.pad_inches'] = 0.6
     plt.rcParams['figure.subplot.left'] = 0.08
@@ -49,10 +48,16 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
     os.makedirs(path_dir, exist_ok=True)
     path = os.path.join(path_dir, f'{name}.png')
 
-    styled = df.style.set_properties(**{
-        'white-space': 'pre-wrap',
-        'text-align': 'left'
-    })
+    styled = (
+        df_exp.style
+        .set_properties(
+            subset=df_exp.columns,
+            **{
+                'white-space': 'pre-wrap',
+                'text-align': 'left',
+            }
+        )
+    )
 
     try:
         dfi.export(
