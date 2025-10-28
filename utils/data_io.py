@@ -34,8 +34,9 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
     """
     rows, cols = df.shape
     width = max(8, cols * 1.2)
-    height = max(2, rows * 0.4)
+    height = max(2, rows * 0.45)
     plt.rcParams['figure.figsize'] = (width, height)
+    plt.rcParams['figure.dpi'] = 200
 
     base_dir = subfolder if subfolder else '.'
     path_dir = os.path.join(base_dir, folder)
@@ -49,8 +50,9 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
             path,
             table_conversion='matplotlib',
             dpi=300,
-            mpl_kwargs={'bbox_inches': 'tight', 'pad_inches': 0.3}
+            mpl_kwargs={'bbox_inches': 'tight', 'pad_inches': 0.4}
         )
+        plt.close('all')
         logging.info(f'Table saved as {path}')
     except Exception as e:
         logging.error(f'Failed to save table {name}: {e}')
