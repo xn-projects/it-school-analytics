@@ -59,7 +59,6 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
             path,
             table_conversion='matplotlib',
             dpi=300,
-            bbox_inches='tight',
             pad_inches=1.2
         )
         plt.close('all')
