@@ -30,18 +30,19 @@ def load_files(base_url, files, target_folder='data/raw'):
     return saved_files
 
 
-def save_table_as_png(df, name, subfolder=None, folder='figures'):
+def save_table_as_png(df, name, subfolder=None, folder='figures', add_index_column=True):
     """
     Save a DataFrame as a PNG image using dataframe_image with matplotlib backend.
     """ 
     df = df.copy()
 
-    df.insert(
-        0,
-        '',
-        ['\n'.join(textwrap.wrap(str(i), 18)) if isinstance(i, str) else i
-         for i in df.index])
-    df.reset_index(drop=True, inplace=True)
+    if add_index_column:
+        df.insert(
+            0,
+            '',
+            ['\n'.join(textwrap.wrap(str(i), 18)) if isinstance(i, str) else i
+             for i in df.index])
+        df.reset_index(drop=True, inplace=True)
 
     rows, cols = df.shape
     width = max(8, cols * 1.5)
