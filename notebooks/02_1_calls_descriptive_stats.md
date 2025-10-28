@@ -7,7 +7,7 @@ The goal is to understand the distribution of call durations, evaluate the impac
 
 ## Numeric Fields
 
-### 1. Descriptive Statistics
+### 1️⃣ Descriptive Statistics
 
 A summary of numerical variables — including mean, median, standard deviation, and distribution characteristics.  
 ![calls_stats_num.png](figures/calls_stats_num.png)
@@ -16,7 +16,7 @@ A summary of numerical variables — including mean, median, standard deviation,
 
 ---
 
-### 2. Call Duration Distribution — Before & After Log Transformation
+### 2️⃣ Call Duration Distribution — Before & After Log Transformation
 
 Histogram and KDE plots showing the raw vs. log-transformed call durations.  
 ![call_duration_orig_vs_log.png](figures/call_duration_orig_vs_log.png)
@@ -26,7 +26,7 @@ Histogram and KDE plots showing the raw vs. log-transformed call durations.
 
 ---
 
-### 3. Violin Plot — Distribution Comparison
+### 3️⃣ Violin Plot — Distribution Comparison
 
 Violin plots visualize the spread and quartiles of the original and transformed call durations.  
 ![call_duration_distribution.png](figures/call_duration_distribution.png)
@@ -36,7 +36,7 @@ Violin plots visualize the spread and quartiles of the original and transformed 
 
 ---
 
-### 4. Statistical Comparison — Before vs. After Log
+### 4️⃣ Statistical Comparison — Before vs. After Log
 
 Comparison of descriptive measures before and after transformation.
 ![calls_compare.png](figures/calls_compare.png)  
@@ -53,7 +53,7 @@ Visual representation of percentage change in key statistical metrics.
 
 ##  Categorical Fields
 
-### 5. Descriptive Statistics for Categorical Variables
+### 5️⃣ Descriptive Statistics for Categorical Variables
 
 A summary table showing unique counts, most frequent values, and frequency shares for categorical attributes.  
 ![calls_stats_cat.png](figures/calls_stats_cat.png)
@@ -63,7 +63,7 @@ A summary table showing unique counts, most frequent values, and frequency share
 
 ---
 
-### 6. Top 15 Call Owners — Exclusive & Unique Clients
+### 6️⃣ Top 15 Call Owners — Exclusive & Unique Clients
 
 Bar chart comparing the total number of calls, unique clients, and exclusive clients for the top 15 owners.  
 ![call_owners.png](figures/call_owners.png)
