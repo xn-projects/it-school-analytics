@@ -32,7 +32,7 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
     """
     Save a DataFrame as a PNG image using dataframe_image with matplotlib backend.
     """ 
-    rows, cols = df_exp.shape
+    rows, cols = df.shape
     width = max(8, cols * 1.5)
     height = max(2, rows * 0.4)
     plt.rcParams['figure.figsize'] = (width, height)
@@ -44,21 +44,23 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
     path = os.path.join(path_dir, f'{name}.png')
 
     styled = (
-        df_exp.style
+        df.style
         .set_properties(
-            subset=df_exp.columns,
+            subset=df.columns,
             **{
                 'white-space': 'pre-wrap',
                 'text-align': 'left',
                 'max-width': '280px'}))
 
     try:
-        plt.subplots_adjust(left=0.15)
+        plt.subplots_adjust(left=0.18, right=0.97)
         dfi.export(
             styled,
             path,
             table_conversion='matplotlib',
-            dpi=300
+            dpi=300,
+            bbox_inches='tight',
+            pad_inches=1.2
         )
         plt.close('all')
         logging.info(f'Table saved as {path}')
