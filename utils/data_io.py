@@ -99,3 +99,59 @@ def save_clean_data(df, name, folder='data/clean'):
     path = os.path.join(folder, f'{name}.xlsx')
     df.to_excel(path, index=False)
     logging.info(f'Cleaned dataset saved as {path}')
+
+
+def save_styler_as_png(styler, name, subfolder=None, folder='figures'):
+    """
+    Saves a Styler as a PNG image, adding the first column from the index.
+    """
+    df = styler.data.copy()
+    df[df.select_dtypes(include='number').columns] = (
+        df.select_dtypes(include='number').round(2))
+
+    df.insert(
+        0,
+        '',
+        ['\n'.join(textwrap.wrap(str(i), 18)) if isinstance(i, str) else i
+         for i in df.index])
+    df.reset_index(drop=True, inplace=True)
+
+    exported = styler.export()
+    has_colors = any(
+        'background-color' in str(css) or 'color' in str(css)
+        for css in str(exported).split())
+
+    new_styler = df.style.use(exported)
+
+    export = new_styler.export()
+    cleaned = []
+    for cell in export.get('cellstyle', []):
+        if not any('col0' in s for s in cell['selectors']):
+            cleaned.append(cell)
+    export['cellstyle'] = cleaned
+    new_styler = df.style.use(export)
+
+    num_cols = df.select_dtypes(include='number').columns
+    new_styler = new_styler.format('{:.2f}', subset=num_cols)
+
+    rows, cols = df.shape
+    plt.rcParams['figure.figsize'] = (max(8, cols * 1.5), max(2, rows * 0.4))
+    plt.rcParams['figure.dpi'] = 300
+
+    base_dir = subfolder if subfolder else '.'
+    path_dir = os.path.join(base_dir, folder)
+    os.makedirs(path_dir, exist_ok=True)
+    path = os.path.join(path_dir, f'{name}.png')
+
+    try:
+        dfi.export(
+            new_styler,
+            path,
+            table_conversion='matplotlib',
+            dpi=300,
+            max_rows=-1
+        )
+        plt.close('all')
+        logging.info(f'Table saved as {path}')
+    except Exception as e:
+        logging.error(f'Failed to save styled table {name}: {e}')
