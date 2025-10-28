@@ -53,7 +53,7 @@ def save_table_as_png(df, name, subfolder=None, folder='figures'):
                 'max-width': '280px'}))
 
     try:
-        plt.subplots_adjust(left=0.18, right=0.97)
+        plt.subplots_adjust(left=0.25, right=0.99)
         dfi.export(
             styled,
             path,
