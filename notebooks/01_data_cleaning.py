@@ -13,6 +13,20 @@ pip install dataframe-image
 !git clone -q https://github.com/xn-projects/it-school-analytics.git
 # %cd it-school-analytics
 
+import datetime
+import logging
+import os
+import re
+import time
+import json
+import warnings
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import dataframe_image as dfi
+import requests
+
 from utils import (
     setup_logging,
     show_df,
@@ -30,43 +44,35 @@ from utils import (
     load_files,
     save_table_as_png,
     save_plot,
-    save_clean_data
+    save_clean_data,
 )
 
-import logging
-import os
-import datetime
-import re
-import requests
-import warnings
-import time
-
-import numpy as np
-import pandas as pd
-
-import matplotlib.pyplot as plt
-
-import dataframe_image as dfi
-
-warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore")
 
 setup_logging()
 logging.info('Repository successfully loaded and ready')
 
+PROJECT_ROOT = '/content/it-school-analytics'
+RAW_DIR = os.path.join(PROJECT_ROOT, 'data', 'raw')
+CLEAN_DIR = os.path.join(PROJECT_ROOT, 'data', 'clean')
+
 log_section('=== Downloading source Excel files ===')
 
-base_url = 'https://raw.githubusercontent.com/xn-projects/it-school-analytics/main/data/raw/'
-files = ['calls.xlsx', 'contacts.xlsx', 'deals.xlsx', 'spend.xlsx']
+BASE_URL = 'https://raw.githubusercontent.com/xn-projects/it-school-analytics/main/data/raw/'
+FILES = ['calls.xlsx', 'contacts.xlsx', 'deals.xlsx', 'spend.xlsx']
 
-download = load_files(base_url, files)
+download = load_files(BASE_URL, FILES)
 logging.info(f'Downloaded {len(download)} files successfully.')
 
 log_section('=== Reading Excel files ===')
 
-df_calls = pd.read_excel(f'/content/it-school-analytics/data/raw/calls.xlsx', dtype={'Id': str, 'CONTACTID':str}, engine='openpyxl')
-df_contacts = pd.read_excel(f'/content/it-school-analytics/data/raw/contacts.xlsx', dtype={'Id': str}, engine='openpyxl')
-df_deals = pd.read_excel(f'/content/it-school-analytics/data/raw/deals.xlsx', dtype={'Id': str, 'Contact Name':str}, engine='openpyxl')
-df_spend = pd.read_excel(f'/content/it-school-analytics/data/raw/spend.xlsx', engine='openpyxl')
+df_calls = pd.read_excel(os.path.join(RAW_DIR, 'calls.xlsx'),
+                         dtype={'Id': str, 'CONTACTID':str}, engine='openpyxl')
+df_contacts = pd.read_excel(os.path.join(RAW_DIR, 'contacts.xlsx'),
+                         dtype={'Id': str}, engine='openpyxl')
+df_deals = pd.read_excel(os.path.join(RAW_DIR, 'deals.xlsx'),
+                         dtype={'Id': str, 'Contact Name':str}, engine='openpyxl')
+df_spend = pd.read_excel(os.path.join(RAW_DIR, 'spend.xlsx'), engine='openpyxl')
 
 logging.info('All files successfully loaded into DataFrames.')
 
@@ -426,15 +432,6 @@ logging.info(f'Test rows found: {test_rows.shape[0]}')
 clean_deals = clean_deals.drop(test_rows.index)
 logging.info(f'Rows after removing test rows: {clean_deals.shape[0]}')
 
-test_rows = clean_deals[
-    clean_deals['Page']
-    .isin(['/test', '/eng/test'])
-]
-logging.info(f'Found {test_rows.shape[0]} test rows in deals dataset.')
-
-clean_deals = clean_deals.drop(test_rows.index)
-logging.info(f'Rows after removing test rows: {clean_deals.shape[0]}')
-
 missing_id_rows = clean_deals[clean_deals['Id'].isna()]
 
 logging.info(f'Found {len(missing_id_rows)} rows with missing Id.')
@@ -494,7 +491,48 @@ clean_deals = convert_columns(
     datetime_cols=['Created Time', 'Closing Date']
 )
 
-"""#### Manual correction of specific city values"""
+"""#### Correction of city values"""
+
+json_path = os.path.join(RAW_DIR, 'city_data_google_en.json')
+with open(json_path, 'r', encoding='utf-8') as f:
+    city_data = json.load(f)
+
+city_data.update({
+    "Wenden": {
+        "city": "Wenden",
+        "federal_state": "North Rhine-Westphalia",
+        "country": "Germany",
+        "latitude": 50.9686,
+        "longitude": 7.8724,
+    },
+    "Steinbach": {
+        "city": "Steinbach",
+        "federal_state": "Hesse",
+        "country": "Germany",
+        "latitude": 50.1760,
+        "longitude": 8.5950,
+    },
+    "Belgrade": {
+        "city": "Belgrade",
+        "federal_state": "Central Serbia",
+        "country": "Serbia",
+        "latitude": 44.787197,
+        "longitude": 20.457273,
+    },
+})
+
+normalized_json = {}
+for key, value in city_data.items():
+    normalized_key = key.replace(' city', '').strip()
+    value['city'] = normalized_key
+    normalized_json[normalized_key] = value
+
+json_output_path = os.path.join(CLEAN_DIR, 'cities_updated.json')
+
+with open(json_output_path, 'w', encoding='utf-8') as f:
+    json.dump(normalized_json, f, ensure_ascii=False, indent=4)
+
+logging.info('File JSON updated and saved')
 
 clean_deals['City'] = (
     clean_deals['City']
@@ -510,6 +548,20 @@ city_correction = {
 clean_deals['City'] = clean_deals['City'].replace(city_correction)
 
 logging.info(f'Normalized City names and applied {len(city_correction)} manual corrections.')
+
+clean_deals['Federal state'] = clean_deals['City'].map(
+    lambda x: normalized_json.get(x, {}).get('federal_state')
+)
+clean_deals['Country'] = clean_deals['City'].map(
+    lambda x: normalized_json.get(x, {}).get('country')
+)
+clean_deals['Latitude'] = clean_deals['City'].map(
+    lambda x: normalized_json.get(x, {}).get('latitude')
+)
+clean_deals['Longitude'] = clean_deals['City'].map(
+    lambda x: normalized_json.get(x, {}).get('longitude')
+)
+logging.info('Added new columns (Federal state, Country, Latitude, Longitude)')
 
 """#### Cleaning and correcting amount values in deals"""
 
@@ -584,19 +636,27 @@ logging.info(f'Swapped {condition.sum()} rows where Created Time was later than 
 
 clean_deals['Product'] = clean_deals['Product'].fillna('Unknown')
 
-clean_deals['Days_Diff'] = (clean_deals['Closing Date'] - clean_deals['Created Time']).dt.days
+clean_deals['Days_Diff'] = (
+    clean_deals['Closing Date'] - clean_deals['Created Time']
+).dt.days
 
-mode_diff = clean_deals.groupby('Product')['Days_Diff'].agg(lambda x: x.mode()[0] if not x.mode().empty else np.nan)
+mode_diff = (
+    clean_deals
+    .groupby('Product')['Days_Diff']
+    .agg(lambda x: x.mode()[0] if not x.mode().empty else np.nan)
+)
 
 fill = (
-    clean_deals['Closing Date'].isna() &
-    (clean_deals['Months of study'] == clean_deals['Course duration']) &
-    (clean_deals['Stage'] == 'Payment Done')
+    clean_deals['Closing Date'].isna()
+    & (clean_deals['Months of study'] == clean_deals['Course duration'])
+    & (clean_deals['Stage'] == 'Payment Done')
 )
 
 clean_deals.loc[fill, 'Closing Date'] = (
-    clean_deals.loc[fill, 'Created Time'] +
-    clean_deals.loc[fill, 'Product'].map(mode_diff).apply(lambda x: pd.Timedelta(days=x) if pd.notna(x) else pd.NaT)
+    clean_deals.loc[fill, 'Created Time']
+    + clean_deals.loc[fill, 'Product']
+    .map(mode_diff)
+    .apply(lambda x: pd.Timedelta(days=x) if pd.notna(x) else pd.NaT)
 )
 
 logging.info(f'Filled {fill.sum()} missing Closing Date values.')
@@ -698,7 +758,9 @@ cols = [
     'Content',
     'Term',
     'Campaign',
-    'Contact Name'
+    'Contact Name',
+    'Federal state',
+    'Country'
 ]
 
 clean_deals[cols] = clean_deals[cols].fillna('Unknown')
@@ -766,8 +828,8 @@ save_table_as_png(summary_info_spend, 'spend_info_clean', subfolder='notebooks')
 save_table_as_png(summary_deals_info, 'deals_info_raw', subfolder='notebooks')
 save_table_as_png(summary_info_deals, 'deals_info_clean', subfolder='notebooks')
 
-save_table_as_png(bool_rows, name='contacts_bool_rows')
-save_table_as_png(earliest_rows, name='deals_earliest_rows')
-save_table_as_png(missing_id_rows, name='deals_missing_id')
+save_table_as_png(bool_rows,'contacts_bool_rows', subfolder='notebooks')
+save_table_as_png(earliest_rows, 'deals_earliest_rows', subfolder='notebooks')
+save_table_as_png(missing_id_rows, 'deals_missing_id', subfolder='notebooks')
 
 logging.info(f'All cleaned datasets and visualizations successfully saved in {time.time() - start_time:.2f} sec.')
