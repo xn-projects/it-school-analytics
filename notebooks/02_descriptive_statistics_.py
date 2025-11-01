@@ -13,112 +13,177 @@ pip install dataframe-image
 !git clone -q https://github.com/xn-projects/it-school-analytics.git
 # %cd it-school-analytics
 
-from utils import (
-    setup_logging,
-    show_df,
-    log_section,
-    load_files,
-    save_table_as_png,
-    save_plot,
-    save_clean_data,
-    get_my_palette,
-    cmap_cornflower,
-    cmap_lime,
-    cmap_tomato,
-    cmap_yellow,
-    cmap_lavender,
-    cmap_neutral,
-    describe_num,
-    describe_cat,
-    plot_change,
-    compare_distributions,
-    summarize_category
-)
-
 import logging
 import os
-import warnings
+import textwrap
 import time
-
-import numpy as np
-import pandas as pd
-
-import matplotlib.pyplot as plt
-import plotly.express as px
-import seaborn as sns
-import matplotlib.patches as mpatches
-from matplotlib.colors import LinearSegmentedColormap
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-from scipy.stats import skew, kurtosis
+import warnings
 
 import dataframe_image as dfi
+import matplotlib.colors as mcolors
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+import seaborn as sns
 from IPython.display import HTML, display
+from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.font_manager import FontProperties
+from plotly.subplots import make_subplots
+from scipy.stats import kurtosis, skew
+
+from utils import (
+    cmap_cornflower,
+    cmap_lavender,
+    cmap_lime,
+    cmap_neutral,
+    cmap_tomato,
+    cmap_yellow,
+    compare_distributions,
+    describe_cat,
+    describe_num,
+    get_my_palette,
+    load_files,
+    log_section,
+    plot_change,
+    save_clean_data,
+    save_plot,
+    save_styler_as_png,
+    save_table_as_png,
+    setup_logging,
+    show_df,
+    summarize_category,
+)
 
 warnings.filterwarnings('ignore')
 
 setup_logging()
 logging.info('Repository successfully loaded and ready')
 
+PROJECT_ROOT = '/content/it-school-analytics'
+CLEAN_DIR = os.path.join(PROJECT_ROOT, 'data', 'clean')
+
 log_section('=== Downloading source Excel files ===')
 
-base_url = 'https://raw.githubusercontent.com/xn-projects/it-school-analytics/main/data/clean/'
-files = ['calls_clean.xlsx', 'contacts_clean.xlsx', 'deals_clean.xlsx', 'spend_clean.xlsx']
+BASE_URL = 'https://raw.githubusercontent.com/xn-projects/it-school-analytics/main/data/clean/'
+FILES = ['calls_clean.xlsx', 'contacts_clean.xlsx', 'deals_clean.xlsx', 'spend_clean.xlsx']
 
-download = load_files(base_url, files)
+download = load_files(BASE_URL, FILES)
 logging.info(f'Downloaded {len(download)} files successfully.')
 
 log_section('=== Reading Excel files ===')
 
-df_calls = pd.read_excel(f'/content/it-school-analytics/data/clean/calls_clean.xlsx', dtype={'Id': str, 'CONTACTID':str}, engine='openpyxl')
-df_contacts = pd.read_excel(f'/content/it-school-analytics/data/clean/contacts_clean.xlsx', dtype={'Id': str}, engine='openpyxl')
-df_deals = pd.read_excel(f'/content/it-school-analytics/data/clean/deals_clean.xlsx', dtype={'Id': str, 'Contact Name':str}, engine='openpyxl')
-df_spend = pd.read_excel(f'/content/it-school-analytics/data/clean/spend_clean.xlsx', engine='openpyxl')
+df_calls = pd.read_excel(os.path.join(CLEAN_DIR, 'calls_clean.xlsx'),
+                         dtype={'Id': str, 'CONTACTID':str}, engine='openpyxl')
+df_contacts = pd.read_excel(os.path.join(CLEAN_DIR, 'contacts_clean.xlsx'),
+                         dtype={'Id': str}, engine='openpyxl')
+df_deals = pd.read_excel(os.path.join(CLEAN_DIR, 'deals_clean.xlsx'),
+                         dtype={'Id': str, 'Contact Name':str}, engine='openpyxl')
+df_spend = pd.read_excel(os.path.join(CLEAN_DIR, 'spend_clean.xlsx'),
+                         engine='openpyxl')
 
 logging.info('All files successfully loaded into DataFrames.')
 
 log_section('=== Descriptive statistics for Calls Data ===')
 start_time = time.time()
 
-"""##### Numeric fields"""
+"""# === Calls ===
+
+#### Numeric fields
+"""
 
 calls = describe_num(df_calls, df_name='calls')
+
+df_calls['Weekday'] = df_calls['Call Start Time'].dt.day_name()
+
+weekday_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+cornflower = get_my_palette(group='Cornflower')
+
+weekday_duration = (
+    df_calls.groupby('Weekday')['Call Duration (in seconds)']
+    .mean()
+    .reindex(weekday_order)
+    .reset_index(name='Average Call Duration')
+)
+
+plt.figure(figsize=(8, 4), dpi=100)
+ax = sns.barplot(
+    data=weekday_duration,
+    x='Weekday',
+    y='Average Call Duration',
+    order=weekday_order,
+    color=cornflower[3],
+    alpha=0.9
+)
+
+ax.bar_label(ax.containers[0], fmt='%.0f', fontsize=8, padding=2)
+
+plt.title('Average Call Duration by Day of the Week', fontsize=14, pad=12)
+plt.xlabel('')
+plt.ylabel('Average Call Duration (seconds)', fontsize=8)
+plt.xticks(rotation=30, fontsize=8)
+plt.yticks(fontsize=8)
+plt.grid(axis='y', linestyle=':', alpha=0.4)
+sns.despine()
+plt.tight_layout()
+
+save_plot('call_duration_by_weekday', subfolder='notebooks')
+plt.show()
 
 df_calls['Call Duration (log)'] = np.log1p(df_calls['Call Duration (in seconds)'])
 
 lime = get_my_palette(group='Lime Green')[4]
-cornflower = get_my_palette(group='Cornflower')[2]
+cornflower = get_my_palette(group='Cornflower')[3]
 
-fig, axes = plt.subplots(1, 2, figsize=(12, 4), facecolor='white')
+fig, axes = plt.subplots(1, 2, figsize=(12, 4), dpi=100)
 
 sns.histplot(
-    df_calls['Call Duration (in seconds)'],
-    bins=50, kde=True, color=lime, ax=axes[0]
+    data=df_calls,
+    x='Call Duration (in seconds)',
+    bins=50,
+    kde=True,
+    color=lime,
+    ax=axes[0]
 )
 axes[0].set_title('Before Log Transformation', fontsize=12)
-axes[0].set_xlabel('Duration (seconds)')
-axes[0].set_ylabel('Frequency')
+axes[0].set_xlabel('Duration (seconds)', fontsize=8)
+axes[0].set_ylabel('Frequency', fontsize=8)
+axes[0].tick_params(axis='both', labelsize=8)
+axes[0].grid(axis='y', linestyle=':', alpha=0.4)
 
 sns.histplot(
-    df_calls['Call Duration (log)'],
-    bins=50, kde=True, color=cornflower, ax=axes[1]
+    data=df_calls,
+    x='Call Duration (log)',
+    bins=50,
+    kde=True,
+    color=cornflower,
+    ax=axes[1]
 )
 axes[1].set_title('After Log Transformation', fontsize=12)
-axes[1].set_xlabel('Log(Duration)')
-axes[1].set_ylabel('Frequency')
+axes[1].set_xlabel('Log(Duration)', fontsize=8)
+axes[1].set_ylabel('Frequency', fontsize=8)
+axes[1].tick_params(axis='both', labelsize=8)
+axes[1].grid(axis='y', linestyle=':', alpha=0.4)
 
-plt.suptitle('Call Duration Distribution — Original vs Log', fontsize=14, fontweight='bold')
+plt.suptitle(
+    'Call Duration Distribution — Original vs Log',
+    fontsize=14,
+    y=1.02)
+
 plt.tight_layout()
+sns.despine()
 
 save_plot('call_duration_orig_vs_log', subfolder='notebooks')
 plt.show()
 
-logging.info('Plot Call Duration Distribution — Original vs Log saved successfully.')
-
 lime = get_my_palette(group='Lime Green')[2]
-cornflower = get_my_palette(group='Cornflower')[2]
+cornflower = get_my_palette(group='Cornflower')[3]
 
-fig, axes = plt.subplots(1, 2, figsize=(10, 5), facecolor='white')
+fig, axes = plt.subplots(1, 2, figsize=(10, 4), dpi=100)
 
 sns.violinplot(
     y=df_calls['Call Duration (in seconds)'],
@@ -129,6 +194,8 @@ sns.violinplot(
 )
 axes[0].set_title('Before Log Transformation', fontsize=12)
 axes[0].set_ylabel('Duration (seconds)')
+axes[0].set_xlabel('', fontsize=8)
+axes[0].tick_params(axis='y', labelsize=8)
 
 sns.violinplot(
     y=df_calls['Call Duration (log)'],
@@ -139,58 +206,64 @@ sns.violinplot(
 )
 axes[1].set_title('After Log Transformation', fontsize=12)
 axes[1].set_ylabel('Log(Duration)')
+axes[1].set_xlabel('', fontsize=8)
+axes[1].tick_params(axis='y', labelsize=8)
 
-plt.suptitle('Call Duration Distribution', fontsize=14, fontweight='bold')
+plt.suptitle('Call Duration Distribution', fontsize=14, y=1.02)
 plt.tight_layout()
 
 save_plot('call_duration_distribution', subfolder='notebooks')
 plt.show()
-
-logging.info('Plot Call Duration Distribution — Original vs Log saved successfully.')
 
 compare_calls = compare_distributions(df_calls, 'Call Duration (in seconds)', 'Call Duration (log)', df_name='calls')
 show_df(compare_calls)
 
 delta_calls = plot_change(compare_calls, name='call_change', subfolder='notebooks')
 
-"""##### Categorical fields"""
+"""#### Categorical fields"""
 
 calls_new = describe_cat(df_calls, df_name='Calls')
 
-owners = (
-    df_calls
-    .groupby('Call Owner Name', as_index=False)
-    .agg(
-        Calls=('CONTACTID', 'size'),
-        UniqueContacts=('CONTACTID', 'nunique')
-    )
-)
-
-exclusive_mask = (
+contact_owner_count = (
     df_calls.groupby('CONTACTID')['Call Owner Name']
     .nunique()
-    .eq(1)
+    .reset_index(name='OwnerCount')
 )
 
-exclusive_df = (
-    df_calls[df_calls['CONTACTID'].isin(exclusive_mask[exclusive_mask].index)]
-    .groupby('Call Owner Name', as_index=False)
-    .agg(ExclusiveContacts=('CONTACTID', 'nunique'))
+df_with_count = df_calls.merge(contact_owner_count, on='CONTACTID', how='left')
+
+top3_names = (
+    df_with_count.groupby(['OwnerCount', 'Call Owner Name'])
+    .size()
+    .reset_index(name='Count')
+    .sort_values(['OwnerCount', 'Count'], ascending=[True, False])
+    .groupby('OwnerCount')['Call Owner Name']
+    .apply(lambda x: ', '.join(x.head(3)))
+    .reset_index(name='Top3 Call Owner Name')
 )
 
-owners = owners.merge(exclusive_df, on='Call Owner Name', how='left').fillna(0)
-owners['ExclusiveShare (%)'] = owners['ExclusiveContacts'] / owners['UniqueContacts'] * 100
-owners = owners.sort_values('Calls', ascending=False)
-
-owners.head(33)
+example_contacts = (
+    contact_owner_count.groupby('OwnerCount')['CONTACTID']
+    .apply(lambda x: ', '.join(x.astype(str).head(3)))
+    .reset_index(name='Example CONTACTID')
+)
 
 contact_owners = (
-    df_calls.groupby('CONTACTID')['Call Owner Name']
-    .nunique()
+    contact_owner_count['OwnerCount']
     .value_counts()
     .sort_index()
+    .reset_index()
 )
-contact_owners
+
+contact_owners.columns = ['OwnerCount', 'NumContacts']
+
+contact_owners_df = (
+    contact_owners
+    .merge(top3_names, on='OwnerCount', how='left')
+    .merge(example_contacts, on='OwnerCount', how='left')
+)
+
+show_df(contact_owners_df, max_rows=10)
 
 unique_df = (
     df_calls.groupby('Call Owner Name', as_index=False)
@@ -212,15 +285,17 @@ exclusive_df = (
 owners = df_calls['Call Owner Name'].value_counts().head(15).reset_index()
 owners.columns = ['Call Owner Name', 'Count']
 
-owners = owners.merge(unique_df, on='Call Owner Name', how='left')
-owners = owners.merge(exclusive_df, on='Call Owner Name', how='left').fillna(0)
+owners = (
+    owners.merge(unique_df, on='Call Owner Name', how='left')
+          .merge(exclusive_df, on='Call Owner Name', how='left')
+          .fillna(0)
+)
 
 total_color = get_my_palette(group='Lavender')[2]
 exclusive_color = get_my_palette(group='Yellowsoft')[2]
 unique_color = get_my_palette(group='Tomato')[2]
 
-
-plt.figure(figsize=(9, 6))
+plt.figure(figsize=(9, 6), dpi=100)
 ax = plt.gca()
 
 sns.barplot(
@@ -229,25 +304,41 @@ sns.barplot(
     y='Call Owner Name',
     color=total_color,
     ax=ax,
-    label='Total Calls'
+    label='Total Calls',
+    alpha=1
 )
 
-for i, (count, excl) in enumerate(zip(owners['Count'], owners['ExclusiveContacts'])):
-    ax.barh(i, excl, color=exclusive_color, height=0.8, label='Exclusive Clients' if i == 0 else "")
+ax.barh(
+    y=owners['Call Owner Name'],
+    width=owners['UniqueContacts'],
+    color=unique_color,
+    height=0.5,
+    label='Unique Clients'
+)
 
-for i, uniq in enumerate(owners['UniqueContacts']):
-    ax.barh(i, uniq, color=unique_color, height=0.8, alpha=0.5, label='Unique Clients' if i == 0 else "")
+ax.barh(
+    y=owners['Call Owner Name'],
+    width=owners['ExclusiveContacts'],
+    color=exclusive_color,
+    height=0.5,
+    label='Exclusive Clients'
+)
 
-for i, (count, excl, uniq) in enumerate(zip(owners['Count'], owners['ExclusiveContacts'], owners['UniqueContacts'])):
-    ax.text(count + 50, i, f'{int(count):,}', va='center', ha='left', fontsize=9)
-    ax.text(excl + 50, i, f'{int(excl):,}', va='center', ha='left', fontsize=9)
-    ax.text(uniq + 50, i, f'{int(uniq):,}', va='center', ha='left', fontsize=9, color='white', fontweight='bold')
+for i, (count, excl, uniq) in enumerate(
+        zip(owners['Count'], owners['ExclusiveContacts'], owners['UniqueContacts'])):
+    ax.text(count + 100, i, f'{int(count):,}', va='center', ha='left', fontsize=8)
+    ax.text(excl + 100, i, f'{int(excl):,}', va='center', ha='left', fontsize=8)
+    ax.text(uniq + 100, i, f'{int(uniq):,}', va='center', ha='left', fontsize=8)
 
-plt.title('Top 15 Call Owners by Calls (Exclusive & Unique Clients)', fontsize=13, fontweight='bold', pad=10)
-plt.xlabel('Number of Calls / Clients', fontsize=10)
+plt.title(
+    'Top 15 Call Owners by Calls (Unique & Exclusive Clients)',
+    fontsize=14,
+    pad=12
+)
+plt.xlabel('Number of Calls / Clients', fontsize=8)
 plt.ylabel('')
-plt.xticks(fontsize=9)
-plt.yticks(fontsize=9)
+plt.xticks(fontsize=8)
+plt.yticks(fontsize=8)
 plt.grid(axis='x', linestyle=':', alpha=0.4)
 
 for spine in ['top', 'right']:
@@ -255,16 +346,16 @@ for spine in ['top', 'right']:
 
 legend_handles = [
     mpatches.Patch(color=total_color, label='Total Calls'),
-    mpatches.Patch(color=exclusive_color, label='Exclusive Clients'),
-    mpatches.Patch(color=unique_color, label='Unique Clients')
+    mpatches.Patch(color=unique_color, label='Unique Clients'),
+    mpatches.Patch(color=exclusive_color, label='Exclusive Clients')
 ]
 plt.legend(
     handles=legend_handles,
     loc='lower right',
-    fontsize=9,
+    fontsize=8,
     frameon=False,
     title='Categories',
-    title_fontsize=10
+    title_fontsize=9
 )
 
 plt.tight_layout()
@@ -272,16 +363,133 @@ plt.tight_layout()
 save_plot('call_owners', subfolder='notebooks')
 plt.show()
 
-logging.info('Plot Top 15 Call Owners by Calls (Exclusive & Unique Clients) saved successfully.')
+owners['UniqueShare (%)'] = owners['UniqueContacts'] / owners['Count'] * 100
+owners['ExclusiveShare (%)'] = owners['ExclusiveContacts'] / owners['Count'] * 100
+
+owners = owners.sort_values('UniqueShare (%)', ascending=False)
+
+exclusive_color = get_my_palette(group='Yellowsoft')[2]
+unique_color = get_my_palette(group='Tomato')[2]
+
+plt.figure(figsize=(9, 6), dpi=100)
+ax = plt.gca()
+
+sns.barplot(
+    data=owners,
+    x='UniqueShare (%)',
+    y='Call Owner Name',
+    color=unique_color,
+    ax=ax,
+    label='Unique Clients',
+    alpha=1
+)
+
+for i, excl in enumerate(owners['ExclusiveShare (%)']):
+    ax.barh(
+        i,
+        excl,
+        color=exclusive_color,
+        height=0.5,
+        alpha=1,
+        label='Exclusive Clients' if i == 0 else ''
+    )
+
+for i, (uniq, excl) in enumerate(zip(owners['UniqueShare (%)'], owners['ExclusiveShare (%)'])):
+    ax.text(
+        excl + 0.5, i,
+        f'{excl:.1f}%',
+        va='center', ha='left',
+        fontsize=8
+    )
+    ax.text(
+        uniq + 0.5, i,
+        f'{uniq:.1f}%',
+        va='center', ha='left',
+        fontsize=8
+    )
+
+plt.title(
+    'Top 15 Call Owners — Share of Unique & Exclusive Clients',
+    fontsize=14,
+    pad=12)
+
+plt.xlabel('Share (%)', fontsize=8)
+plt.ylabel('')
+plt.xticks(fontsize=8)
+plt.yticks(fontsize=8)
+plt.grid(axis='x', linestyle=':', alpha=0.4)
+
+for spine in ['top', 'right']:
+    ax.spines[spine].set_visible(False)
+
+legend_handles = [
+    mpatches.Patch(color=exclusive_color, label='Exclusive Clients'),
+    mpatches.Patch(color=unique_color, label='Unique Clients')
+]
+plt.legend(
+    handles=legend_handles,
+    loc='lower right',
+    fontsize=8,
+    frameon=False,
+    title='Categories',
+    title_fontsize=9
+)
+
+plt.tight_layout()
+
+save_plot('call_owners_percent', subfolder='notebooks')
+plt.show()
+
+df_calls['Weekday'] = df_calls['Call Start Time'].dt.day_name()
+
+weekday_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+cornflower = get_my_palette(group='Cornflower')
+
+weekday_calls = (
+    df_calls.groupby('Weekday')['CONTACTID']
+    .count()
+    .reindex(weekday_order)
+    .reset_index(name='Number of Calls')
+)
+
+plt.figure(figsize=(8, 4), dpi=100)
+ax = sns.barplot(
+    data=weekday_calls,
+    x='Weekday',
+    y='Number of Calls',
+    order=weekday_order,
+    color=cornflower[3],
+    alpha=0.9
+)
+plt.grid(axis='y', linestyle=':', alpha=0.4, zorder=0)
+
+ax.bar_label(ax.containers[0], fmt='%.0f', fontsize=8, padding=2)
+
+plt.title('Calls by Day of the Week', fontsize=14, pad=12)
+plt.xlabel('')
+plt.ylabel('Number of Calls', fontsize=8)
+plt.xticks(rotation=30, fontsize=8)
+plt.yticks(fontsize=8)
+plt.grid(axis='y', linestyle=':', alpha=0.4)
+
+sns.despine()
+plt.tight_layout()
+
+save_plot('call_by_weekday', subfolder='notebooks')
+plt.show()
 
 log_section('=== Descriptive statistics for Contacts Data ===')
 start_time = time.time()
 
-"""##### Numeric fields"""
+"""# === Contacts ===
+
+#### Numeric fields
+"""
 
 contacts = describe_num(df_contacts, df_name='contacts')
 
-"""##### Categorical fields"""
+"""#### Categorical fields"""
 
 contacts_new = describe_cat(df_contacts, df_name='Contacts')
 
@@ -297,7 +505,7 @@ lavender = get_my_palette(group='Lavender')
 lavender_cmap = LinearSegmentedColormap.from_list('lavender', lavender)
 lavender_gradient = [lavender_cmap(i / (len(owners) - 1)) for i in range(len(owners))]
 
-plt.figure(figsize=(9, 6))
+plt.figure(figsize=(9, 6), dpi=100)
 ax = sns.barplot(
     data=aggregated_data,
     x='Frequency',
@@ -305,14 +513,14 @@ ax = sns.barplot(
     palette=lavender_gradient[::-1]
 )
 
-for i, v in enumerate(aggregated_data['Frequency']):
-    ax.text(v + 10, i, str(v), va='center', ha='left', fontsize=9)
+for container in ax.containers:
+    ax.bar_label(container, fmt='%d', fontsize=8, padding=3, label_type='edge')
 
-plt.title('Top 15 Contact Owners by Frequency', fontsize=13, fontweight='bold', pad=10)
-plt.xlabel('Number of Contacts (Frequency)', fontsize=10)
+plt.title('Top 15 Contact Owners by Frequency', fontsize=14, pad=12)
+plt.xlabel('Number of Contacts (Frequency)', fontsize=8)
 plt.ylabel('')
-plt.xticks(fontsize=9)
-plt.yticks(fontsize=9)
+plt.xticks(fontsize=8)
+plt.yticks(fontsize=8)
 plt.grid(axis='x', linestyle=':', alpha=0.4)
 for spine in ['top', 'right']:
     ax.spines[spine].set_visible(False)
@@ -322,16 +530,15 @@ plt.tight_layout()
 save_plot('contacts_owners', subfolder='notebooks')
 plt.show()
 
-logging.info('Plot Top 15 Contact Owners by Frequency saved successfully.')
-
 log_section('=== Descriptive statistics for Spend Data ===')
 start_time = time.time()
 
-"""##### Numeric fields"""
+"""# === Spend ===
+
+#### Numeric fields
+"""
 
 spend = describe_num(df_spend, df_name='spend')
-
-"""##### 1. Impressions"""
 
 df_spend['Impressions (log)'] = np.log1p(df_spend['Impressions'])
 
@@ -340,7 +547,7 @@ df_spend['Clicks (log)'] = np.log1p(df_spend['Clicks'])
 df_spend['Spend (log)'] = np.log1p(df_spend['Spend'])
 
 lime = get_my_palette(group='Lime Green')[4]
-cornflower = get_my_palette(group='Cornflower')[2]
+cornflower = get_my_palette(group='Cornflower')[3]
 
 metrics = [
     ('Impressions', 'Impressions (log)'),
@@ -349,35 +556,55 @@ metrics = [
 ]
 
 fig, axes = plt.subplots(
-    nrows=len(metrics), ncols=2,
+    nrows=len(metrics),
+    ncols=2,
     figsize=(12, 10),
-    facecolor='white',
-    constrained_layout=True
+    dpi=100
 )
 
 for i, (orig_col, log_col) in enumerate(metrics):
-    sns.histplot(df_spend[orig_col], bins=50, kde=True, color=lime, ax=axes[i, 0])
-    axes[i, 0].set_title(f'{orig_col} — Before Log', fontsize=11)
-    axes[i, 0].set_xlabel('')
-    axes[i, 0].set_ylabel('Frequency')
+    sns.histplot(
+        data=df_spend,
+        x=orig_col,
+        bins=50,
+        kde=True,
+        color=lime,
+        ax=axes[i, 0]
+    )
+    axes[i, 0].set_title(f'{orig_col} — Before Log Transformation', fontsize=12)
+    axes[i, 0].set_xlabel(orig_col, fontsize=8)
+    axes[i, 0].set_ylabel('Frequency', fontsize=8)
+    axes[i, 0].tick_params(axis='both', labelsize=8)
+    axes[i, 0].grid(axis='y', linestyle=':', alpha=0.4)
 
-    sns.histplot(df_spend[log_col], bins=50, kde=True, color=cornflower, ax=axes[i, 1])
-    axes[i, 1].set_title(f'{orig_col} — After Log', fontsize=11)
-    axes[i, 1].set_xlabel('')
-    axes[i, 1].set_ylabel('Frequency')
+    sns.histplot(
+        data=df_spend,
+        x=log_col,
+        bins=50,
+        kde=True,
+        color=cornflower,
+        ax=axes[i, 1]
+    )
+    axes[i, 1].set_title(f'{orig_col} — After Log Transformation', fontsize=12)
+    axes[i, 1].set_xlabel(log_col, fontsize=8)
+    axes[i, 1].set_ylabel('Frequency', fontsize=8)
+    axes[i, 1].tick_params(axis='both', labelsize=8)
+    axes[i, 1].grid(axis='y', linestyle=':', alpha=0.4)
 
+plt.suptitle(
+    'Spend Metrics — Distributions Before and After Log Transformation',
+    fontsize=14,
+    y=1.02
+)
 
-plt.suptitle('Distributions Before and After Log Transformation', fontsize=14, fontweight='bold', y=0.98)
-
-plt.tight_layout(rect=[0, 0, 1, 0.96])
+plt.tight_layout()
+sns.despine()
 
 save_plot('spend_all_metrics_orig_vs_log', subfolder='notebooks')
 plt.show()
 
-logging.info('Plot Spend Metrics — Original vs Log saved successfully.')
-
 lime = get_my_palette(group='Lime Green')[2]
-cornflower = get_my_palette(group='Cornflower')[2]
+cornflower = get_my_palette(group='Cornflower')[3]
 
 metrics = [
     ('Impressions', 'Impressions (log)'),
@@ -386,9 +613,10 @@ metrics = [
 ]
 
 fig, axes = plt.subplots(
-    nrows=len(metrics), ncols=2,
+    nrows=len(metrics),
+    ncols=2,
     figsize=(10, 10),
-    facecolor='white'
+    dpi=100
 )
 
 for i, (orig_col, log_col) in enumerate(metrics):
@@ -402,6 +630,7 @@ for i, (orig_col, log_col) in enumerate(metrics):
     axes[i, 0].set_title(f'{orig_col} — Before Log', fontsize=12)
     axes[i, 0].set_ylabel(orig_col)
     axes[i, 0].set_xlabel('')
+    axes[i, 0].tick_params(axis='y', labelsize=8)
 
     sns.violinplot(
         y=df_spend[log_col],
@@ -413,40 +642,17 @@ for i, (orig_col, log_col) in enumerate(metrics):
     axes[i, 1].set_title(f'{orig_col} — After Log', fontsize=12)
     axes[i, 1].set_ylabel(f'Log({orig_col})')
     axes[i, 1].set_xlabel('')
+    axes[i, 1].tick_params(axis='y', labelsize=8)
 
-plt.suptitle('Distributions Before and After Log Transformation', fontsize=14, fontweight='bold', y=0.98)
+plt.suptitle(
+    'Distributions Before and After Log Transformation',
+    fontsize=14,
+    y=1.02)
 
 plt.tight_layout(rect=[0, 0, 1, 0.96])
 
 save_plot('spend_violin_all_metrics', subfolder='notebooks')
 plt.show()
-
-logging.info('Plot Spend Metrics — Violin Distributions saved successfully.')
-
-cols = ['Spend', 'Impressions', 'Clicks']
-
-my_color = get_my_palette(group='Lime Green')[3]
-
-pair = sns.pairplot(
-    df_spend[cols],
-    diag_kind='kde',
-    corner=False,
-    plot_kws=dict(s=30, alpha=0.7, color=my_color, edgecolor='white')
-)
-
-pair.fig.suptitle(
-    'Spend Data — Correlation Matrix',
-    fontsize=14,
-    fontweight='bold',
-    y=1.02
-)
-
-plt.tight_layout()
-
-save_plot('spend_correlation_matrix', subfolder='notebooks')
-plt.show()
-
-logging.info('Plot Spend — Correlation Matrix saved successfully.')
 
 """##### 1. Impressions"""
 
@@ -469,7 +675,7 @@ show_df(compare_spend)
 
 delta_spend = plot_change(compare_spend, name='spend_change', subfolder='notebooks')
 
-"""##### Categorical fields"""
+"""#### Categorical fields"""
 
 spend_new = describe_cat(df_spend, df_name='Spend')
 
@@ -498,6 +704,7 @@ for i, (col, palette_group) in enumerate(zip(cols, palettes), start=1):
     summary = summary.sort_values('Count', ascending=True)
 
     my_colors = get_my_palette(group=palette_group)
+    colorscale = [[i / (len(my_colors) - 1), c] for i, c in enumerate(my_colors)]
 
     row = (i - 1) // 2 + 1
     col_pos = (i - 1) % 2 + 1
@@ -511,7 +718,7 @@ for i, (col, palette_group) in enumerate(zip(cols, palettes), start=1):
             textposition='outside',
             marker=dict(
                 color=summary['Percent'],
-                colorscale=my_colors,
+                colorscale=colorscale,
                 line=dict(color='white', width=1)
             ),
             name=col
@@ -519,16 +726,20 @@ for i, (col, palette_group) in enumerate(zip(cols, palettes), start=1):
         row=row, col=col_pos
     )
 fig.update_traces(textposition='outside', cliponaxis=False)
-fig.update_layout(margin=dict(l=80, r=150, t=80, b=50))
 
 fig.update_layout(
     template='plotly_white',
     height=800,
     width=1200,
     showlegend=False,
-    title_text='Category Distributions',
-    title_font=dict(size=20),
+    title=dict(
+        text='Category Distributions',
+        x=0.5,
+        xanchor='center',
+        font=dict(size=20)
+    ),
     font=dict(size=12),
+    margin=dict(l=80, r=150, t=80, b=50)
 )
 
 fig.update_yaxes(title='', automargin=True)
@@ -540,7 +751,10 @@ fig.show()
 log_section('=== Descriptive statistics for Deals Data ===')
 start_time = time.time()
 
-"""##### Numeric fields"""
+"""# === Deals ===
+
+#### Numeric fields
+"""
 
 deals = describe_num(df_deals, df_name='deals')
 
@@ -551,59 +765,74 @@ df_deals['Offer Total Amount (log)'] = np.log1p(df_deals['Offer Total Amount'])
 df_deals['SLA Hours (log)'] = np.log1p(df_deals['SLA Hours'])
 
 lime = get_my_palette(group='Lime Green')[4]
-cornflower = get_my_palette(group='Cornflower')[2]
+cornflower = get_my_palette(group='Cornflower')[3]
 
 metrics = [
     ('Initial Amount Paid', 'Initial Amount Paid (log)'),
     ('SLA Hours', 'SLA Hours (log)')
 ]
 
-for orig, log_col in metrics:
-    if log_col not in df_deals.columns and orig in df_deals.columns:
-        df_deals[log_col] = np.log1p(df_deals[orig])
-
 fig, axes = plt.subplots(
-    nrows=len(metrics), ncols=2,
-    figsize=(10, 8),
-    facecolor='white'
+    nrows=len(metrics),
+    ncols=2,
+    figsize=(12, 8),
+    dpi=100
 )
 
 for i, (orig_col, log_col) in enumerate(metrics):
-    sns.histplot(df_deals[orig_col], bins=50, kde=True, color=lime, ax=axes[i, 0])
-    axes[i, 0].set_title(f'{orig_col} — Before Log', fontsize=11)
-    axes[i, 0].set_xlabel('')
-    axes[i, 0].set_ylabel('Frequency')
+    sns.histplot(
+        data=df_deals,
+        x=orig_col,
+        bins=50,
+        kde=True,
+        color=lime,
+        ax=axes[i, 0]
+    )
+    axes[i, 0].set_title(f'{orig_col} — Before Log Transformation', fontsize=12)
+    axes[i, 0].set_xlabel(orig_col, fontsize=8)
+    axes[i, 0].set_ylabel('Frequency', fontsize=8)
+    axes[i, 0].tick_params(axis='both', labelsize=8)
+    axes[i, 0].grid(axis='y', linestyle=':', alpha=0.4)
 
-    sns.histplot(df_deals[log_col], bins=50, kde=True, color=cornflower, ax=axes[i, 1])
-    axes[i, 1].set_title(f'{orig_col} — After Log', fontsize=11)
-    axes[i, 1].set_xlabel('')
-    axes[i, 1].set_ylabel('Frequency')
+    sns.histplot(
+        data=df_deals,
+        x=log_col,
+        bins=50,
+        kde=True,
+        color=cornflower,
+        ax=axes[i, 1]
+    )
+    axes[i, 1].set_title(f'{orig_col} — After Log Transformation', fontsize=12)
+    axes[i, 1].set_xlabel(log_col, fontsize=8)
+    axes[i, 1].set_ylabel('Frequency', fontsize=8)
+    axes[i, 1].tick_params(axis='both', labelsize=8)
+    axes[i, 1].grid(axis='y', linestyle=':', alpha=0.4)
 
-plt.suptitle('Deals — Distributions Before and After Log Transformation', fontsize=15, fontweight='bold', y=0.98)
+plt.suptitle(
+    'Deals — Distributions Before and After Log Transformation',
+    fontsize=14,
+    y=1.02
+)
 
-plt.tight_layout(rect=[0, 0, 1, 0.96])
+plt.tight_layout()
+sns.despine()
 
 save_plot('deals_all_metrics_orig_vs_log', subfolder='notebooks')
 plt.show()
 
-logging.info('Plot Deals Metrics — Original vs Log saved successfully.')
-
 lime = get_my_palette(group='Lime Green')[2]
-cornflower = get_my_palette(group='Cornflower')[2]
+cornflower = get_my_palette(group='Cornflower')[3]
 
 metrics = [
     ('Initial Amount Paid', 'Initial Amount Paid (log)'),
     ('SLA Hours', 'SLA Hours (log)')
 ]
 
-for orig_col, log_col in metrics:
-    if log_col not in df_deals.columns and orig_col in df_deals.columns:
-        df_deals[log_col] = np.log1p(df_deals[orig_col])
-
 fig, axes = plt.subplots(
-    nrows=len(metrics), ncols=2,
-    figsize=(10, 8),
-    facecolor='white'
+    nrows=len(metrics),
+    ncols=2,
+    figsize=(10, 7),
+    dpi=100
 )
 
 for i, (orig_col, log_col) in enumerate(metrics):
@@ -617,6 +846,7 @@ for i, (orig_col, log_col) in enumerate(metrics):
     axes[i, 0].set_title(f'{orig_col} — Before Log', fontsize=12)
     axes[i, 0].set_ylabel(orig_col)
     axes[i, 0].set_xlabel('')
+    axes[i, 0].tick_params(axis='y', labelsize=8)
 
     sns.violinplot(
         y=df_deals[log_col],
@@ -628,53 +858,16 @@ for i, (orig_col, log_col) in enumerate(metrics):
     axes[i, 1].set_title(f'{orig_col} — After Log', fontsize=12)
     axes[i, 1].set_ylabel(f'Log({orig_col})')
     axes[i, 1].set_xlabel('')
+    axes[i, 1].tick_params(axis='y', labelsize=8)
 
 plt.suptitle(
     'Deals — Distributions Before and After Log Transformation',
     fontsize=14,
-    fontweight='bold',
-    y=0.98
-)
+    y=1.02)
 
 plt.tight_layout(rect=[0, 0, 1, 0.96])
 
 save_plot('deals_violin_all_metrics', subfolder='notebooks')
-plt.show()
-
-logging.info('Plot Deals Metrics — Violin Distributions saved successfully.')
-
-gradient_colors = [
-    get_my_palette(group='Tomato')[3],
-    get_my_palette(group='Yellowsoft')[3],
-    get_my_palette(group='Lavender')[3],
-    get_my_palette(group='Cornflower')[3],
-    get_my_palette(group='Lime Green')[3],
-]
-
-cmap_custom = LinearSegmentedColormap.from_list("smooth_custom", gradient_colors, N=256)
-
-plt.figure(figsize=(8, 6))
-ax = sns.heatmap(
-    df_deals[['Course duration', 'Months of study', 'Initial Amount Paid', 'Offer Total Amount', 'SLA Seconds']].corr(),
-    annot=True,
-    fmt=".3f",
-    cmap=cmap_custom,
-    center=0,
-    annot_kws={"size": 10},
-    linewidths=0.5,
-    cbar_kws={"shrink": 0.7, "label": "Correlation"}
-)
-
-cbar = ax.collections[0].colorbar
-cbar.ax.tick_params(labelsize=8)
-cbar.set_label('Correlation', fontsize=10)
-
-plt.title('Correlation Matrix (deals)', fontsize=14, fontweight='bold', pad=10)
-plt.xticks(rotation=40, ha='right', fontsize=9)
-plt.yticks(rotation=0, fontsize=9)
-plt.tight_layout()
-
-save_plot('deals_correlation_matrix_custom', subfolder='notebooks')
 plt.show()
 
 """##### 1. Initial Amount Paid"""
@@ -691,79 +884,9 @@ show_df(compare_sla)
 
 delta_deals = plot_change(compare_spend, name='sla_change', subfolder='notebooks')
 
-"""##### Categorical fields"""
+"""#### Categorical fields"""
 
 deals_new = describe_cat(df_deals, df_name='Deals')
-
-top_stages = (
-    df_deals["Stage"].str.strip()
-    .value_counts()
-    .head(5)
-    .index
-)
-df_tree = df_deals[df_deals["Stage"].str.strip().isin(top_stages)].copy()
-df_tree["Stage"] = df_tree["Stage"].str.strip()
-
-cornflower = get_my_palette(group='Cornflower')
-yellow = get_my_palette(group='Yellowsoft')
-lavender = get_my_palette(group='Lavender')
-tomato = get_my_palette(group='Tomato')
-lime = get_my_palette(group='Lime Green')
-neutral = get_my_palette(group='Neutral')
-
-stage_colors = {
-    top_stages[0]: tomato[2],
-    top_stages[4]: neutral[3],
-    top_stages[1]: yellow[2],
-    top_stages[2]: lavender[3],
-    top_stages[3]: lime[3],
-}
-
-fig = px.treemap(
-    df_tree,
-    path=["Source", "Stage"],
-    color="Stage",
-    color_discrete_map=stage_colors,
-    title="Top 5 Stages by Marketing Sources"
-)
-
-cornflower_source_color = cornflower[2]
-
-colors = list(fig.data[0]['marker']['colors'])
-sources = df_tree['Source'].dropna().unique()
-
-for i, label in enumerate(fig.data[0]['labels']):
-    if label in sources:
-        colors[i] = cornflower_source_color
-
-fig.data[0]['marker']['colors'] = tuple(colors)
-
-fig.update_traces(
-    texttemplate="<b>%{label}</b><br>%{value:,} deals<br>%{percentParent:.1%}",
-    hovertemplate="<b>%{label}</b><br>%{value:,} deals<br>%{percentParent:.1%} of Source"
-)
-
-fig.update_layout(
-    template='plotly_white',
-    font=dict(size=13),
-    title_font=dict(size=18),
-    margin=dict(t=70, l=0, r=0, b=0),
-    paper_bgcolor="rgba(0,0,0,0)",
-    plot_bgcolor="rgba(0,0,0,0)"
-)
-
-save_plot('stages_by_marketing_sources', subfolder='notebooks')
-fig.show()
-
-for column in ['Quality', 'Stage', 'Source', 'Product']:
-    summary = summarize_category(df_deals, column)
-
-    log_section(f'=== {column} — Category Summary ===')
-    display(HTML('<br>'))
-    show_df(summary, name=f'{column}_summary', max_rows=12)
-    display(HTML('<br>'))
-
-    save_table_as_png(summary, name=f'{column}_summary', subfolder='notebooks')
 
 cols = ['Quality', 'Product', 'Source','Stage']
 palettes = ['Tomato', 'Cornflower', 'Yellowsoft', 'Lavender']
@@ -817,9 +940,13 @@ fig.update_layout(
     height=800,
     width=1200,
     showlegend=False,
-    title_text='Category Distributions — Calls & Deals Summary',
-    title_font=dict(size=20),
+    title=dict(
+        text='Category Distributions — Calls & Deals Summary',
+        x=0.5,
+        xanchor='center',
+        font=dict(size=20, family='Arial')),
     font=dict(size=12),
+    margin=dict(l=80, r=150, t=80, b=50)
 )
 
 fig.update_yaxes(title='', automargin=True)
@@ -828,56 +955,327 @@ fig.update_xaxes(title='Count')
 save_plot('category_distribution', subfolder='notebooks')
 fig.show()
 
-cross = pd.crosstab(df_deals['Stage'], df_deals['Quality'], normalize='index') * 100
+cross_count = pd.crosstab(df_deals['Stage'], df_deals['Quality'])
 
-gradient_colors = [
-    get_my_palette(group='Yellowsoft')[3],
-    get_my_palette(group='Cornflower')[3],
-    get_my_palette(group='Lavender')[3],
-    get_my_palette(group='Lime Green')[3],
-]
-cmap_custom = LinearSegmentedColormap.from_list("smooth_custom", gradient_colors, N=256)
+cross_percent = cross_count.div(cross_count.sum(axis=1), axis=0) * 100
+cross_percent = cross_percent.round(1)
 
-plt.figure(figsize=(10, 6))
-sns.heatmap(
-    cross,
-    annot=True,
-    fmt=".1f",
-    cmap=cmap_custom,
-    linewidths=0.5,
-    linecolor='white',
-    annot_kws={"size": 9},
-    cbar_kws={"shrink": 0.8, "label": "Percent (%)"}
+colors = get_my_palette(as_dict=True)
+all_colors = (
+    colors['Lavender'] +
+    colors['Cornflower'] +
+    colors['Yellowsoft'] +
+    colors['Tomato'] +
+    colors['Lime Green']
 )
 
-plt.title('Stage × Quality (%)', fontsize=13, fontweight='bold', pad=10)
-plt.xlabel('Quality', fontsize=11)
-plt.ylabel('Stage', fontsize=11)
-plt.xticks(rotation=40, ha='right', fontsize=9)
-plt.yticks(fontsize=9)
+cmap_combined = LinearSegmentedColormap.from_list(
+    "stage_source_cmap",
+    all_colors
+)
+
+fig, ax = plt.subplots(figsize=(10, 6.5), dpi=110)
+
+sns.heatmap(
+    cross_count,
+    annot=False,
+    fmt="",
+    cmap=cmap_combined,
+    linewidths=0.4,
+    cbar_kws={"shrink": 0.6, "label": "Count"},
+    ax=ax
+)
+
+bold_font = FontProperties(weight='bold', size=6.5)
+normal_font = FontProperties(size=6.5)
+
+for y in range(cross_count.shape[0]):
+    for x in range(cross_count.shape[1]):
+        count = cross_count.iloc[y, x]
+        pct = cross_percent.iloc[y, x]
+        ax.text(
+            x + 0.5, y + 0.3, f"{int(count)}", ha='center', va='center', fontproperties=bold_font
+        )
+        ax.text(
+            x + 0.5, y + 0.7, f"({pct:.1f}%)", ha='center', va='center', fontproperties=normal_font
+        )
+
+ax.set_title('Stage × Quality — Count (Percent)', fontsize=14, pad=12)
+ax.tick_params(axis='x', labelrotation=35, labelsize=8)
+ax.tick_params(axis='y', labelsize=8)
+ax.set_xlabel('Quality', fontsize=8)
+ax.set_ylabel('Stage', fontsize=8)
+
+cbar = ax.collections[0].colorbar
+cbar.ax.tick_params(labelsize=8)
+cbar.set_label('Count', fontsize=8)
+
+sns.despine()
 plt.tight_layout()
 
-save_plot('stages_quality', subfolder='notebooks')
+save_plot('stage_vs_quality', subfolder='notebooks')
+plt.show()
+
+cross_count = pd.crosstab(df_deals['Stage'], df_deals['Source'])
+
+cross_percent = cross_count.div(cross_count.sum(axis=1), axis=0) * 100
+cross_percent = cross_percent.round(1)
+
+colors = get_my_palette(as_dict=True)
+all_colors = (
+    colors['Lavender'] +
+    colors['Cornflower'] +
+    colors['Yellowsoft'] +
+    colors['Tomato'] +
+    colors['Lime Green']
+)
+
+cmap_combined = LinearSegmentedColormap.from_list(
+    "stage_source_cmap",
+    all_colors
+)
+
+fig, ax = plt.subplots(figsize=(12, 7), dpi=110)
+sns.heatmap(
+    cross_count,
+    annot=False,
+    fmt="",
+    cmap=cmap_combined,
+    linewidths=0.4,
+    cbar_kws={"shrink": 0.6, "label": "Count"},
+    ax=ax
+)
+
+bold_font = FontProperties(weight='bold', size=6.5)
+normal_font = FontProperties(size=6.5)
+
+for y in range(cross_count.shape[0]):
+    for x in range(cross_count.shape[1]):
+        count = cross_count.iloc[y, x]
+        pct = cross_percent.iloc[y, x]
+        ax.text(
+            x + 0.5, y + 0.3, f"{int(count)}", ha='center', va='center', fontproperties=bold_font
+        )
+        ax.text(
+            x + 0.5, y + 0.7, f"({pct:.1f}%)", ha='center', va='center', fontproperties=normal_font
+        )
+
+ax.set_title('Stage × Source — Count and Percent', fontsize=14, pad=12)
+ax.tick_params(axis='x', labelrotation=35, labelsize=8)
+ax.tick_params(axis='y', labelsize=8)
+ax.set_xlabel('Source', fontsize=8)
+ax.set_ylabel('Stage', fontsize=8)
+
+cbar = ax.collections[0].colorbar
+cbar.ax.tick_params(labelsize=8)
+cbar.set_label('Count', fontsize=8)
+
+sns.despine()
+plt.tight_layout()
+
+save_plot('stage_vs_source', subfolder='notebooks')
+plt.show()
+
+cross_count = pd.crosstab(df_deals['Product'], df_deals['Source'])
+
+cross_percent = cross_count.div(cross_count.sum(axis=1), axis=0) * 100
+cross_percent = cross_percent.round(1)
+
+colors = get_my_palette(as_dict=True)
+all_colors = (
+    colors['Lavender'] +
+    colors['Cornflower'] +
+    colors['Yellowsoft'] +
+    colors['Tomato'] +
+    colors['Lime Green']
+)
+
+cmap_combined = LinearSegmentedColormap.from_list(
+    "stage_source_cmap",
+    all_colors
+)
+
+fig, ax = plt.subplots(figsize=(10, 3.5), dpi=110)
+sns.heatmap(
+    cross_count,
+    annot=False,
+    fmt="",
+    cmap=cmap_combined,
+    linewidths=0.4,
+    cbar_kws={"shrink": 0.6, "label": "Count"},
+    ax=ax
+)
+
+bold_font = FontProperties(weight='bold', size=6.5)
+normal_font = FontProperties(size=6.5)
+
+for y in range(cross_count.shape[0]):
+    for x in range(cross_count.shape[1]):
+        count = cross_count.iloc[y, x]
+        pct = cross_percent.iloc[y, x]
+        ax.text(
+            x + 0.5, y + 0.3, f"{int(count)}", ha='center', va='center', fontproperties=bold_font
+        )
+        ax.text(
+            x + 0.5, y + 0.7, f"({pct:.1f}%)", ha='center', va='center', fontproperties=normal_font
+        )
+
+ax.set_title('Product × Source — Count and Percent', fontsize=14, pad=12)
+ax.tick_params(axis='x', labelrotation=35, labelsize=8)
+ax.tick_params(axis='y', labelsize=8)
+ax.set_xlabel('Source', fontsize=8)
+ax.set_ylabel('Product', fontsize=8)
+
+cbar = ax.collections[0].colorbar
+cbar.ax.tick_params(labelsize=8)
+cbar.set_label('Count', fontsize=8)
+
+sns.despine()
+plt.tight_layout()
+
+save_plot('product_vs_source', subfolder='notebooks')
+plt.show()
+
+cross_count = pd.crosstab(df_deals['Product'], df_deals['Quality'])
+
+cross_percent = cross_count.div(cross_count.sum(axis=1), axis=0) * 100
+cross_percent = cross_percent.round(1)
+
+colors = get_my_palette(as_dict=True)
+all_colors = (
+    colors['Lavender'] +
+    colors['Cornflower'] +
+    colors['Yellowsoft'] +
+    colors['Tomato'] +
+    colors['Lime Green']
+)
+
+cmap_combined = LinearSegmentedColormap.from_list(
+    "stage_source_cmap",
+    all_colors
+)
+
+fig, ax = plt.subplots(figsize=(8, 3.5), dpi=100)
+
+sns.heatmap(
+    cross_count,
+    annot=False,
+    fmt="",
+    cmap=cmap_combined,
+    linewidths=0.4,
+    cbar_kws={"shrink": 0.6, "label": "Count"},
+    ax=ax
+)
+
+bold_font = FontProperties(weight='bold', size=6.5)
+normal_font = FontProperties(size=6.5)
+
+for y in range(cross_count.shape[0]):
+    for x in range(cross_count.shape[1]):
+        count = cross_count.iloc[y, x]
+        pct = cross_percent.iloc[y, x]
+        ax.text(
+            x + 0.5, y + 0.3, f"{int(count)}", ha='center', va='center', fontproperties=bold_font
+        )
+        ax.text(
+            x + 0.5, y + 0.7, f"({pct:.1f}%)", ha='center', va='center', fontproperties=normal_font
+        )
+
+ax.set_title('Product × Quality — Count and Percent', fontsize=14, pad=12)
+ax.tick_params(axis='x', labelrotation=35, labelsize=8)
+ax.tick_params(axis='y', labelsize=8)
+ax.set_xlabel('Quality', fontsize=8)
+ax.set_ylabel('Product', fontsize=8)
+
+cbar = ax.collections[0].colorbar
+cbar.ax.tick_params(labelsize=8)
+cbar.set_label('Count', fontsize=8)
+
+sns.despine()
+plt.tight_layout()
+
+save_plot('product_vs_quality', subfolder='notebooks')
+plt.show()
+
+cross_count = pd.crosstab(df_deals['Product'], df_deals['Stage'])
+
+cross_percent = cross_count.div(cross_count.sum(axis=1), axis=0) * 100
+cross_percent = cross_percent.round(1)
+
+colors = get_my_palette(as_dict=True)
+all_colors = (
+    colors['Lavender'] +
+    colors['Cornflower'] +
+    colors['Yellowsoft'] +
+    colors['Tomato'] +
+    colors['Lime Green']
+)
+
+cmap_combined = LinearSegmentedColormap.from_list(
+    "stage_source_cmap",
+    all_colors
+)
+
+fig, ax = plt.subplots(figsize=(10, 3.5), dpi=110)
+sns.heatmap(
+    cross_count,
+    annot=False,
+    fmt="",
+    cmap=cmap_combined,
+    linewidths=0.4,
+    cbar_kws={"shrink": 0.6, "label": "Count"},
+    ax=ax
+)
+
+bold_font = FontProperties(weight='bold', size=6.5)
+normal_font = FontProperties(size=6.5)
+
+for y in range(cross_count.shape[0]):
+    for x in range(cross_count.shape[1]):
+        count = cross_count.iloc[y, x]
+        pct = cross_percent.iloc[y, x]
+        ax.text(
+            x + 0.5, y + 0.3, f"{int(count)}", ha='center', va='center', fontproperties=bold_font
+        )
+        ax.text(
+            x + 0.5, y + 0.7, f"({pct:.1f}%)", ha='center', va='center', fontproperties=normal_font
+        )
+
+ax.set_title('Product × Stage — Count and Percent', fontsize=14, pad=12)
+ax.tick_params(axis='x', labelrotation=35, labelsize=8)
+ax.tick_params(axis='y', labelsize=8)
+ax.set_xlabel('Stage', fontsize=8)
+ax.set_ylabel('Product', fontsize=8)
+
+cbar = ax.collections[0].colorbar
+cbar.ax.tick_params(labelsize=8)
+cbar.set_label('Count', fontsize=8)
+
+sns.despine()
+plt.tight_layout()
+
+save_plot('product_vs_stage', subfolder='notebooks')
 plt.show()
 
 log_section('=== Saving results ===')
 start_time = time.time()
 
-save_table_as_png(calls, 'calls_stats_num', subfolder='notebooks')
-save_table_as_png(compare_calls, 'calls_compare', subfolder='notebooks')
-save_table_as_png(calls_new, 'calls_stats_cat', subfolder='notebooks')
+save_styler_as_png(calls, 'calls_stats_num', subfolder='notebooks', decimals=2)
+save_table_as_png(compare_calls, 'calls_compare', subfolder='notebooks', decimals=2)
+save_table_as_png(contact_owners_df, 'contract_owners', add_index_column=False, subfolder='notebooks', decimals=2)
+save_styler_as_png(calls_new, 'calls_stats_cat', subfolder='notebooks', decimals=2)
 
-save_table_as_png(contacts_new, 'contacts_stats_cat', subfolder='notebooks')
+save_styler_as_png(contacts_new, 'contacts_stats_cat', subfolder='notebooks', decimals=2)
 
-save_table_as_png(spend, 'spend_stats_num', subfolder='notebooks')
-save_table_as_png(compare_imp, 'compare_imp', subfolder='notebooks')
-save_table_as_png(compare_clicks, 'compare_clicks', subfolder='notebooks')
-save_table_as_png(compare_spend, 'compare_spend', subfolder='notebooks')
-save_table_as_png(spend_new, 'spend_stats_cat', subfolder='notebooks')
+save_styler_as_png(spend, 'spend_stats_num', subfolder='notebooks', decimals=2)
+save_table_as_png(compare_imp, 'compare_imp', subfolder='notebooks', decimals=2)
+save_table_as_png(compare_clicks, 'compare_clicks', subfolder='notebooks', decimals=2)
+save_table_as_png(compare_spend, 'compare_spend', subfolder='notebooks', decimals=2)
+save_styler_as_png(spend_new, 'spend_stats_cat', subfolder='notebooks', decimals=2)
 
-save_table_as_png(deals, 'deals_stats_num', subfolder='notebooks')
-save_table_as_png(compare_iap, 'compare_iap', subfolder='notebooks')
-save_table_as_png(compare_sla, 'compare_sla', subfolder='notebooks')
-save_table_as_png(deals_new, 'deals_stats_cat', subfolder='notebooks')
+save_styler_as_png(deals, 'deals_stats_num', subfolder='notebooks', decimals=2)
+save_table_as_png(compare_iap, 'compare_iap', subfolder='notebooks', decimals=2)
+save_table_as_png(compare_sla, 'compare_sla', subfolder='notebooks', decimals=2)
+save_styler_as_png(deals_new, 'deals_stats_cat', subfolder='notebooks', decimals=2)
 
 logging.info(f'All files successfully saved in {time.time() - start_time:.2f} sec.')
