@@ -64,32 +64,7 @@ They were **kept intentionally**, preserving logical integrity.
 
 ---
 
-## 6️⃣ Outlier Detection — Duration Analysis
-
-Outlier detection was performed using:
-- **Interquartile Range (IQR)**  
-- **Three Sigma Rule (3σ)**  
-
-Outliers were highlighted both in histograms and scatter plots.
-
-### Outlier Detection Visualization
-![Outlier Detection](figures/outlier_detection_iqr_vs_3sigma.png)
-
-Two views were generated:
-- **Left:** Histogram showing IQR-based outliers  
-- **Right:** Scatter plot of call duration over time with 3σ threshold  
-
-From these visualizations, it is clear that the **distribution of call durations is not normal** —  
-it is heavily right-skewed, with a long tail of extended calls.
-
-These visualizations are therefore **not intended for detailed statistical analysis**,  
-but rather for **an initial diagnostic check** — to determine whether long-duration outliers should be excluded or retained.
-
-For future analytical steps, **logarithmic transformation** and other **robust statistical techniques** will be applied to correctly handle the non-normal distribution of call durations.
-
----
-
-## 7️⃣ Type Conversion
+## 6️⃣ Type Conversion
 
 To optimize performance and ensure proper categorical encoding:
 | Column | Converted Type |
@@ -100,7 +75,7 @@ To optimize performance and ensure proper categorical encoding:
 
 ---
 
-## 8️⃣ Final Summary After Cleaning
+## 7️⃣ Final Summary After Cleaning
 
 A final statistical overview was generated for the cleaned dataset.
 
