@@ -387,6 +387,25 @@ logging.info(f'Found {len(duplicates)} duplicate rows for {unique_duplicate_name
 show_df(duplicates.sort_values(by='Contact Name'), name='Duplicate Contact Names')
 
 important_cols = [
+    'Months of study',
+    'Initial Amount Paid',
+    'Offer Total Amount',
+    'Course duration'
+]
+
+clean_deals['is_empty'] = clean_deals[important_cols].isna().all(axis=1)
+
+group_has_data = clean_deals.groupby('Contact Name')['is_empty'].transform(lambda x: not x.all())
+
+to_remove = clean_deals['is_empty'] & group_has_data
+
+logging.info(f'Removed {to_remove.sum()} empty duplicate rows where group has non-empty data.')
+
+clean_deals = clean_deals[~to_remove].copy()
+
+clean_deals.drop(columns='is_empty', inplace=True)
+
+important_cols = [
     'Course duration',
     'Months of study',
     'Initial Amount Paid',
@@ -406,7 +425,6 @@ after = len(clean_deals)
 removed = before - after
 
 logging.info(f'Removed {removed} duplicate rows with empty key fields.')
-show_df(clean_deals, name='Clean Deals (duplicates with empty fields removed)')
 
 """#### Convert columns to datetime"""
 
