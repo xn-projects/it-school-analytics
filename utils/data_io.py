@@ -111,33 +111,26 @@ def save_styler_as_png(styler, name, subfolder=None, folder='figures'):
     Saves a Styler as a PNG image, adding the first column from the index.
     """
     df = styler.data.copy()
-    df[df.select_dtypes(include='number').columns] = (
-        df.select_dtypes(include='number').round(2))
+
+    num_cols = df.select_dtypes(include='number').columns
+    df[num_cols] = df[num_cols].round(decimals)
 
     df.insert(
         0,
         '',
         ['\n'.join(textwrap.wrap(str(i), 18)) if isinstance(i, str) else i
-         for i in df.index])
+         for i in df.index]
+    )
     df.reset_index(drop=True, inplace=True)
 
-    exported = styler.export()
-    has_colors = any(
-        'background-color' in str(css) or 'color' in str(css)
-        for css in str(exported).split())
-
-    new_styler = df.style.use(exported)
-
     export = new_styler.export()
-    cleaned = []
-    for cell in export.get('cellstyle', []):
-        if not any('col0' in s for s in cell['selectors']):
-            cleaned.append(cell)
+    cleaned = [
+        cell for cell in export.get('cellstyle', [])
+        if not any('col0' in s for s in cell['selectors'])
+    ]
     export['cellstyle'] = cleaned
     new_styler = df.style.use(export)
-
-    num_cols = df.select_dtypes(include='number').columns
-    new_styler = new_styler.format('{:.2f}', subset=num_cols)
+    new_styler = new_styler.format(f'{{:.{decimals}f}}', subset=num_cols)
 
     rows, cols = df.shape
     plt.rcParams['figure.figsize'] = (max(8, cols * 1.5), max(2, rows * 0.4))
