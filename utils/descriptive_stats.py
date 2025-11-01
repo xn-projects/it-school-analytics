@@ -206,6 +206,5 @@ def summarize_category(df, column):
 
     total = summary['Count'].sum()
     summary['Percent'] = (summary['Count'] / total * 100).round(2)
-    summary['Cumulative %'] = summary['Percent'].cumsum().round(1)
 
     return summary
