@@ -1,0 +1,99 @@
+2025-11-01 22:02:36,393 — [INFO] Logging started. File: logs/log_2025-11-01_22-02-36.txt
+2025-11-01 22:02:36,395 — [INFO] Repository successfully loaded and ready
+2025-11-01 22:02:36,424 — [INFO] ==================================================
+2025-11-01 22:02:36,428 — [INFO] === Downloading source Excel files ===
+2025-11-01 22:02:36,430 — [INFO] ==================================================
+2025-11-01 22:02:36,753 — [INFO] File calls_clean.xlsx downloaded to data/raw/calls_clean.xlsx
+2025-11-01 22:02:36,975 — [INFO] File contacts_clean.xlsx downloaded to data/raw/contacts_clean.xlsx
+2025-11-01 22:02:37,212 — [INFO] File deals_clean.xlsx downloaded to data/raw/deals_clean.xlsx
+2025-11-01 22:02:37,418 — [INFO] File spend_clean.xlsx downloaded to data/raw/spend_clean.xlsx
+2025-11-01 22:02:37,420 — [INFO] Downloaded 4 files successfully.
+2025-11-01 22:02:37,431 — [INFO] ==================================================
+2025-11-01 22:02:37,434 — [INFO] === Reading Excel files ===
+2025-11-01 22:02:37,436 — [INFO] ==================================================
+2025-11-01 22:03:19,139 — [INFO] All files successfully loaded into DataFrames.
+2025-11-01 22:03:19,151 — [INFO] ==================================================
+2025-11-01 22:03:19,153 — [INFO] === Descriptive statistics for Calls Data ===
+2025-11-01 22:03:19,155 — [INFO] ==================================================
+2025-11-01 22:03:19,315 — [INFO] calls: Processed 2 numeric columns successfully.
+2025-11-01 22:03:19,318 — [INFO] Numeric columns: Call Duration (in seconds), Scheduled in CRM
+2025-11-01 22:03:19,447 — [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-11-01 22:03:19,457 — [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-11-01 22:03:20,282 — [INFO] Plot saved as notebooks/figures/call_duration_by_weekday.png
+2025-11-01 22:03:22,742 — [INFO] Plot saved as notebooks/figures/call_duration_orig_vs_log.png
+2025-11-01 22:03:24,336 — [INFO] Plot saved as notebooks/figures/call_duration_distribution.png
+2025-11-01 22:03:24,516 — [INFO] calls: Compared distributions (Call Duration (in seconds) → Call Duration (log)).
+2025-11-01 22:03:25,046 — [INFO] Plot saved as notebooks/figures/call_change.png
+2025-11-01 22:03:25,195 — [INFO] Plot call_change.png saved successfully.
+2025-11-01 22:03:26,080 — [INFO] Calls: Processed 7 categorical columns successfully.
+2025-11-01 22:03:26,081 — [INFO] Categorical columns: Id, Call Owner Name, CONTACTID, Call Type, Call Status, Outgoing Call Status, Weekday
+2025-11-01 22:03:27,288 — [INFO] Plot saved as notebooks/figures/call_owners.png
+2025-11-01 22:03:28,364 — [INFO] Plot saved as notebooks/figures/call_owners_percent.png
+2025-11-01 22:03:28,655 — [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-11-01 22:03:28,666 — [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-11-01 22:03:29,129 — [INFO] Plot saved as notebooks/figures/call_by_weekday.png
+2025-11-01 22:03:29,305 — [INFO] ==================================================
+2025-11-01 22:03:29,308 — [INFO] === Descriptive statistics for Contacts Data ===
+2025-11-01 22:03:29,310 — [INFO] ==================================================
+2025-11-01 22:03:29,323 — [WARNING] contacts: No numeric columns found.
+2025-11-01 22:03:29,436 — [INFO] Contacts: Processed 2 categorical columns successfully.
+2025-11-01 22:03:29,437 — [INFO] Categorical columns: Id, Contact Owner Name
+2025-11-01 22:03:30,256 — [INFO] Plot saved as notebooks/figures/contacts_owners.png
+2025-11-01 22:03:30,471 — [INFO] ==================================================
+2025-11-01 22:03:30,473 — [INFO] === Descriptive statistics for Spend Data ===
+2025-11-01 22:03:30,475 — [INFO] ==================================================
+2025-11-01 22:03:30,541 — [INFO] spend: Processed 3 numeric columns successfully.
+2025-11-01 22:03:30,544 — [INFO] Numeric columns: Impressions, Spend, Clicks
+2025-11-01 22:03:35,013 — [INFO] Plot saved as notebooks/figures/spend_all_metrics_orig_vs_log.png
+2025-11-01 22:03:38,181 — [INFO] Plot saved as notebooks/figures/spend_violin_all_metrics.png
+2025-11-01 22:03:38,606 — [INFO] spend: Compared distributions (Impressions → Impressions (log)).
+2025-11-01 22:03:39,155 — [INFO] Plot saved as notebooks/figures/impressions_change.png
+2025-11-01 22:03:39,278 — [INFO] Plot impressions_change.png saved successfully.
+2025-11-01 22:03:39,301 — [INFO] spend: Compared distributions (Clicks → Clicks (log)).
+2025-11-01 22:03:39,826 — [INFO] Plot saved as notebooks/figures/click_change.png
+2025-11-01 22:03:39,963 — [INFO] Plot click_change.png saved successfully.
+2025-11-01 22:03:39,983 — [INFO] spend: Compared distributions (Spend → Spend (log)).
+2025-11-01 22:03:40,505 — [INFO] Plot saved as notebooks/figures/spend_change.png
+2025-11-01 22:03:40,626 — [INFO] Plot spend_change.png saved successfully.
+2025-11-01 22:03:40,682 — [INFO] Spend: Processed 4 categorical columns successfully.
+2025-11-01 22:03:40,683 — [INFO] Categorical columns: Source, Campaign, AdGroup, Ad
+2025-11-01 22:03:42,671 — [INFO] Plot saved as notebooks/figures/category_spend_distribution.png
+2025-11-01 22:03:42,760 — [INFO] ==================================================
+2025-11-01 22:03:42,761 — [INFO] === Descriptive statistics for Deals Data ===
+2025-11-01 22:03:42,762 — [INFO] ==================================================
+2025-11-01 22:03:42,870 — [INFO] deals: Processed 9 numeric columns successfully.
+2025-11-01 22:03:42,871 — [INFO] Numeric columns: Course duration, Months of study, Initial Amount Paid, Offer Total Amount, Latitude, Longitude, SLA Seconds, SLA Minutes, SLA Hours
+2025-11-01 22:03:45,448 — [INFO] Plot saved as notebooks/figures/deals_all_metrics_orig_vs_log.png
+2025-11-01 22:03:48,230 — [INFO] Plot saved as notebooks/figures/deals_violin_all_metrics.png
+2025-11-01 22:03:48,543 — [INFO] deals: Compared distributions (Initial Amount Paid → Initial Amount Paid (log)).
+2025-11-01 22:03:49,093 — [INFO] Plot saved as notebooks/figures/iap_change.png
+2025-11-01 22:03:49,217 — [INFO] Plot iap_change.png saved successfully.
+2025-11-01 22:03:49,242 — [INFO] deals: Compared distributions (SLA Hours → SLA Hours (log)).
+2025-11-01 22:03:49,874 — [INFO] Plot saved as notebooks/figures/sla_change.png
+2025-11-01 22:03:50,014 — [INFO] Plot sla_change.png saved successfully.
+2025-11-01 22:03:50,331 — [INFO] Deals: Processed 18 categorical columns successfully.
+2025-11-01 22:03:50,333 — [INFO] Categorical columns: Id, Deal Owner Name, Quality, Stage, Lost Reason, Page, Campaign, Content, Term, Source, Payment Type, Product, Education Type, Contact Name, City, Federal state, Country, German Level
+2025-11-01 22:03:50,870 — [INFO] Plot saved as notebooks/figures/category_distribution.png
+2025-11-01 22:03:52,109 — [INFO] Plot saved as notebooks/figures/stage_vs_quality.png
+2025-11-01 22:03:54,170 — [INFO] Plot saved as notebooks/figures/stage_vs_source.png
+2025-11-01 22:03:55,542 — [INFO] Plot saved as notebooks/figures/product_vs_source.png
+2025-11-01 22:03:56,370 — [INFO] Plot saved as notebooks/figures/product_vs_quality.png
+2025-11-01 22:03:57,356 — [INFO] Plot saved as notebooks/figures/product_vs_stage.png
+2025-11-01 22:03:57,755 — [INFO] ==================================================
+2025-11-01 22:03:57,757 — [INFO] === Saving results ===
+2025-11-01 22:03:57,758 — [INFO] ==================================================
+2025-11-01 22:03:58,515 — [INFO] Table saved as notebooks/figures/calls_stats_num.png
+2025-11-01 22:03:58,750 — [INFO] Table saved as notebooks/figures/calls_compare.png
+2025-11-01 22:03:59,735 — [INFO] Table saved as notebooks/figures/contract_owners.png
+2025-11-01 22:04:00,388 — [INFO] Table saved as notebooks/figures/calls_stats_cat.png
+2025-11-01 22:04:00,529 — [INFO] Table saved as notebooks/figures/contacts_stats_cat.png
+2025-11-01 22:04:01,226 — [INFO] Table saved as notebooks/figures/spend_stats_num.png
+2025-11-01 22:04:01,707 — [INFO] Table saved as notebooks/figures/compare_imp.png
+2025-11-01 22:04:02,024 — [INFO] Table saved as notebooks/figures/compare_clicks.png
+2025-11-01 22:04:02,195 — [INFO] Table saved as notebooks/figures/compare_spend.png
+2025-11-01 22:04:02,801 — [INFO] Table saved as notebooks/figures/spend_stats_cat.png
+2025-11-01 22:04:06,222 — [INFO] Table saved as notebooks/figures/deals_stats_num.png
+2025-11-01 22:04:06,378 — [INFO] Table saved as notebooks/figures/compare_iap.png
+2025-11-01 22:04:06,549 — [INFO] Table saved as notebooks/figures/compare_sla.png
+2025-11-01 22:04:08,974 — [INFO] Table saved as notebooks/figures/deals_stats_cat.png
+2025-11-01 22:04:08,976 — [INFO] All files successfully saved in 11.22 sec.
