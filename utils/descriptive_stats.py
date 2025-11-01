@@ -130,7 +130,7 @@ def compare_distributions(df, col_original, col_transformed, df_name='DataFrame'
     }, index=['Original', 'Log'])
 
     logging.info(f'{df_name}: Compared distributions ({col_original} → {col_transformed}).')
-    return compare.round(2)
+    return compare.round(2).style.format('{:.2f}')
 
 
 def plot_change(compare, orig_label='Original', trans_label='Log', name='relative_change', subfolder=None):
