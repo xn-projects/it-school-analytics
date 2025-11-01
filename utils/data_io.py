@@ -30,28 +30,28 @@ def load_files(base_url, files, target_folder='data/raw'):
     return saved_files
 
 
-def save_table_as_png(df, name, subfolder=None, folder='figures', add_index_column=True):
+def save_table_as_png(df, name, subfolder=None, folder='figures',
+                      add_index_column=True, decimals=None):
     """
     Save a DataFrame as a PNG image using dataframe_image with matplotlib backend.
-    """ 
+    """
     df = df.copy()
 
-    float_cols = df.select_dtypes(include='float')
-    if not float_cols.empty:
-        df[float_cols.columns] = df[float_cols.columns].round(1)
-
+    if decimals is not None:
+        num_cols = df.select_dtypes(include='number').columns
+        if len(num_cols) > 0:
+            df[num_cols] = df[num_cols].round(decimals)
     if add_index_column:
         df.insert(
             0,
             '',
             ['\n'.join(textwrap.wrap(str(i), 18)) if isinstance(i, str) else i
-             for i in df.index])
+             for i in df.index]
+        )
         df.reset_index(drop=True, inplace=True)
 
     rows, cols = df.shape
-    width = max(8, cols * 1.5)
-    height = max(2, rows * 0.4)
-    plt.rcParams['figure.figsize'] = (width, height)
+    plt.rcParams['figure.figsize'] = (max(8, cols * 1.5), max(2, rows * 0.4))
     plt.rcParams['figure.dpi'] = 300
 
     base_dir = subfolder if subfolder else '.'
@@ -64,7 +64,14 @@ def save_table_as_png(df, name, subfolder=None, folder='figures', add_index_colu
         .set_properties(**{
             'white-space': 'pre-wrap',
             'text-align': 'left',
-            'font-size': '7pt'}))
+            'font-size': '7pt'
+        })
+    )
+
+    if decimals is not None:
+        num_cols = df.select_dtypes(include='number').columns
+        if len(num_cols) > 0:
+            styled = styled.format(f'{{:.{decimals}f}}', subset=num_cols)
 
     try:
         dfi.export(
@@ -72,7 +79,8 @@ def save_table_as_png(df, name, subfolder=None, folder='figures', add_index_colu
             path,
             table_conversion='matplotlib',
             dpi=300,
-            max_rows=-1)
+            max_rows=-1
+        )
         plt.close('all')
         logging.info(f'Table saved as {path}')
     except Exception as e:
