@@ -106,14 +106,15 @@ def save_clean_data(df, name, folder='data/clean'):
     logging.info(f'Cleaned dataset saved as {path}')
 
 
-def save_styler_as_png(styler, name, subfolder=None, folder='figures'):
+def save_styler_as_png(styler, name, subfolder=None, folder='figures', decimals=None):
     """
     Saves a Styler as a PNG image, adding the first column from the index.
     """
     df = styler.data.copy()
 
     num_cols = df.select_dtypes(include='number').columns
-    df[num_cols] = df[num_cols].round(decimals)
+    if decimals is not None:
+        df[num_cols] = df[num_cols].round(decimals)
 
     df.insert(
         0,
@@ -123,14 +124,15 @@ def save_styler_as_png(styler, name, subfolder=None, folder='figures'):
     )
     df.reset_index(drop=True, inplace=True)
 
-    export = new_styler.export()
+    export = styler.export()
     cleaned = [
         cell for cell in export.get('cellstyle', [])
         if not any('col0' in s for s in cell['selectors'])
     ]
     export['cellstyle'] = cleaned
     new_styler = df.style.use(export)
-    new_styler = new_styler.format(f'{{:.{decimals}f}}', subset=num_cols)
+    if decimals is not None:
+        new_styler = new_styler.format(f'{{:.{decimals}f}}', subset=num_cols)
 
     rows, cols = df.shape
     plt.rcParams['figure.figsize'] = (max(8, cols * 1.5), max(2, rows * 0.4))
