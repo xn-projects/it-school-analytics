@@ -47,7 +47,7 @@ from utils import (
     save_clean_data,
 )
 
-warnings.filterwarnings("ignore")
+warnings.filterwarnings('ignore')
 
 setup_logging()
 logging.info('Repository successfully loaded and ready')
@@ -104,10 +104,20 @@ clean_calls = convert_columns(clean_calls, datetime_cols=['Call Start Time'])
 """#### Analyze calls with missing CONTACTID"""
 
 calls_nan_contactid = clean_calls[clean_calls['CONTACTID'].isna()]
-clean_calls["CONTACTID"] = clean_calls["CONTACTID"].astype(str)
+clean_calls['CONTACTID'] = clean_calls['CONTACTID'].astype(str)
 
 logging.info(f'Missing CONTACTID rows: {calls_nan_contactid.shape[0]}')
 show_df(calls_nan_contactid.head(5))
+
+condition = (
+    (clean_calls['CONTACTID'].isna() | clean_calls['CONTACTID'].isin(['nan', 'None', '']))
+    & (clean_calls['Call Duration (in seconds)'] == 0)
+)
+
+count_removed = condition.sum()
+logging.info(f'Removed {count_removed} rows with missing CONTACTID and Call duration = 0')
+
+clean_calls = clean_calls[~condition]
 
 """#### Fill missing Call duration with 0 and add flag"""
 
@@ -157,88 +167,6 @@ clean_calls['Scheduled in CRM'] = (
     .astype('float')
 )
 logging.info('Filled missing Scheduled in CRM with 0.0 and added boolean flag Is_schedule_missing.')
-
-"""#### Analytical check: identifying abnormal call durations"""
-
-mean_duration = clean_calls['Call Duration (in seconds)'].mean()
-std_duration = clean_calls['Call Duration (in seconds)'].std()
-upper_limit = mean_duration + 3 * std_duration
-
-Q1 = clean_calls['Call Duration (in seconds)'].quantile(0.25)
-Q3 = clean_calls['Call Duration (in seconds)'].quantile(0.75)
-IQR = Q3 - Q1
-lower_limit = Q1 - 1.5 * IQR
-upper_limit_iqr = Q3 + 1.5 * IQR
-
-outliers_iqr = clean_calls[
-    (clean_calls['Call Duration (in seconds)'] < lower_limit) |
-    (clean_calls['Call Duration (in seconds)'] > upper_limit_iqr)
-]
-
-fig, axes = plt.subplots(1, 2, figsize=(14, 5))
-
-axes[0].hist(
-    clean_calls['Call Duration (in seconds)'],
-    bins=50,
-    color='cornflowerblue',
-    alpha=0.7,
-    label='Core calls'
-)
-axes[0].hist(
-    outliers_iqr['Call Duration (in seconds)'],
-    bins=50,
-    color='tomato',
-    alpha=0.7,
-    label='Outliers (IQR)'
-)
-
-axes[0].axvline(lower_limit, color='tomato', linestyle='--', linewidth=2, label='Lower IQR limit')
-axes[0].axvline(upper_limit_iqr, color='tomato', linestyle='--', linewidth=2, label='Upper IQR limit')
-axes[0].axvline(mean_duration, color='seagreen', linestyle='--', linewidth=2, label=f'Mean = {mean_duration:.1f}')
-
-axes[0].set_title('Distribution of Call Durations — IQR Outliers')
-axes[0].set_xlabel('Duration (seconds)')
-axes[0].set_ylabel('Frequency')
-axes[0].legend()
-
-outliers_std = clean_calls[
-    clean_calls['Call Duration (in seconds)'] > upper_limit
-]
-
-axes[1].scatter(
-    clean_calls['Call Start Time'],
-    clean_calls['Call Duration (in seconds)'],
-    alpha=0.7,
-    color='cornflowerblue',
-    label='Core calls'
-)
-axes[1].scatter(
-    outliers_std['Call Start Time'],
-    outliers_std['Call Duration (in seconds)'],
-    alpha=0.7,
-    color='tomato',
-    label='Outliers (> 3σ)'
-)
-axes[1].axhline(upper_limit, color='tomato', linestyle='--', linewidth=2, label='3σ limit')
-axes[1].axhline(mean_duration, color='seagreen', linestyle='--', linewidth=2, label=f'Mean = {mean_duration:.1f}')
-
-axes[1].set_title('Call Durations Over Time with Outliers')
-axes[1].set_xlabel('Call Start Time')
-axes[1].set_ylabel('Duration (seconds)')
-axes[1].legend()
-
-fig.suptitle('Outlier Detection: IQR vs 3σ Rule', fontsize=14, fontweight='bold')
-plt.tight_layout()
-
-save_plot('outlier_detection_iqr_vs_3sigma', subfolder='notebooks', fig=fig)
-
-plt.show()
-
-logging.info(
-    f'Outlier stats — mean: {mean_duration:.2f}, std: {std_duration:.2f}, '
-    f'outliers: {outliers_std.shape[0]}'
-)
-logging.info('\n' + str(outliers_std['Call Duration (in seconds)'].describe().round(1)))
 
 """####Convert columns to category types"""
 
@@ -350,15 +278,11 @@ logging.info(f'Filled missing values in {cols} with Unknown.')
 
 """#### Cleaning and correcting amount values in spend"""
 
-cols_to_clean = ['Spend']
+before_clean = clean_spend['Spend'].copy()
+clean_spend['Spend'] = clean_spend['Spend'].apply(clean_amount)
+changed = (before_clean != clean_spend['Spend']).sum()
 
-for col in cols_to_clean:
-    before_clean = clean_spend[col].copy()
-
-    clean_spend[col] = clean_spend[col].apply(clean_amount)
-
-    changed = (before_clean != clean_spend[col]).sum()
-    logging.info(f'Cleaned and converted {col} — {changed} values changed.')
+logging.info(f'Cleaned and converted {col} — {changed} values changed.')
 
 """####  Convert to category types"""
 
@@ -491,6 +415,72 @@ clean_deals = convert_columns(
     datetime_cols=['Created Time', 'Closing Date']
 )
 
+"""#### Find rows where Created Time is later than Closing Date"""
+
+condition = clean_deals['Created Time'] > clean_deals['Closing Date']
+logging.info(f'Rows where Created Time > Closing Date: {condition.sum()}')
+
+temp = clean_deals.loc[condition, 'Created Time'].copy()
+clean_deals.loc[condition, 'Created Time'] = clean_deals.loc[condition, 'Closing Date']
+clean_deals.loc[condition, 'Closing Date'] = temp
+
+logging.info(f'Swapped {condition.sum()} rows where Created Time was later than Closing Date.')
+
+"""#### Fill Closing Date"""
+
+clean_deals['Product'] = clean_deals['Product'].fillna('Unknown')
+
+clean_deals['Days_Diff'] = (
+    clean_deals['Closing Date'] - clean_deals['Created Time']
+).dt.days
+
+negative_count = (clean_deals['Days_Diff'] < 0).sum()
+logging.info(f'Found {negative_count} negative Days_Diff values.')
+
+mode_diff = (
+    clean_deals
+    .groupby('Product')['Days_Diff']
+    .agg(lambda x: x.mode()[0] if not x.mode().empty else np.nan)
+)
+
+fill = (
+    clean_deals['Closing Date'].isna()
+    & (clean_deals['Months of study'] == clean_deals['Course duration'])
+    & (clean_deals['Stage'] == 'Payment Done')
+)
+
+clean_deals.loc[fill, 'Closing Date'] = (
+    clean_deals.loc[fill, 'Created Time']
+    + clean_deals.loc[fill, 'Product']
+    .map(mode_diff)
+    .apply(lambda x: pd.Timedelta(days=x) if pd.notna(x) else pd.NaT)
+)
+
+logging.info(f'Filled {fill.sum()} missing Closing Date values.')
+
+clean_deals.drop(columns=['Days_Diff'], inplace=True)
+logging.info('Temporary column Days_Diff removed after filling.')
+
+"""#### Identify and remove an outlier date in Created Time (October 2022)"""
+
+earliest_dates = (
+    clean_deals['Created Time']
+    .dropna()
+    .sort_values()
+    .unique()[:5]
+)
+
+logging.info(f'Earliest 5 unique Created Time values:\n{earliest_dates}')
+show_df(pd.DataFrame(earliest_dates, columns=['Earliest Created Time']))
+
+earliest_date = earliest_dates[0]
+
+earliest_rows = clean_deals[clean_deals['Created Time'] == earliest_date]
+clean_deals = clean_deals[clean_deals['Created Time'] != earliest_date]
+
+logging.info(f'Removed {earliest_rows.shape[0]} rows with Created Time = {earliest_date}')
+show_df(earliest_rows, name='Removed Earliest Created Time Rows')
+
 """#### Correction of city values"""
 
 json_path = os.path.join(RAW_DIR, 'city_data_google_en.json')
@@ -621,49 +611,6 @@ logging.info('Payment Type counts after filling:\n%s', payment_counts)
 logging.info(f'Filled {fill.sum()} missing Payment Type values.')
 show_df(payment_counts.reset_index().rename(columns={'index': 'Payment Type', 'Payment Type': 'Count'}))
 
-"""#### Find rows where Created Time is later than Closing Date"""
-
-condition = clean_deals['Created Time'] > clean_deals['Closing Date']
-logging.info(f'Rows where Created Time > Closing Date: {condition.sum()}')
-
-temp = clean_deals.loc[condition, 'Created Time'].copy()
-clean_deals.loc[condition, 'Created Time'] = clean_deals.loc[condition, 'Closing Date']
-clean_deals.loc[condition, 'Closing Date'] = temp
-
-logging.info(f'Swapped {condition.sum()} rows where Created Time was later than Closing Date.')
-
-"""#### Fill Closing Date"""
-
-clean_deals['Product'] = clean_deals['Product'].fillna('Unknown')
-
-clean_deals['Days_Diff'] = (
-    clean_deals['Closing Date'] - clean_deals['Created Time']
-).dt.days
-
-mode_diff = (
-    clean_deals
-    .groupby('Product')['Days_Diff']
-    .agg(lambda x: x.mode()[0] if not x.mode().empty else np.nan)
-)
-
-fill = (
-    clean_deals['Closing Date'].isna()
-    & (clean_deals['Months of study'] == clean_deals['Course duration'])
-    & (clean_deals['Stage'] == 'Payment Done')
-)
-
-clean_deals.loc[fill, 'Closing Date'] = (
-    clean_deals.loc[fill, 'Created Time']
-    + clean_deals.loc[fill, 'Product']
-    .map(mode_diff)
-    .apply(lambda x: pd.Timedelta(days=x) if pd.notna(x) else pd.NaT)
-)
-
-logging.info(f'Filled {fill.sum()} missing Closing Date values.')
-
-clean_deals.drop(columns=['Days_Diff'], inplace=True)
-logging.info('Temporary column Days_Diff removed after filling.')
-
 """#### Normalize Level of Deutsch"""
 
 clean_deals['German Level'] = clean_deals['Level of Deutsch'].apply(normalize_german_level)
@@ -674,26 +621,6 @@ logging.info(f'German Level distribution:\n{level_counts}')
 
 clean_deals.drop(columns=['Level of Deutsch'], inplace=True)
 logging.info('Removed original column Level of Deutsch.')
-
-"""#### Identify and remove an outlier date in Created Time (October 2022)"""
-
-earliest_dates = (
-    clean_deals['Created Time']
-    .dropna()
-    .sort_values()
-    .unique()[:5]
-)
-
-logging.info(f'Earliest 5 unique Created Time values:\n{earliest_dates}')
-show_df(pd.DataFrame(earliest_dates, columns=['Earliest Created Time']))
-
-earliest_date = earliest_dates[0]
-
-earliest_rows = clean_deals[clean_deals['Created Time'] == earliest_date]
-clean_deals = clean_deals[clean_deals['Created Time'] != earliest_date]
-
-logging.info(f'Removed {earliest_rows.shape[0]} rows with Created Time = {earliest_date}')
-show_df(earliest_rows, name='Removed Earliest Created Time Rows')
 
 """#### Column Quality transformation"""
 
