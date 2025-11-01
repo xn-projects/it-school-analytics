@@ -36,6 +36,10 @@ def save_table_as_png(df, name, subfolder=None, folder='figures', add_index_colu
     """ 
     df = df.copy()
 
+    float_cols = df.select_dtypes(include='float')
+    if not float_cols.empty:
+        df[float_cols.columns] = df[float_cols.columns].round(1)
+
     if add_index_column:
         df.insert(
             0,
