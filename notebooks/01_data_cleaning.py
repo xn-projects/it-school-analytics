@@ -582,7 +582,10 @@ for col in cols_to_clean:
     changed = (before_clean != clean_deals[col]).sum()
     logging.info(f'Cleaned and converted {col} — {changed} values changed.')
 
-check_time = clean_deals['Offer Total Amount'] < clean_deals['Initial Amount Paid']
+check_time = (
+    (clean_deals['Offer Total Amount'] < clean_deals['Initial Amount Paid']) |
+    (clean_deals['Offer Total Amount'].isna() & clean_deals['Initial Amount Paid'].notna())
+)
 temp_columns = clean_deals.loc[check_time, 'Offer Total Amount']
 
 clean_deals.loc[check_time, 'Offer Total Amount'] = clean_deals.loc[check_time, 'Initial Amount Paid']
