@@ -14,6 +14,7 @@ from .cleaners import find_duplicates, clean_duplicates, convert_columns, freque
 from .data_io import load_files, save_table_as_png, save_plot, save_clean_data, save_styler_as_png
 from .my_palette import get_my_palette, cmap_cornflower, cmap_lime, cmap_tomato, cmap_yellow, cmap_lavender, cmap_neutral
 from .descriptive_stats import describe_num, describe_cat, compare_distributions, plot_change, summarize_category
+from .product_analysis import prod_analysis
 
 __all__ = [
     'setup_logging',
@@ -45,5 +46,6 @@ __all__ = [
     'describe_cat',
     'compare_distributions',
     'plot_change',
-    'summarize_category'
+    'summarize_category',
+    'prod_analysis'
 ]
