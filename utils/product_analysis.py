@@ -1,3 +1,7 @@
+import pandas as pd
+import numpy as np
+from utils import get_my_palette
+
 def prod_analysis(df_deals, df_contacts, df_spend, product=None):
     UA = df_contacts['Id'].nunique()
 
