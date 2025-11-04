@@ -3,6 +3,7 @@
 This document describes the full data-cleaning workflow for the **Calls** dataset in the *IT School Analytics* project.  
 It includes data preparation, anomaly detection, and export of clean results.
 
+## Table of Contents
 1. [Initial Overview](#1️⃣-initial-overview)
 2. [Removing Irrelevant Columns](#2️⃣-removing-irrelevant-columns)
 3. [Duplicate Detection and Removal](#3️⃣-duplicate-detection-and-removal)
