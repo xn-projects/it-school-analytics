@@ -1,0 +1,57 @@
+
+
+📦 it-school-analytics/
+├── 📁 data/
+│   ├── 📁 clean/
+│   │   ├── calls_clean.xlsx
+│   │   ├── cities_updated.json
+│   │   ├── contacts_clean.xlsx
+│   │   ├── deals_clean.xlsx
+│   │   └── spend_clean.xlsx
+│   └── 📁 raw/
+│       ├── calls.xlsx
+│       ├── city_data_google_en.json
+│       ├── contacts.xlsx
+│       ├── deals.xlsx
+│       └── spend.xlsx
+│
+├── 📁 docs/
+│   ├── 📁 images/
+│   │   └── my_palette.png
+│   └── crm_dataset_documentation.md
+│
+├── 📁 logs/
+│   └── (logs)
+│
+├── 📁 notebooks/
+│   ├── 📁 figures/
+│   │   └── (figures for data cleaning & descriptive analysis)
+│   ├── 01_1_data_preparation.md
+│   ├── 01_2_calls_cleaning.md
+│   ├── 01_3_contacts_cleaning.md
+│   ├── 01_4_spend_cleaning.md
+│   ├── 01_5_deals_cleaning.md
+│   ├── 02_1_calls_descriptive_stats.md
+│   ├── 02_2_contacts_descriptive_stats.md
+│   ├── 02_3_spend_descriptive_stats.md
+│   ├── 02_4_deals_descriptive_stats.md  
+│   ├── 01_data_cleaning.py
+│   └── 02_descriptive_statistics.py
+│
+├── 📁 product_analytics/
+│   ├── 📁 figures/
+│   │   └── (visual outputs for product metrics)
+│   ├── 04_product_analyse.md
+│   └── 04_product_analyse.py
+│
+├── 📁 utils/
+│   ├── __init__.py
+│   ├── cleaners.py
+│   ├── data_io.py
+│   ├── data_summary.py
+│   ├── descriptive_stats.py
+│   ├── logging_setup.py
+│   ├── my_palette.py
+│   └── product_analysis.py
+│
+└── 📄 README.md
