@@ -1,4 +1,7 @@
+# Product Analysis, Unit Economics and A/B Testing (`04_product_analyse.py`)
 
+This report presents a comprehensive analysis of product performance **based on unit economics**, supported by a **metric tree structure** and **A/B testing of three marketing hypotheses**.
+It combines financial efficiency assessment with experimental validation to identify the most impactful growth drivers for each product line.
 
 ## Table of Contents
 
