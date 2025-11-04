@@ -7,19 +7,19 @@ It examines both **numeric** and **categorical** fields, focusing on distributio
 
 ## Table of Contents
 
-1. [Numeric Fields](#1️⃣-numeric-fields)  
-   - [1.1 Descriptive Overview](#11-descriptive-overview)  
-   - [1.2 Distributions — Before and After Log Transformation](#12-distributions--before-and-after-log-transformation)  
-   - [1.3 Violin Plots — Spread Comparison](#13-violin-plots--spread-comparison)  
-   - [1.4 Impressions — Statistical Comparison](#14-impressions--statistical-comparison)  
-   - [1.5 Clicks — Statistical Comparison](#15-clicks--statistical-comparison)  
-   - [1.6 Spend — Statistical Comparison](#16-spend--statistical-comparison)
-    
-2. [Categorical Fields](#2️⃣-categorical-fields)  
-   - [2.1 Overview of Categorical Attributes](#21-overview-of-categorical-attributes)  
-   - [2.2 Category Distributions](#22-category-distributions)
-     
-3. [Key Insights](#3️⃣-key-insights)  
+1. [Numeric Fields](#1️⃣-numeric-fields)
+   - [1.1 Descriptive Overview](#11-descriptive-overview)
+   - [1.2 Distributions — Before and After Log Transformation](#12-distributions--before-and-after-log-transformation)
+   - [1.3 Violin Plots — Spread Comparison](#13-violin-plots--spread-comparison)
+   - [1.4 Impressions — Statistical Comparison](#14-impressions--statistical-comparison)
+   - [1.5 Clicks — Statistical Comparison](#15-clicks--statistical-comparison)
+   - [1.6 Spend — Statistical Comparison](#16-spend--statistical-comparison)
+
+2. [Categorical Fields](#2️⃣-categorical-fields)
+   - [2.1 Overview of Categorical Attributes](#21-overview-of-categorical-attributes)
+   - [2.2 Category Distributions](#22-category-distributions)
+
+3. [Key Insights](#3️⃣-key-insights)
 4. [Next Step](#4️⃣-next-step)
 
 ---
