@@ -1,6 +1,16 @@
 # Getting Started with Data Cleaning (`01_data_cleaning.py`)
 
-This document describes the initial stage of data preparation and loading for further cleaning and analysis in the **IT School Analytics** project.
+This notebook performs the **first step of the data pipeline** — downloading, reading, and logging raw Excel files for the *IT School Analytics* project.
+
+
+## Table of Contents
+1. [Environment Initialization](#1️⃣-environment-initialization)
+2. [Importing Custom Utility Functions](#2️⃣-importing-custom-utility-functions)
+3. [Logging Setup](#3️⃣-logging-setup)
+4. [Downloading Raw Excel Files](#4️⃣-downloading-raw-excel-files)
+5. [Reading Data into Pandas DataFrames](#5️⃣-reading-data-into-pandas-dataframes)
+6. [Summary of Initial Preparation](#6️⃣-summary-of-initial-preparation)
+7. [Next Step](#7️⃣-next-step)
 
 ---
 
@@ -89,7 +99,7 @@ The log confirms:
 
 ---
 
-## Summary of Initial Preparation
+## 6️⃣ Summary of Initial Preparation
 
 | Step | Status |
 |------|--------|
@@ -101,8 +111,6 @@ The log confirms:
 
 ---
 
-## Next Step
+## 7️⃣ Next Step
 
-With the environment ready and the raw data imported, the project proceeds to **data cleaning** — beginning with the `Calls` dataset, followed by `Contacts`, `Spend` and `Deals`.
-
-Each of these steps is fully documented in separate Markdown reports.
+With the environment ready and the raw data imported, the project proceeds to **data cleaning** — beginning with the `Calls` dataset, Continue to: [01_2_calls_cleaning.md](01_2_calls_cleaning.md)
