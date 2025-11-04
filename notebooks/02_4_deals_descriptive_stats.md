@@ -5,28 +5,29 @@ The goal is to uncover **monetary patterns, performance structure, and product-s
 
 ---
 
-### **1️⃣ Numeric Fields**
-1. [1.1 Descriptive Overview](#11-descriptive-overview)  
-2. [1.2 Distributions — Before and After Log Transformation](#12-distributions--before-and-after-log-transformation)  
-3. [1.3 Violin Plots — Spread Comparison](#13-violin-plots--spread-comparison)  
-4. [1.4 Initial Amount Paid — Statistical Comparison](#14-initial-amount-paid--statistical-comparison)  
-5. [1.5 SLA Hours — Statistical Comparison](#15-sla-hours--statistical-comparison)  
+## Table of Contents
 
-### **2️⃣ Categorical Fields**
-1. [2.1 Overview of Categorical Attributes](#21-overview-of-categorical-attributes)  
-2. [2.2 Category Distributions](#22-category-distributions)  
-3. [2.3 Categorical Cross-Relations](#23-categorical-cross-relations)  
-   - [2.3.1 Product × Quality](#231-product--quality)  
-   - [2.3.2 Product × Source](#232-product--source)  
-   - [2.3.3 Product × Stage](#233-product--stage)  
-   - [2.3.4 Stage × Quality](#234-stage--quality)  
-   - [2.3.5 Stage × Source](#235-stage--source)  
-   - [Summary — Cross-Categorical Findings](#summary--cross-categorical-findings)
-### **3️⃣ Key Insights**
-- [Executive Summary](#3️⃣-key-insights)
-### **4️⃣ Next Step**
-- [Revenue & Conversion Analysis](#4️⃣-next-step)
-  
+1. [Numeric Fields](#1️⃣-numeric-fields)
+   - [1.1 Descriptive Overview](#11-descriptive-overview)
+   - [1.2 Distributions — Before and After Log Transformation](#12-distributions--before-and-after-log-transformation)
+   - [1.3 Violin Plots — Spread Comparison](#13-violin-plots--spread-comparison)
+   - [1.4 Initial Amount Paid — Statistical Comparison](#14-initial-amount-paid--statistical-comparison)
+   - [1.5 SLA Hours — Statistical Comparison](#15-sla-hours--statistical-comparison)
+
+2. [Categorical Fields](#2️⃣-categorical-fields)
+   - [2.1 Overview of Categorical Attributes](#21-overview-of-categorical-attributes)
+   - [2.2 Category Distributions](#22-category-distributions)
+   - [2.3 Categorical Cross-Relations](#23-categorical-cross-relations)  
+     - [2.3.1 Product × Quality](#231-product--quality)  
+     - [2.3.2 Product × Source](#232-product--source)  
+     - [2.3.3 Product × Stage](#233-product--stage)  
+     - [2.3.4 Stage × Quality](#234-stage--quality)  
+     - [2.3.5 Stage × Source](#235-stage--source)  
+     - [Summary — Cross-Categorical Findings](#summary--cross-categorical-findings)
+
+3. [Key Insights](#3️⃣-key-insights)
+4. [Next Step](#4️⃣-next-step)
+
 ---
 
 ## 1️⃣ Numeric Fields
