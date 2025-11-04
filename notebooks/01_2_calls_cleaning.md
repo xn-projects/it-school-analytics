@@ -140,4 +140,5 @@ The difference between the raw and cleaned summaries clearly demonstrates:
 ## 9️⃣ Next Step
 
 With the Calls dataset cleaned and verified, the next stage continues with **Contacts** data preparation and validation.
+
 **Continue to:** [01_3_contacts_cleaning.md](01_3_contacts_cleaning.md)
