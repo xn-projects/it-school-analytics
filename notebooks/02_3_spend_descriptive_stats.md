@@ -1,4 +1,4 @@
-# Descriptive Statistics — Spend Data (`02_3_spend_descriptive_stats.py`)
+# Descriptive Statistics — Spend Data (`02_descriptive_statistics.py`)
 
 This section presents the **descriptive statistical analysis** of the cleaned **Spend** dataset.  
 It examines both **numeric** and **categorical** fields, focusing on distribution shape, log-transformation effects, and advertising structure patterns.
