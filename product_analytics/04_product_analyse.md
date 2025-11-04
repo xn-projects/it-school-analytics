@@ -1,5 +1,24 @@
 
-# 1. Calculate unit economics by product and identify the growth point.
+
+## Table of Contents
+
+1. [Unit economics](#1️⃣-unit-economics)
+2. [Metric Tree](#2️⃣-metric-tree)
+   - [2.1 Level — Target Metric](#21-target-metric)
+   - [2.2 Unit Economics Metrics](#22-unit-economics-metrics)
+   - [2.3 Product Metrics](#21-product-metrics)
+   - [2.4 Atomic Metrics](#21-atomic-metrics)
+3. [Hypotheses](#3️⃣-hypotheses)
+   - [3.1 Hypothesis 1](#31-hypotheses-1)
+   - [3.2 Hypothesis 2](#32-hypotheses-2)
+   - [3.3 Hypothesis 3](#33-hypotheses-3)
+4. [A/B testing method](#4️⃣-a/b-testing-method)
+   - [4.1 Hypothesis 1](#41-hypotheses-1)
+   - [4.2 Hypothesis 2](#42-chypotheses-2)
+   - [4.3 Hypothesis 3](#43-hypotheses-3)
+
+
+# 1️⃣ Unit economics
 
 
 prod_analysis(df_deals, df_contacts, df_spend)
@@ -10,19 +29,18 @@ prod_analysis(df_deals, df_contacts, df_spend, product='Web Developer')
 
 prod_analysis(df_deals, df_contacts, df_spend, product='UX/UI Design')
 
-# 2. Metric Tree
+---
+
+# 2️⃣ Metric Tree
 *(Based on the core datasets used in business performance analysis)*  
 
-
-## 1️⃣ Level — Target Metric  
+## 2.1 Target Metric  
 
 - **CM — Contribution Margin**  
 
   $CM = UA \times (LTV - CPA)$
 
----
-
-## 2️⃣ Level — Unit Economics Metrics  
+## 2.2 Unit Economics Metrics  
 
 - **UA — User Acquisition**
 
@@ -44,9 +62,7 @@ prod_analysis(df_deals, df_contacts, df_spend, product='UX/UI Design')
 
   $APC = T / B$
 
----
-
-## 3️⃣ Level — Product Metrics
+## 2.3 Product Metrics
 
 - **AOVᵢ — Average Order Value (per user)**  
 
@@ -58,7 +74,7 @@ prod_analysis(df_deals, df_contacts, df_spend, product='UX/UI Design')
 
 - **REV — Total Revenue**  
 
-  $REV = [R_i].sum()$ (for Total)<br>
+  $REV = [R_i].sum()$ (for Total) <br>
   $REV = AOV \times T$
 
 - **B — Buyers**  
@@ -84,63 +100,65 @@ prod_analysis(df_deals, df_contacts, df_spend, product='UX/UI Design')
   $AC = df\_spend[Spend].sum()$ (for Total)  
   $AC = UA \times CPA$
 
----
-
-## 4️⃣ Level — Atomic Metrics  
+## 2.4 Atomic Metrics  
 *(Base columns from each dataset used in the calculations)*  
 
-**1. df_deals**  
+**df_deals**  
 - `Initial Amount Paid`  
 - `Offer Total Amount`  
 - `Course duration`  
 - `Months of study`  
 - `Stage (Payment Done)`  
 
-**2. df_spend**  
+**df_spend**  
 - `Spend`  
 
-**3. df_contacts**  
+**df_contacts**  
 - `Id`  
 <br>
 
 *In this way, all metrics are hierarchically connected:<br>
 **atomic → product → unit economics → target (CM)***
 
-# 3. Identify which product metric they will influence and formulate hypotheses.
+---
 
-**Hypothesis 1:** <br>
+# 3️⃣ Hypotheses
+
+## 3.1 Hypothesis 1
 For the Digital Marketing product, re-engaging users who have already shown interest but haven’t completed the target action can increase their readiness to convert.
 Launching a campaign to reach this “warmed” audience through personalized messages and relevant ad formats (social media, email, push, SMS) is expected **to raise the conversion rate by 2% — from 2.52% to 2.57%.**
 Such an increase would confirm the effectiveness of repeated interactions and show that this approach can be a reliable tool for improving conversion in the Digital Marketing product line.
 
-**Hypothesis 2:** <br>
+## 3.2 Hypothesis 2
 For the Web Developer product, offering new users a one-month free trial will increase engagement during the trial period and lead to a higher conversion rate to paid plans after the trial ends.<br>
 It is expected that providing users with the opportunity to test the product without financial commitment will **boost conversion by 4% — from 0.73% to 0.76%** over the full observation period.
 
 Such an increase would confirm that a free trial effectively improves user activation and payment conversion for the Web Developer product.
 
-**Hypothesis 3:**<br>
+## 3.3 Hypothesis 3
 For the UX/UI Design product, displaying authentic customer reviews on the website, in the mobile app, and in email campaigns will increase audience trust and the likelihood of completing the target action.
 It is assumed that showcasing real user experiences will **raise the conversion rate by 1% — from 1.21% to 1.22%.**
 
 Such a result would confirm that customer reviews help build trust and serve as an effective tool for improving conversion.
 
-# 4. Describe the hypothesis testing method and define the testing conditions
+---
 
-### Hypothesis 1
+# 4️⃣ A/B testing method
 
-**H₀ (Null Hypothesis):**<br>
+## 4.1 Hypothesis 1
+
+**H₀ (Null Hypothesis):** <br>
 Re-engagement of users who have already shown interest does not lead to an increase in the conversion rate.<br>
 The conversion rate of the re-engaged group (Group B) is equal to or lower than that of the control group (Group A).
 
-**A/B Test:**<br>
+**A/B Test:** <br>
 Group A — users without re-engagement<br>
 Group B — users exposed to re-engagement campaigns
 
-**What is being tested:**<br>
+**What is being tested:** <br>
 Communication formats and channels (social media, email, push, SMS), creative content, and timing of delivery.
 
-**Metrics:**<br>
+**Metrics:** <br>
  - Baseline conversion (p): 2.52%<br>
  - Target conversion: 2.65%<br>
  - Relative increase (x): +5%<br>
@@ -148,10 +166,10 @@ Communication formats and channels (social media, email, push, SMS), creative co
  - Total number of days: 357<br>
  - Average number of people per day: 52
 
-**Sample size:**<br>
+**Sample size:** <br>
 157 users per group
 
-**Success criterion:**<br>
+**Success criterion:** <br>
 Conversion rate increase of at least 5% — from 2.52% to 2.65%
 
 **Formula**<br>
@@ -159,26 +177,23 @@ $n = \frac{16 \times p \times (1 - p)}{x^2}$
 
 $day = \frac{n \times 2}{Average Daily Users​}$
 
-
-**Conclusion:**<br>
+**Conclusion:** <br>
 The A/B test can be completed in approximately **6 days**, which means it can be comfortably executed within a two-week testing window.<br>
 This timeframe allows not only for the test itself but also for data validation, monitoring of interim results, and post-test analysis, ensuring that the conclusions are both statistically reliable and operationally actionable.
-"""
 
+## 4.2 Hypothesis 2
 
-"""### Hypothesis 2
-
-**H₀ (Null Hypothesis):**<br>
+**H₀ (Null Hypothesis):** <br>
 Offering a one-month free trial does not increase the conversion rate after the trial.
 
-**A/B Test:**<br>
+**A/B Test:** <br>
 Group A — users without a free trial<br>
 Group B — users offered a one-month free trial
 
-**What is being tested:**<br>
+**What is being tested:** <br>
 The presence and duration of the free trial offer.
 
-**Metrics:**<br>
+**Metrics:** <br>
  - Baseline conversion (p): 0.73%<br>
  - Target conversion: 0.76%<br>
  - Relative increase (x): +4%<br>
@@ -186,38 +201,35 @@ The presence and duration of the free trial offer.
  - Total number of days: 357<br>
  - Average number of people per day: 52
 
-**Sample size:**<br>
+**Sample size:** <br>
 72 users per group
 
-**Success criterion:**<br>
+**Success criterion:** <br>
 Conversion rate increase of at least 4% — from 0.73% to 0.76%
 
-**Formula**<br>
+**Formula** <br>
 $n = \frac{16 \times p \times (1 - p)}{x^2}$
 
 $day = \frac{n \times 2}{Average Daily Users​}$
 
-
-**Conclusion:**<br>
+**Conclusion:** <br>
 The A/B test can technically be conducted within **3 days** to collect the required sample size.<br>
 However, because the experiment involves a **one-month free trial**, the actual results on conversion can only be measured **after the 30-day period ends**.
 Therefore, the **full testing cycle** — including data collection and evaluation — will take approximately **one month**.
-"""
 
+## 4.3 Hypothesis 3
 
-"""### Hypothesis 3
-
-**H₀ (Null Hypothesis):**<br>
+**H₀ (Null Hypothesis):** <br>
 Displaying customer reviews does not significantly affect the conversion rate compared to users who do not see reviews.<br>
 
-**A/B Test:**<br>
+**A/B Test:** <br>
 Group A — users who do not see customer reviews<br>
 Group B — users who see authentic customer reviews
 
-**What is being tested:**<br>
+**What is being tested:** <br>
 The presence, format, and placement of customer reviews (website, app, email).
 
-**Metrics:**<br>
+**Metrics:** <br>
  - Baseline conversion (p): 1.21%<br>
  - Target conversion: 1.23%<br>
  - Relative increase (x): +2%<br>
@@ -225,10 +237,10 @@ The presence, format, and placement of customer reviews (website, app, email).
  - Total number of days: 357<br>
  - Average number of people per day: 52
 
-**Sample size:**<br>
+**Sample size:** <br>
 501 users per group
 
-**Success criterion:**<br>
+**Success criterion:** <br>
 Conversion rate increases by at least 2% - from 1.21% to 1.23%.
 
 **Formula**<br>
@@ -236,9 +248,7 @@ $n = \frac{16 \times p \times (1 - p)}{x^2}$
 
 $day = \frac{n \times 2}{Average Daily Users​}$
 
-
-**Conclusion:**<br>
+**Conclusion:** <br>
 The required sample size for this A/B test can be reached in approximately **19 days** under current traffic conditions.
 Since the experiment does not require a delayed observation period, results can be analyzed immediately after the data collection phase.<br>
 However, given this duration, the test **cannot be fully completed within the planned two-week timeframe**, and an extension of the testing period will be required to obtain statistically valid results.
-"""
