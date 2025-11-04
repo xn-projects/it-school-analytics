@@ -25,8 +25,14 @@ def prod_analysis(df_deals, df_contacts, df_spend, product=None):
 
     B = merged[merged['Stage'].astype(str).str.lower().str.strip() == 'payment done']
     C1 = round(len(B) / UA * 100, 2)
-    AC = float(df_spend['Spend'].sum())
-    CPA = round(AC / UA, 2)
+
+    if product is None or product == 'Total':
+        AC = float(df_spend['Spend'].sum())
+        CPA = round(AC / UA, 2)
+    else:
+        CPA = round(float(df_spend['Spend'].sum()) / df_contacts['Id'].nunique(), 2)
+        AC = round(UA * CPA, 2)
+
     REV = round(float(merged['R_i'].sum()), 2)
     T = round(float(merged['Months of study'].sum()), 2)
     AOV = round(REV / T if T > 0 else 0, 2)
