@@ -21,13 +21,21 @@
 # 1️⃣ Unit economics
 
 
-prod_analysis(df_deals, df_contacts, df_spend)
+Unit economics Total
 
-prod_analysis(df_deals, df_contacts, df_spend, product='Digital Marketing')
+![Total](figures/total.png)
 
-prod_analysis(df_deals, df_contacts, df_spend, product='Web Developer')
+Unit economics - Digital Marketing
 
-prod_analysis(df_deals, df_contacts, df_spend, product='UX/UI Design')
+![Digital Marketing](figures/digital_marketing.png)
+
+Unit economics - Web Developer
+
+![Web Developer](figures/web_developer.png)
+
+Unit economics - UX/UI Design
+
+![UX/UI Design](figures/ux:ui_design.png)
 
 ---
 
