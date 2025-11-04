@@ -78,6 +78,7 @@ def prod_analysis(df_deals, df_contacts, df_spend, product=None):
     scenarios['REV'] = round(scenarios['AOV'] * scenarios['T'], 2)
     scenarios['CLTV'] = round(scenarios['AOV'] * scenarios['APC'], 2)
     scenarios['LTV'] = round(scenarios['CLTV'] * (scenarios['C1'] / 100), 2)
+    scenarios['AC'] = round(scenarios['UA'] * scenarios['CPA'], 2)
     scenarios['CM'] = round(scenarios['UA'] * (scenarios['LTV'] - scenarios['CPA']), 2)
 
     highlight_color = get_my_palette(group='Yellowsoft')[2]
