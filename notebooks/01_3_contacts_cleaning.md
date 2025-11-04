@@ -66,7 +66,6 @@ This confirms that the dataset respects the logical order of record creation and
 
 A new summary table was generated for the cleaned dataset to confirm successful transformation.
 
-### Summary Table — Cleaned Contacts Data  
 ![Contacts Info Clean](figures/contacts_info_clean.png)
 
 ---
