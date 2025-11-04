@@ -13,22 +13,22 @@ Original file is located at
 !git clone -q https://github.com/xn-projects/it-school-analytics.git
 # %cd it-school-analytics
 
-from utils import (
-    setup_logging,
-    load_files,
-    log_section,
-    get_my_palette,
-    prod_analysis
-)
-
+import datetime
 import logging
 import os
-import datetime
 import time
-import dataframe_image as dfi
 
 import numpy as np
 import pandas as pd
+import dataframe_image as dfi
+
+from utils import (
+    get_my_palette,
+    load_files,
+    log_section,
+    prod_analysis,
+    setup_logging,
+)
 
 setup_logging()
 logging.info('Repository successfully loaded and ready')
