@@ -26,68 +26,87 @@ It examines both **numeric** and **categorical** fields, focusing on distributio
 
 ### 1.1 Descriptive Overview
 
-The `describe_num()` function generated a primary statistical summary for all numeric fields in the **Spend** dataset — including central tendency (mean/median), dispersion (std, range, IQR), and shape (skewness, kurtosis).
+The `describe_num()` function generated a primary statistical summary for all numeric fields in the **Spend** dataset’s numeric variables — `Impressions`, `Clicks`, and `Spend`. 
+All three demonstrate **extreme right-skewness**, large dispersion, and heavy-tailed behavior — hallmarks of digital marketing data where a few high-performing campaigns dominate scale and cost.
+
 
 ![spend_stats_num.png](figures/spend_stats_num.png)
 
-**Highlights**
-- All three core metrics — **Impressions**, **Clicks**, **Spend** — exhibit **heavy right skew** (long tails), typical for paid media data where a few campaigns dominate volume and cost.
-- **Medians are much lower than means**, confirming the influence of high-value outliers.
-- **High variance and kurtosis** indicate fat tails; direct parametric modeling on the raw scale is unstable → use **log transforms** or **robust statistics**.
-- This motivates the subsequent **log-transform analysis** (sections 1.2–1.5) to stabilize variance and reveal underlying structure.
+> **Key Observations:**
+> - **Impressions** range from near-zero to over **430K**, with a coefficient of variation exceeding **400%** — an enormous spread driven by a few massive campaigns.
+> - **Clicks** and **Spend** show similarly skewed patterns, suggesting proportional growth across all performance dimensions.
+> - High **kurtosis** values confirm the dominance of outliers, implying that typical averages do not represent the dataset well.
+> - The data clearly benefits from **logarithmic transformation** to stabilize variance and normalize distributions.
+
+---
 
 ### 1.2 Distributions — Before and After Log Transformation
 
+The figure below visualizes the impact of the log transform on distribution shapes.  
+Each metric transitions from a compressed, spike-like pattern (left) to a more symmetric, bell-like spread (right).
+
 ![spend_all_metrics_orig_vs_log.png](figures/spend_all_metrics_orig_vs_log.png)
 
-> Each histogram pair compares the original and log-transformed distributions for **Impressions**, **Clicks**, and **Spend**.  
-> - All three variables exhibit **heavy right skew**, with a few campaigns showing extremely high values.  
-> - After applying the **`log1p()` transformation**, distributions become **more symmetric** and **less heavy-tailed**, which improves interpretability for correlation and regression analysis.  
-> - Particularly for *Spend*, the log scale significantly reduces extreme outliers caused by large advertising campaigns.
+> **Insights:**
+> - The log scale smooths extreme peaks, expanding dense low-value areas.
+> - Frequency histograms reveal the underlying population structure that was previously hidden by outliers.
+> - This transformation enhances interpretability for regression or correlation-based analyses.
 
 ---
 
 ### 1.3 Violin Plots — Spread Comparison
 
+The violin plots reinforce the previous observations by illustrating the collapse of extreme variance and improved central symmetry post-transformation.
+
 ![spend_violin_all_metrics.png](figures/spend_violin_all_metrics.png)
 
-> Violin plots visualize data density and quartiles before and after log transformation.  
-> - **Impressions**: the raw distribution is concentrated near zero with occasional spikes; the log transformation smooths and widens it.  
-> - **Clicks**: similar right skew diminishes after transformation, revealing more evenly distributed performance levels.  
-> - **Spend**: displays the greatest compression, as extreme campaigns become normalized within the overall pattern.
+> **Highlights:**
+> - Each distribution’s “tail” nearly disappears.
+> - The log scale compresses magnitudes while retaining relative ranking.
+> - Variability between campaigns becomes more analyzable — critical for ROI modeling and outlier detection.
 
 ---
 
 ### 1.4 Impressions — Statistical Comparison
 
-
+![compare_imp.png](figures/compare_imp.png)
 
 ![impressions_change.png](figures/impressions_change.png)
 
-> - The log transformation reduced variance and skewness by over **90%**.  
-> - The resulting distribution is close to normal, allowing more reliable linear modeling and cluster segmentation.
+> **Observations:**
+> - **Mean** and **Range** fell by over **90–99%**, highlighting how the log transform neutralizes extreme dispersion.
+> - **Skewness** dropped from **9.05 → 0.70**, shifting towards near-normal symmetry.
+> - **Kurtosis** plummeted from **78 → -0.17**, indicating near-Gaussian tails.
+> - Overall, Impressions become statistically balanced, suitable for modeling and clustering.
 
 ---
 
 ### 1.5 Clicks — Statistical Comparison
 
-
+![compare_clicks.png](figures/compare_clicks.png)
 
 ![click_change.png](figures/click_change.png)
 
-> - **Clicks** followed a highly right-skewed distribution, driven by a few popular ads.  
-> - After transformation, variability dropped dramatically, stabilizing the metric for comparative and trend analyses.
+> **Observations:**
+> - **Variance reduction** is dramatic: standard deviation drops by **>95%**.
+> - **Skewness** improves from **7.05 → 0.88**, suggesting moderate symmetry.
+> - The transformation successfully eliminates extreme bias from high-click outliers.
+> - Distribution now aligns with expectations for log-linear ad performance patterns.
 
 ---
 
 ### 1.6 Spend — Statistical Comparison
 
-
+![compare_spend.png](figures/compare_spend.png)
 
 ![spend_change.png](figures/spend_change.png)
 
-> - The **Spend** variable benefited the most from transformation — skewness and kurtosis decreased almost entirely.  
-> - This indicates that extreme advertising outliers no longer dominate the distribution, making it suitable for cross-channel efficiency analysis.
+> **Observations:**
+> - **Mean** decreased by **~86%**, while **skewness** improved by over **90%**.
+> - The flattening of **kurtosis** (from 232 → 0.25) signifies full normalization of extreme campaign costs.
+> - Post-log, the dataset achieves an almost Gaussian shape — a strong base for linear modeling of ad efficiency.
+
+---
 
 ---
 
@@ -95,11 +114,15 @@ The `describe_num()` function generated a primary statistical summary for all nu
 
 ### 2.1 Overview of Categorical Attributes
 
+Categorical profiling of `Source`, `Campaign`, `AdGroup`, and `Ad` uncovers structural dominance and naming diversity in campaign metadata.
+
 ![spend_stats_cat.png](figures/spend_stats_cat.png)
 
-> - Categorical profiling covered four key fields: `Source`, `Campaign`, `AdGroup`, and `Ad`.  
-> - Missing values were previously replaced with `"Unknown"`, ensuring full completeness.  
-> - The dataset captures multiple **marketing dimensions** — from platform to creative level — allowing flexible aggregation in future analytics.
+> **Highlights:**
+> - **Facebook Ads** leads overwhelmingly with **56.6%** of all records, confirming its central role in spend activity.
+> - Campaign and Ad naming conventions are inconsistent — many “Unknown” entries indicate missing metadata.
+> - **AdGroup** categories such as “wide” appear frequently, suggesting a mix of broad and targeted segmentation.
+> - The distribution imbalance hints at potential optimization opportunities in underused channels.
 
 ---
 
@@ -107,21 +130,26 @@ The `describe_num()` function generated a primary statistical summary for all nu
 
 ![category_spend_distribution.png](figures/category_spend_distribution.png)
 
-> The bar charts display the **top 10 categories** in each key dimension:  
-> - **Source**: few dominant ad platforms contribute most impressions and spend.  
-> - **Campaign**: concentration of spend in limited high-performing campaigns.  
-> - **AdGroup / Ad**: long-tail structure where smaller creatives collectively drive substantial reach.  
->  
-> This distribution pattern confirms a **typical digital-ad hierarchy** — few major campaigns supported by numerous tactical ad variations.
+> **Observations:**
+> - **Facebook Ads** dominates the dataset with **57.1%** of all spend records — the platform serves as the main acquisition driver. 
+> - **Tiktok Ads (13.7%)**, **Youtube Ads (8.9%)**, and **Google Ads (5.7%)** follow as key secondary channels, forming a strong multi-platform ecosystem.  
+> - Within **AdGroups**, the segment **“wide”** leads (31.8%), indicating broad targeting, while other thematic segments such as *recentlymoved*, *women*, or *WebDev interests* show niche diversification.  
+> - **Campaign names** reflect structured yet somewhat inconsistent labeling practices — notable repetition of “Unknown” (~17%) and various ad-hoc date strings suggests irregular metadata management.  
+> - At the **Ad** level, **over 40%** remain “Unknown”, which obscures full creative-level attribution and optimization insights.
+> **Insights:**  
+> - The **spend concentration** on Facebook Ads reveals a high reliance on a single channel — a risk and opportunity for diversification.  
+> - Missing campaign and ad naming standards reduce **traceability and governance quality**.  
+> - The strong presence of targeted subgroups implies ongoing experimentation and segmentation strategies.  
+> - Cleaning and standardizing campaign metadata would significantly **improve analytical precision** and **ROI evaluation**.
 
 ---
 
 ## 3️⃣ Key Insights
 
-- **Strong right-skew** across all numeric metrics confirms the presence of heavy outliers typical for marketing data.  
-- **Log transformation** successfully normalizes the numeric fields, stabilizing variance and improving statistical robustness.  
-- **Campaign hierarchy** is clearly defined: top platforms and campaigns dominate performance while long-tail ads diversify engagement.  
-- The dataset is **complete, clean, and structurally ready** for correlation, segmentation, and ROI modeling.
+- **Raw spend metrics** were highly skewed and dominated by outliers — typical for advertising datasets.  
+- **Log transformations** normalized all numeric fields, improving comparability and reducing noise by up to **99%** across key statistics.  
+- **Categorical structure** reveals **platform dominance**, **metadata inconsistency**, and **segmentation depth**.  
+- Together, these patterns show a **mature marketing setup** with optimization potential in **data quality** and **budget allocation balance**.
 
 ---
 
