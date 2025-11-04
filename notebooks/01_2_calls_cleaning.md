@@ -3,6 +3,20 @@
 This document describes the full data-cleaning workflow for the **Calls** dataset in the *IT School Analytics* project.  
 It includes data preparation, anomaly detection, and export of clean results.
 
+1. [Initial Overview](#1️⃣-initial-overview)
+2. [Removing Irrelevant Columns](#2️⃣-removing-irrelevant-columns)
+3. [Duplicate Detection and Removal](#3️⃣-duplicate-detection-and-removal)
+4. [Date Conversion](#4️⃣-date-conversion)
+5. [Missing Value Analysis and Handling](#5️⃣-missing-value-analysis-and-handling)
+   - [5.1 CONTACTID](#51-contactid)
+   - [5.2 Call Duration](#52-call-duration)
+   - [5.3 Outgoing Call Status](#53-outgoing-call-status)
+   - [5.4 Scheduled in CRM](#54-scheduled-in-crm)
+6. [Type Conversion](#6️⃣-type-conversion)
+7. [Final Summary After Cleaning](#7️⃣-final-summary-after-cleaning)
+8. [Final Results Overview](#8️⃣-final-results-overview)
+9. [Next Step](#9️⃣-next-step)
+
 ---
 
 ## 1️⃣ Initial Overview
@@ -110,7 +124,7 @@ The difference between the raw and cleaned summaries clearly demonstrates:
 
 ---
 
-## Final Results Overview
+## 8️⃣ Final Results Overview
 
 | Step | Action Performed |
 |------|------------------|
@@ -122,7 +136,7 @@ The difference between the raw and cleaned summaries clearly demonstrates:
 
 ---
 
-## Next Step
+## 9️⃣ Next Step
 
 With the Calls dataset cleaned and verified, the next stage continues with **Contacts** data preparation and validation.
 **Continue to:** [01_3_contacts_cleaning.md](01_3_contacts_cleaning.md)
