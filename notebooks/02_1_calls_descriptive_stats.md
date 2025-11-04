@@ -1,82 +1,144 @@
 # Descriptive Statistics — Calls Data (`02_descriptive_statistics.py`)
 
-This analysis explores call data, focusing on **numeric** and **categorical** features.  
-The goal is to understand the distribution of call durations, evaluate the impact of logarithmic transformation, and examine ownership patterns among call handlers.
+This section explores the **descriptive statistics** of the cleaned `Calls` dataset, covering both **numeric** and **categorical** variables.  
+The objective is to examine the structure of call durations, evaluate the effects of logarithmic transformation, and analyze agent performance patterns across different dimensions.
+
+## Table of Contents
+
+1. [Numeric Fields](#1️⃣-numeric-fields)
+ 1.1 [Descriptive Overview](#descriptive-overview)
+ 1.2 [Call Duration by Day of the Week](#call-duration-by-day-of-the-week)
+ 1.3 [Call Duration Distribution — Before & After Log Transformation](#call-duration-distribution--before--after-log-transformation)
+ 1.4 [Violin Plot — Distribution Comparison](#violin-plot--distribution-comparison)
+ 1.5 [Statistical Comparison — Before vs After Log](#statistical-comparison--before-vs-after-log)
+2. [Categorical Fields](#2️⃣-categorical-fields)
+ 2.1 [Overview of Categorical Attributes](#overview-of-categorical-attributes)
+ 2.2 [Top 15 Call Owners — Total, Unique & Exclusive Clients](#top-15-call-owners--total-unique--exclusive-clients)
+ 2.3 [Unique & Exclusive Client Share (%)](#unique--exclusive-client-share-)
+ 2.4 [Calls by Day of the Week](#calls-by-day-of-the-week)
+3. [Key Insights](#3️⃣-key-insights)
+4. [Next Step](#4️⃣-next-step)
 
 ---
 
-## Numeric Fields
+## 1️⃣ Numeric Fields
 
-### 1️⃣ Descriptive Statistics
+### Descriptive Overview
 
-A summary of numerical variables — including mean, median, standard deviation, and distribution characteristics.  
+The `describe_num()` function generated a summary of numerical features — including central tendency, dispersion, and shape statistics.
+
 ![calls_stats_num.png](figures/calls_stats_num.png)
 
-> The dataset contains over 92k calls. The average call duration is **170 seconds**, but the high standard deviation (≈407) and skewness (4.0) indicate a **right-skewed distribution** with many short calls and a few extremely long ones.
+> The dataset contains **≈92 000 call records**.  
+> The average duration is **170 s**, but the **high standard deviation (≈ 407 s)** and **skewness (≈ 4.0)** indicate a **right-skewed distribution**, typical for communication data with many short calls and few extremely long ones.
 
 ---
 
-### 2️⃣ Call Duration Distribution — Before & After Log Transformation
+### Call Duration by Day of the Week
 
-Histogram and KDE plots showing the raw vs. log-transformed call durations.  
+To analyze weekly activity, average call duration was aggregated by weekday.  
+![call_duration_by_weekday.png](figures/call_duration_by_weekday.png)
+
+> **Wednesday and Thursday** show slightly longer average durations, possibly reflecting higher engagement mid-week.  
+> Weekend calls remain significantly shorter and less frequent.
+
+---
+
+### Call Duration Distribution — Before & After Log Transformation
+
+The distribution of call durations before and after applying logarithmic transformation.
+
 ![call_duration_orig_vs_log.png](figures/call_duration_orig_vs_log.png)
 
-> The original distribution is highly concentrated near zero with a long tail.  
-> After applying a **log transformation**, the distribution becomes smoother and closer to normal — ideal for modeling or statistical inference.
+> The original histogram is sharply right-skewed with heavy tails.  
+> After applying `log1p()`, the curve becomes **smooth and approximately normal**, improving suitability for correlation and regression analyses.
 
 ---
 
-### 3️⃣ Violin Plot — Distribution Comparison
+### Violin Plot — Distribution Comparison
 
-Violin plots visualize the spread and quartiles of the original and transformed call durations.  
+Violin plots visualize the spread and quartiles for the raw and log-transformed durations.  
+
 ![call_duration_distribution.png](figures/call_duration_distribution.png)
 
-> The violin plots confirm that the **spread is significantly reduced** after transformation,  
-> eliminating extreme outliers and compressing long-duration values into a manageable range.
+> The **spread significantly decreases** after transformation, compressing extreme values while maintaining the overall structure of duration variability.
 
 ---
 
-### 4️⃣ Statistical Comparison — Before vs. After Log
+### Statistical Comparison — Before vs. After Log
 
-Comparison of descriptive measures before and after transformation.
-![calls_compare.png](figures/calls_compare.png)  
+The `compare_distributions()` function quantifies how transformation affects numeric properties.
 
-> The **mean**, **range**, and **variance** drastically decrease after transformation, while **skewness** (4.00 → 0.41) and **kurtosis** (21.95 → -0.90) show a major improvement toward a symmetric, flatter distribution.
+![calls_compare.png](figures/calls_compare.png)
 
-Visual representation of percentage change in key statistical metrics.
+> The transformation reduces **mean, range, and variance** by more than 90%.  
+> **Skewness** decreases from 4.00 → 0.41 and **kurtosis** from 21.95 → –0.90, confirming that log scaling effectively normalizes the distribution.
+
+Visualized percentage change of key metrics:
+
 ![call_change.png](figures/call_change.png)
 
-> Most metrics drop by over **90%**, highlighting the stabilizing effect of the transformation.  
-> The sharp reduction in variability (Standard Deviation ↓99%) and shape parameters (Skewness ↓90%) confirms better distribution symmetry.
+> The drastic reduction in variability (SD ↓ 99%) and asymmetry (Skew ↓ 90%) clearly demonstrates the stabilizing effect of the logarithmic transformation.
 
 ---
 
-##  Categorical Fields
+## 2️⃣ Categorical Fields
 
-### 5️⃣ Descriptive Statistics for Categorical Variables
+### Overview of Categorical Attributes
 
-A summary table showing unique counts, most frequent values, and frequency shares for categorical attributes.  
+The `describe_cat()` function summarized unique counts, top categories, and their frequency share.
+
 ![calls_stats_cat.png](figures/calls_stats_cat.png)
 
-> The dataset includes **33 call owners** and over **15000 unique contacts**.  
-> Around **90% of calls are outbound**, and the most common owner (“Yara Edwards”) handles **over 9% of all calls**, suggesting a high concentration of workload.
+> There are **33 call owners** managing **≈15 000 unique contacts**.  
+> Around **90% of calls are outbound**, and the top agent (**Yara Edwards**) handles about **9% of all calls**, indicating a high workload concentration.
 
 ---
 
-### 6️⃣ Top 15 Call Owners — Exclusive & Unique Clients
+### Top 15 Call Owners — Total, Unique & Exclusive Clients
 
-Bar chart comparing the total number of calls, unique clients, and exclusive clients for the top 15 owners.  
+A bar chart compares each owner’s total calls, number of unique clients, and those served exclusively.
+
 ![call_owners.png](figures/call_owners.png)
 
-> **Yara Edwards** leads with 8,532 calls (≈ 9% of total).  
-> Only a fraction of contacts are exclusive to a single owner, suggesting a **shared client base** and collaboration across agents.
+> **Yara Edwards** leads with 8 532 calls (≈ 9% of total).  
+> The ratio of exclusive clients remains low, suggesting **shared ownership** of contacts and  **collaboration across sales and support teams**.
 
 ---
 
-## Key Insights
+### Unique & Exclusive Client Share (%)
 
-- **Right-Skewed Data:** Call durations follow a long-tail pattern, typical for communication datasets.
-- **Log Transformation Success:** Strongly improves normality and variance stability.
-- **Operational imbalance:** a few owners handle most calls.  
-- **Client overlap:** many contacts appear under multiple owners. 
-- **High Consistency in Status:** Outbound and completed calls dominate, indicating operational uniformity.
+Proportional comparison of unique vs. exclusive clients per owner.
+
+![call_owners_percent.png](figures/call_owners_percent.png)
+
+> For most owners, **unique contacts** account for 60–80 % of their portfolio, while **exclusive ownership** rarely exceeds 30 %, reflecting significant overlap between agents’ contact lists.
+
+---
+
+### Calls by Day of the Week
+
+Frequency of total calls by weekday, using ordered weekday indexing.
+
+![call_by_weekday.png](figures/call_by_weekday.png)
+
+> Activity peaks on **Tuesday – Thursday**, gradually dropping toward the weekend.  
+> This pattern aligns with operational cycles and client availability in standard business hours.
+
+---
+
+## 3️⃣ Key Insights
+
+- **Right-Skewed Distribution:** Raw call durations exhibit long-tail behavior typical of telecom datasets.  
+- **Successful Normalization:** Log transformation improved normality and reduced variance by > 90%.  
+- **Operational Imbalance:** A few agents handle the majority of calls.  
+- **Client Overlap:** Many contacts are managed by multiple owners, reflecting team-based engagement.  
+- **Consistent Patterns:** Weekday peaks suggest predictable workflow intensity and scheduling efficiency.
+
+---
+
+## 4️⃣ Next Step
+
+With numerical and categorical profiles explored, the next stage proceeds to **Contacts Dataset Descriptive Statistics**, examining client-level activity, source distribution, and demographic segmentation.
+
+**Continue to:** [02_2_contacts_descriptive_stats.md](02_2_contacts_descriptive_stats.md)
