@@ -1,5 +1,5 @@
 
-
+```
 📦 it-school-analytics/
 ├── 📁 data/
 │   ├── 📁 clean/
@@ -55,3 +55,4 @@
 │   └── product_analysis.py
 │
 └── 📄 README.md
+```
