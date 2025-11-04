@@ -6,27 +6,24 @@ The objective is to examine the structure of call durations, evaluate the effect
 ## Table of Contents
 
 1. [Numeric Fields](#1️⃣-numeric-fields)
- 1.1 [Descriptive Overview](#descriptive-overview)
- 1.2 [Call Duration by Day of the Week](#call-duration-by-day-of-the-week)
- 1.3 [Call Duration Distribution — Before & After Log Transformation](#call-duration-distribution--before--after-log-transformation)
- 1.4 [Violin Plot — Distribution Comparison](#violin-plot--distribution-comparison)
- 1.5 [Statistical Comparison — Before vs After Log](#statistical-comparison--before-vs-after-log)
-
+ - [1.1 Descriptive Overview](#descriptive-overview)
+ - [1.2 Call Duration by Day of the Week](#call-duration-by-day-of-the-week)
+ - [1.3 Call Duration Distribution — Before & After Log Transformation](#call-duration-distribution--before--after-log-transformation)
+ - [1.4 Violin Plot — Distribution Comparison](#violin-plot--distribution-comparison)
+ - [1.5 Statistical Comparison — Before vs After Log](#statistical-comparison--before-vs-after-log)
 2. [Categorical Fields](#2️⃣-categorical-fields)
- 2.1 [Overview of Categorical Attributes](#overview-of-categorical-attributes)
- 2.2 [Top 15 Call Owners — Total, Unique & Exclusive Clients](#top-15-call-owners--total-unique--exclusive-clients)
- 2.3 [Unique & Exclusive Client Share (%)](#unique--exclusive-client-share-)
- 2.4 [Calls by Day of the Week](#calls-by-day-of-the-week)
-
+ - [2.1 Overview of Categorical Attributes](#overview-of-categorical-attributes)
+ - [2.2 Top 15 Call Owners — Total, Unique & Exclusive Clients](#top-15-call-owners--total-unique--exclusive-clients)
+ - [2.3 Unique & Exclusive Client Share (%)](#unique--exclusive-client-share-)
+ - [2.4 Calls by Day of the Week](#calls-by-day-of-the-week)
 3. [Key Insights](#3️⃣-key-insights)
-
 4. [Next Step](#4️⃣-next-step)
 
 ---
 
 ## 1️⃣ Numeric Fields
 
-### Descriptive Overview
+### 1.1 Descriptive Overview
 
 The `describe_num()` function generated a summary of numerical features — including central tendency, dispersion, and shape statistics.
 
@@ -37,7 +34,7 @@ The `describe_num()` function generated a summary of numerical features — incl
 
 ---
 
-### Call Duration by Day of the Week
+### 1.2 Call Duration by Day of the Week
 
 To analyze weekly activity, average call duration was aggregated by weekday.  
 ![call_duration_by_weekday.png](figures/call_duration_by_weekday.png)
@@ -47,7 +44,7 @@ To analyze weekly activity, average call duration was aggregated by weekday.
 
 ---
 
-### Call Duration Distribution — Before & After Log Transformation
+### 1.3 Call Duration Distribution — Before & After Log Transformation
 
 The distribution of call durations before and after applying logarithmic transformation.
 
@@ -58,7 +55,7 @@ The distribution of call durations before and after applying logarithmic transfo
 
 ---
 
-### Violin Plot — Distribution Comparison
+### 1.4 Violin Plot — Distribution Comparison
 
 Violin plots visualize the spread and quartiles for the raw and log-transformed durations.  
 
@@ -68,7 +65,7 @@ Violin plots visualize the spread and quartiles for the raw and log-transformed 
 
 ---
 
-### Statistical Comparison — Before vs. After Log
+### 1.5 Statistical Comparison — Before vs. After Log
 
 The `compare_distributions()` function quantifies how transformation affects numeric properties.
 
@@ -87,7 +84,7 @@ Visualized percentage change of key metrics:
 
 ## 2️⃣ Categorical Fields
 
-### Overview of Categorical Attributes
+### 2.1 Overview of Categorical Attributes
 
 The `describe_cat()` function summarized unique counts, top categories, and their frequency share.
 
@@ -98,7 +95,7 @@ The `describe_cat()` function summarized unique counts, top categories, and thei
 
 ---
 
-### Top 15 Call Owners — Total, Unique & Exclusive Clients
+### 2.2 Top 15 Call Owners — Total, Unique & Exclusive Clients
 
 A bar chart compares each owner’s total calls, number of unique clients, and those served exclusively.
 
@@ -109,7 +106,7 @@ A bar chart compares each owner’s total calls, number of unique clients, and t
 
 ---
 
-### Unique & Exclusive Client Share (%)
+### 2.3 Unique & Exclusive Client Share (%)
 
 Proportional comparison of unique vs. exclusive clients per owner.
 
@@ -119,7 +116,7 @@ Proportional comparison of unique vs. exclusive clients per owner.
 
 ---
 
-### Calls by Day of the Week
+### 2.4 Calls by Day of the Week
 
 Frequency of total calls by weekday, using ordered weekday indexing.
 
