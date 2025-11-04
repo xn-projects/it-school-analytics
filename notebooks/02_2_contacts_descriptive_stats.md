@@ -9,8 +9,8 @@ The objective is to analyze the structure of contact ownership, identify dominan
 
 1. [Numeric Fields](#1️⃣-numeric-fields)  
 2. [Categorical Fields](#2️⃣-categorical-fields)  
-    - [2.1 Overview of Categorical Attributes](#21-overview-of-categorical-attributes)  
-    - [2.2 Top 15 Contact Owners by Frequency](#22-top-15-contact-owners-by-frequency)  
+   - [2.1 Overview of Categorical Attributes](#21-overview-of-categorical-attributes)  
+   - [2.2 Top 15 Contact Owners by Frequency](#22-top-15-contact-owners-by-frequency)  
 3. [Key Insights](#3️⃣-key-insights)  
 4. [Next Step](#4️⃣-next-step)
 
