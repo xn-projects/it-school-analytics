@@ -20,7 +20,7 @@ This initial report provided insights into:
 
 ## 2️⃣ Removing Irrelevant Columns
 
-Two columns were dropped as they contained non-analytical or redundant information:
+Two columns were dropped as they contained entirely empty values and provided no analytical value.
 - `Dialled Number`
 - `Tag`
 
@@ -32,35 +32,57 @@ After removal, the dataset became more compact and focused on relevant business 
 
 Duplicates were identified using `find_duplicates()` and removed with `clean_duplicates()`.  
 All duplicate counts were logged.  
-The cleaned version of the dataset was stored as **`clean_calls`**, containing only unique call records.
+The cleaned version of the dataset was stored as **`clean_calls`**.
 
 ---
 
 ## 4️⃣ Date Conversion
 
 The column **`Call Start Time`** was converted to `datetime` format to enable time-series analysis and visualization.  
-Any invalid or inconsistent formats were automatically coerced to `NaT`.
 
 ---
 
 ## 5️⃣ Missing Value Analysis and Handling
 
 ### 5.1 CONTACTID
-Some calls lacked a contact identifier.  
-Such rows mostly corresponded to **Inbound** or **Missed** calls, where linking to a contact was not possible.  
-They were **kept intentionally**, preserving logical integrity.
+
+Rows with missing **`CONTACTID`** values were analyzed separately to assess potential data loss.  
+The inspection showed that most of these rows represented incomplete call records with no associated contact information.
+
+Rows meeting both conditions were removed:
+- `CONTACTID` is missing (`NaN`, `'nan'`, `'None'`, or empty string`)  
+- `Call Duration (in seconds)` equals **0**
+
+This ensured that non-informative call entries (zero duration and no contact reference) were excluded from the dataset.
+
+> *Removed all rows with missing `CONTACTID` and zero call duration.*
 
 ### 5.2 Call Duration
-- Missing durations were replaced with **0 seconds**.  
-- A binary flag **`Is_duration_missing`** was added to mark originally missing values.
+
+The column **`Call Duration (in seconds)`** contained several missing values.  
+To preserve analytical consistency:
+- Missing durations were filled with **0**,  
+- A binary flag **`Is_duration_missing`** was added to mark originally missing records.  
+
+This approach retained all call entries while making missing data explicitly traceable.
+
+> *Filled missing durations with 0 and added the indicator `Is_duration_missing`.*
 
 ### 5.3 Outgoing Call Status
-- Missing values were replaced with `'Unknown'`.  
-- This prevented categorical inconsistencies and maintained uniform grouping.
+
+Some records lacked an **`Outgoing Call Status`** value.  
+To prevent categorical gaps and maintain consistency, all missing values were replaced with **`'Unknown'`**.
+
+> *Filled missing Outgoing Call Status values with `'Unknown'`.*
 
 ### 5.4 Scheduled in CRM
-- Missing values were filled with `0.0`.  
-- A boolean flag **`Is_schedule_missing`** was added to indicate originally missing schedule info.
+
+The column **`Scheduled in CRM`** occasionally contained null values.  
+To ensure numerical consistency:
+- Missing values were replaced with **0.0**,  
+- A flag **`Is_schedule_missing`** was added to track originally empty records.  
+
+> *Filled missing `Scheduled in CRM` values with 0.0 and added the indicator `Is_schedule_missing`.*
 
 ---
 
@@ -92,15 +114,15 @@ The difference between the raw and cleaned summaries clearly demonstrates:
 
 | Step | Action Performed |
 |------|------------------|
-| Column pruning | Removed non-informative fields to reduce noise |
+| Column pruning | Removed empty or non-informative fields to reduce noise |
 | Duplicate removal | Identified and eliminated duplicate entries |
 | Missing data | Applied logical imputation and added missing-value indicators |
-| Outlier detection | Detected long-call anomalies for later statistical review |
-| Type conversion | Standardized data types for analytical consistency |
-| Exports | Saved cleaned dataset and visual summaries (PNG format) |
+| Type conversion | Standardized column types (datetime, category) for analytical consistency |
+| Exports | Prepared cleaned dataset and generated summary visualizations |
 
 ---
 
 ## Next Step
 
-The next stage continues with **Contacts** dataset cleaning
+With the Calls dataset cleaned and verified, the next stage continues with **Contacts** data preparation and validation.
+**Continue to:** [01_3_contacts_cleaning.md](01_3_contacts_cleaning.md)
