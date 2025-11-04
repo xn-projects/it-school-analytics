@@ -13,10 +13,12 @@ It examines both **numeric** and **categorical** fields, focusing on distributio
    - [1.3 Violin Plots — Spread Comparison](#13-violin-plots--spread-comparison)  
    - [1.4 Impressions — Statistical Comparison](#14-impressions--statistical-comparison)  
    - [1.5 Clicks — Statistical Comparison](#15-clicks--statistical-comparison)  
-   - [1.6 Spend — Statistical Comparison](#16-spend--statistical-comparison)  
+   - [1.6 Spend — Statistical Comparison](#16-spend--statistical-comparison)
+    
 2. [Categorical Fields](#2️⃣-categorical-fields)  
    - [2.1 Overview of Categorical Attributes](#21-overview-of-categorical-attributes)  
-   - [2.2 Category Distributions](#22-category-distributions)  
+   - [2.2 Category Distributions](#22-category-distributions)
+     
 3. [Key Insights](#3️⃣-key-insights)  
 4. [Next Step](#4️⃣-next-step)
 
