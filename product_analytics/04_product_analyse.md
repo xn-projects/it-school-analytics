@@ -21,7 +21,7 @@ It combines financial efficiency assessment with experimental validation to iden
    - [4.3 Hypothesis 3](#43-hypotheses-3)
 
 
-# 1️⃣ Unit economics
+## 1️⃣ Unit economics
 
 
 Unit economics Total
@@ -42,16 +42,16 @@ Unit economics - UX/UI Design
 
 ---
 
-# 2️⃣ Metric Tree
+## 2️⃣ Metric Tree
 *(Based on the core datasets used in business performance analysis)*  
 
-## 2.1 Target Metric  
+### 2.1 Target Metric  
 
 - **CM — Contribution Margin**  
 
   $CM = UA \times (LTV - CPA)$
 
-## 2.2 Unit Economics Metrics  
+### 2.2 Unit Economics Metrics  
 
 - **UA — User Acquisition**
 
@@ -73,7 +73,7 @@ Unit economics - UX/UI Design
 
   $APC = T / B$
 
-## 2.3 Product Metrics
+### 2.3 Product Metrics
 
 - **AOVᵢ — Average Order Value (per user)**  
 
@@ -111,7 +111,7 @@ Unit economics - UX/UI Design
   $AC = df\_spend[Spend].sum()$ (for Total)  
   $AC = UA \times CPA$
 
-## 2.4 Atomic Metrics  
+### 2.4 Atomic Metrics  
 *(Base columns from each dataset used in the calculations)*  
 
 **df_deals**  
@@ -133,20 +133,20 @@ Unit economics - UX/UI Design
 
 ---
 
-# 3️⃣ Hypotheses
+## 3️⃣ Hypotheses
 
-## 3.1 Hypothesis 1
+### 3.1 Hypothesis 1
 For the Digital Marketing product, re-engaging users who have already shown interest but haven’t completed the target action can increase their readiness to convert.
 Launching a campaign to reach this “warmed” audience through personalized messages and relevant ad formats (social media, email, push, SMS) is expected **to raise the conversion rate by 2% — from 2.52% to 2.57%.**
 Such an increase would confirm the effectiveness of repeated interactions and show that this approach can be a reliable tool for improving conversion in the Digital Marketing product line.
 
-## 3.2 Hypothesis 2
+### 3.2 Hypothesis 2
 For the Web Developer product, offering new users a one-month free trial will increase engagement during the trial period and lead to a higher conversion rate to paid plans after the trial ends.<br>
 It is expected that providing users with the opportunity to test the product without financial commitment will **boost conversion by 4% — from 0.73% to 0.76%** over the full observation period.
 
 Such an increase would confirm that a free trial effectively improves user activation and payment conversion for the Web Developer product.
 
-## 3.3 Hypothesis 3
+### 3.3 Hypothesis 3
 For the UX/UI Design product, displaying authentic customer reviews on the website, in the mobile app, and in email campaigns will increase audience trust and the likelihood of completing the target action.
 It is assumed that showcasing real user experiences will **raise the conversion rate by 1% — from 1.21% to 1.22%.**
 
@@ -154,9 +154,9 @@ Such a result would confirm that customer reviews help build trust and serve as 
 
 ---
 
-# 4️⃣ A/B testing method
+## 4️⃣ A/B testing method
 
-## 4.1 Hypothesis 1
+### 4.1 Hypothesis 1
 
 **H₀ (Null Hypothesis):** <br>
 Re-engagement of users who have already shown interest does not lead to an increase in the conversion rate.<br>
@@ -192,7 +192,7 @@ $day = \frac{n \times 2}{Average Daily Users​}$
 The A/B test can be completed in approximately **6 days**, which means it can be comfortably executed within a two-week testing window.<br>
 This timeframe allows not only for the test itself but also for data validation, monitoring of interim results, and post-test analysis, ensuring that the conclusions are both statistically reliable and operationally actionable.
 
-## 4.2 Hypothesis 2
+### 4.2 Hypothesis 2
 
 **H₀ (Null Hypothesis):** <br>
 Offering a one-month free trial does not increase the conversion rate after the trial.
@@ -228,7 +228,7 @@ The A/B test can technically be conducted within **3 days** to collect the requi
 However, because the experiment involves a **one-month free trial**, the actual results on conversion can only be measured **after the 30-day period ends**.
 Therefore, the **full testing cycle** — including data collection and evaluation — will take approximately **one month**.
 
-## 4.3 Hypothesis 3
+### 4.3 Hypothesis 3
 
 **H₀ (Null Hypothesis):** <br>
 Displaying customer reviews does not significantly affect the conversion rate compared to users who do not see reviews.<br>
