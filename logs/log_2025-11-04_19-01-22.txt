@@ -1,0 +1,18 @@
+2025-11-04 19:01:22,204 — [INFO] Logging started. File: logs/log_2025-11-04_19-01-22.txt
+2025-11-04 19:01:22,207 — [INFO] Repository successfully loaded and ready
+2025-11-04 19:01:22,226 — [INFO] ==================================================
+2025-11-04 19:01:22,227 — [INFO] === Downloading source Excel files ===
+2025-11-04 19:01:22,229 — [INFO] ==================================================
+2025-11-04 19:01:22,534 — [INFO] File calls_clean.xlsx downloaded to data/raw/calls_clean.xlsx
+2025-11-04 19:01:22,731 — [INFO] File contacts_clean.xlsx downloaded to data/raw/contacts_clean.xlsx
+2025-11-04 19:01:23,107 — [INFO] File deals_clean.xlsx downloaded to data/raw/deals_clean.xlsx
+2025-11-04 19:01:23,327 — [INFO] File spend_clean.xlsx downloaded to data/raw/spend_clean.xlsx
+2025-11-04 19:01:23,329 — [INFO] Downloaded 4 files successfully.
+2025-11-04 19:01:23,339 — [INFO] ==================================================
+2025-11-04 19:01:23,340 — [INFO] === Reading Excel files ===
+2025-11-04 19:01:23,342 — [INFO] ==================================================
+2025-11-04 19:01:56,483 — [INFO] All files successfully loaded into DataFrames.
+2025-11-04 19:01:56,490 — [INFO] ==================================================
+2025-11-04 19:01:56,491 — [INFO] === Calculate unit-economics ===
+2025-11-04 19:01:56,492 — [INFO] ==================================================
+2025-11-04 19:01:56,984 — [INFO] All hypotheses have been successfully tested in 0.49 sec.
