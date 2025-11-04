@@ -11,12 +11,15 @@ The objective is to examine the structure of call durations, evaluate the effect
  1.3 [Call Duration Distribution — Before & After Log Transformation](#call-duration-distribution--before--after-log-transformation)
  1.4 [Violin Plot — Distribution Comparison](#violin-plot--distribution-comparison)
  1.5 [Statistical Comparison — Before vs After Log](#statistical-comparison--before-vs-after-log)
+
 2. [Categorical Fields](#2️⃣-categorical-fields)
  2.1 [Overview of Categorical Attributes](#overview-of-categorical-attributes)
  2.2 [Top 15 Call Owners — Total, Unique & Exclusive Clients](#top-15-call-owners--total-unique--exclusive-clients)
  2.3 [Unique & Exclusive Client Share (%)](#unique--exclusive-client-share-)
  2.4 [Calls by Day of the Week](#calls-by-day-of-the-week)
+
 3. [Key Insights](#3️⃣-key-insights)
+
 4. [Next Step](#4️⃣-next-step)
 
 ---
