@@ -46,7 +46,7 @@ These represented experimental or placeholder entries not relevant for productio
 
 All such records were removed to maintain dataset purity.
 
-> ✅ *Removed all rows where `Source = 'Test'`.*
+> *Removed all rows where `Source = 'Test'`.*
 
 ---
 
@@ -57,7 +57,7 @@ were identified as non-informative and removed.
 
 **Rationale:** These entries represent campaigns or ad groups with no activity and therefore do not contribute to analytical insights.
 
-> ✅ *Removed all rows with zero values across key performance metrics.*
+> *Removed all rows with zero values across key performance metrics.*
 
 ---
 
