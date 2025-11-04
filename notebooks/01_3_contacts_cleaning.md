@@ -2,6 +2,17 @@
 
 This document describes the **data cleaning process** for the `Contacts` dataset.
 
+## Table of Contents
+
+1. [Initial Data Overview](#1️⃣-initial-data-overview)
+2. [Duplicate Detection and Removal](#2️⃣-duplicate-detection-and-removal)
+3. [Detection of Invalid Boolean Entries](#3️⃣-detection-of-invalid-boolean-entries)
+4. [Datetime Conversion](#4️⃣-datetime-conversion)
+5. [Logical Consistency Check](#5️⃣-logical-consistency-check)
+6. [Final Data Summary](#6️⃣-final-data-summary-after-cleaning)
+7. [Results and Exports](#7️⃣-results-and-exports)
+8. [Next step](#8️⃣-next-step)
+
 ---
 
 ## 1️⃣ Initial Data Overview
@@ -70,5 +81,7 @@ A new summary table was generated for the cleaned dataset to confirm successful 
 | Consistency check | Verified no `Created Time` > `Modified Time` |
 | Exports | Saved cleaned dataset and PNG summaries |
 
-### Next step: 
-Proceed with cleaning of the **Spend** dataset
+
+## 8️⃣ Next step
+With the Contacts dataset cleaned and validated, the next stage proceeds with **Spend** dataset preparation and cleaning.  
+**Continue to:** [01_4_spend_cleaning.md](01_4_spend_cleaning.md)
