@@ -32,55 +32,47 @@ During preprocessing, the `describe_num()` function was executed to detect numer
 
 ### 2.1 Overview of Categorical Attributes
 
-Categorical analysis performed via `describe_cat()` revealed structural characteristics and distribution of key text-based fields such as **Contact Owner Name**, **Lead Source**, and **Status**.
+Categorical analysis performed via `describe_cat()` revealed structural characteristics and distribution of key text-based fields.
 
 ![contacts_stats_cat.png](figures/contacts_stats_cat.png)
 
-> - Most fields are **well-populated with low missingness (<2%)**, ensuring analytical reliability.  
-> - The **Contact Owner Name** field exhibits a moderate number of unique values, confirming a balanced team structure.  
-> - Distribution of **Lead Source** suggests that digital and referral-based origins dominate, aligning with CRM acquisition patterns.
+> - The dataset includes **18,509 unique contacts** assigned to **27 different owners**.  
+> - The **Contact Owner Name** field is categorical and fully populated (no missing values).  
+> - **Charlie Davis** is the most frequent owner, managing **2,018 contacts**, which represents **10.9% of the total dataset**.  
+> - Ownership distribution indicates a **moderately centralized structure** with several dominant agents.
 
 ---
 
 ### 2.2 Top 15 Contact Owners by Frequency
 
-The following visualization presents the top 15 contact owners ranked by the number of clients they manage.
+The bar chart visualizes the **top 15 contact owners** ranked by the number of clients they manage.
 
 ![contacts_owners.png](figures/contacts_owners.png)
 
-| Rank | Contact Owner | Number of Contacts |
-|------|----------------|--------------------|
-| 1 | Yara Edwards | 3,812 |
-| 2 | Julia Nelson | 3,405 |
-| 3 | Ian Miller | 3,011 |
-| ... | ... | ... |
-| 15 | Robert Green | 1,042 |
-
-#### Analytical Observations
-
-- **Yara Edwards** leads with **3,812 contacts**, representing roughly **9–10% of all entries**, indicating a central operational role.  
-- The top five owners collectively manage **over 40% of total contacts**, confirming **a concentrated ownership structure**.  
-- The bar chart (`contacts_owners.png`) demonstrates **gradual decline beyond the top ranks**, showing moderate workload balance across the remaining staff.  
-- This distribution pattern is typical for **CRM-managed datasets**, where senior agents handle larger portfolios, while new or specialized agents oversee smaller client groups.
-
-#### Business Interpretation
-> - The high concentration of contacts among a few top owners may signal **centralized expertise** and **relationship continuity** but could also risk **bottlenecks** or **client dependency**.  
-> - Introducing **tiered ownership models** or **client reallocation strategies** could improve balance and service responsiveness.  
-> - The observed ownership distribution aligns with the **call activity hierarchy**, suggesting consistent performance across datasets.
+> Analytical Observations
+> - The top 5 owners (**Charlie Davis**, **Ulysses Adams**, **Julia Nelson**, **Paula Underwood**, **Quincy Vincent**) together manage **over 40%** of all contacts.  
+> - **Charlie Davis** alone accounts for **~11%** of total records — a clear operational leader.  
+> - Ownership frequency declines gradually after the top 5, showing a **healthy mid-tier of active agents**.  
+> - The distribution pattern suggests **centralized but not monopolized ownership**, allowing both control and scalability.
+> Business Interpretation
+> - **Charlie Davis** likely functions as a key relationship manager or senior CRM agent.  
+> - Concentration of contacts in top performers can boost service consistency but also creates **dependency risk**.  
+> - Mid-range owners (ranks 6–12) have balanced workloads (≈700–1,100 clients), indicating effective team utilization.  
+> - Overall, the **contact allocation model** appears efficient, with gradual workload tapering and no extreme outliers.
 
 ---
 
 ## 3️⃣ Key Insights
 
-- **Data completeness** is high across all numeric and categorical dimensions.  
-- **Contact ownership is moderately concentrated**, with a few key agents dominating the portfolio.  
-- The **CRM structure** supports active client engagement, consistent with earlier call analytics.  
-- Opportunities exist to **optimize contact load distribution** and **enhance client coverage efficiency**.
+- **Ownership concentration** is evident — a few top agents (led by *Charlie Davis* and *Ulysses Adams*) manage a significant share of the client base.  
+- The **distribution of contacts** follows a balanced long-tail pattern: while top performers dominate volume, mid-tier owners maintain strong participation.  
+- This structure suggests an **efficient but centralized CRM model**, ensuring both continuity of client relationships and operational scalability.  
+- There remains an opportunity to **rebalance workloads** and **broaden ownership diversity**, potentially improving responsiveness and client retention.
 
 ---
 
 ## 4️⃣ Next Step
 
-The following stage focuses on the **Spend dataset**, examining financial allocation, campaign expenditure, and performance correlation with contact engagement metrics.
+The next stage continues with the **Spend dataset**, applying the **same descriptive statistical approach** — analyzing both **numeric** and **categorical** fields to evaluate financial patterns and relationships with previous datasets.
 
 **Continue to:** [02_3_spend_descriptive_stats.md](02_3_spend_descriptive_stats.md)
