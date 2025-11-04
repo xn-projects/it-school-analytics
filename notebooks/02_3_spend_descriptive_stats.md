@@ -16,7 +16,7 @@ It examines both **numeric** and **categorical** fields, focusing on distributio
    - [1.6 Spend — Statistical Comparison](#16-spend--statistical-comparison)  
 2. [Categorical Fields](#2️⃣-categorical-fields)  
    - [2.1 Overview of Categorical Attributes](#21-overview-of-categorical-attributes)  
-   - [2.2 Top Categories by Frequency](#22-top-categories-by-frequency)  
+   - [2.2 Category Distributions](#22-category-distribution)  
 3. [Key Insights](#3️⃣-key-insights)  
 4. [Next Step](#4️⃣-next-step)
 
@@ -126,7 +126,7 @@ Categorical profiling of `Source`, `Campaign`, `AdGroup`, and `Ad` uncovers stru
 
 ---
 
-### 2.2 Top Categories by Frequency
+### 2.2 Category Distributions
 
 ![category_spend_distribution.png](figures/category_spend_distribution.png)
 
