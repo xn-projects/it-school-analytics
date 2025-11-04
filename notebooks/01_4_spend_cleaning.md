@@ -125,4 +125,5 @@ A new data summary was generated using the `DataSummary` class to verify the cle
 ## 1️⃣0️⃣ Next Step
 
 With the Spend dataset cleaned and verified, the next stage continues with **Deals** dataset preparation and cleaning.
+
 **Continue to:** [01_5_deals_cleaning.md](01_5_deals_cleaning.md)
