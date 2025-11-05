@@ -30,7 +30,7 @@ def prepare_data(deals, calls):
     deals = deals.merge(calls_count, on='Id', how='left')
     deals['calls_count'] = deals['calls_count'].fillna(0)
 
-    return deals, agg_product
+    return deals, agg_product, agg_edu
 
 
 def compute_kpi(deals, selected_product):
