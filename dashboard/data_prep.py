@@ -13,10 +13,7 @@ def load_data(path=DATA_PATH):
     return deals, calls, contacts, spend
 
 
-def prepare_data(deals, calls):
-    deals['Id'] = deals['Id'].astype(str)
-    calls['Id'] = calls['Id'].astype(str)
-
+def prepare_data(deals):
     deals['Stage'] = deals['Stage'].astype(str).str.strip().str.lower()
     deals['Product'] = deals['Product'].astype(str).str.strip().fillna('Unknown')
     deals['Education Type'] = deals['Education Type'].astype(str).str.strip().fillna('Unknown')
@@ -28,25 +25,25 @@ def prepare_data(deals, calls):
         (deals['Payment Type'] != 'Unknown')
     ].copy()
 
-    deals['is_success'] = (deals['Stage'] == 'payment done').astype(int)
+    deals['is_success'] = deals['Stage'].eq('payment done').astype(int)
+    deals['is_open'] = deals['Stage'].ne('payment done').astype(int)
 
-    deals['Created Time'] = pd.to_datetime(deals['Created Time'], errors='coerce')
-    deals['Deal Created Month'] = deals['Created Time'].dt.to_period('M').dt.to_timestamp()
+    deals['Deal Created Month'] = pd.to_datetime(deals['Deal Created Month']).dt.to_period('M').dt.to_timestamp()
 
-    calls_count = calls.groupby('Id').size().reset_index(name='calls_count')
-    deals = deals.merge(calls_count, on='Id', how='left')
-    deals['calls_count'] = deals['calls_count'].fillna(0)
-
-    agg_product = deals.groupby(['Deal Created Month', 'Product']).agg(
-        deals_count=('Id', 'count'),
-        success_count=('is_success', 'sum')
-    ).reset_index()
+    agg_product = (
+        deals.groupby(['Deal Created Month', 'Product'])
+        .agg(deals_count=('id', 'count'),
+             success_count=('is_success', 'sum'))
+        .reset_index()
+    )
     agg_product['conversion'] = (agg_product['success_count'] / agg_product['deals_count'] * 100).fillna(0)
 
-    agg_edu = deals.groupby(['Deal Created Month', 'Product', 'Education Type']).agg(
-        deals_count=('Id', 'count'),
-        success_count=('is_success', 'sum')
-    ).reset_index()
+    agg_edu = (
+        deals.groupby(['Deal Created Month', 'Education Type', 'Product'])
+        .agg(deals_count=('id', 'count'),
+             success_count=('is_success', 'sum'))
+        .reset_index()
+    )
     agg_edu['conversion'] = (agg_edu['success_count'] / agg_edu['deals_count'] * 100).fillna(0)
 
     return deals, agg_product, agg_edu
@@ -58,8 +55,8 @@ def compute_kpi(deals, selected_product=None):
     if selected_product and selected_product != 'Total':
         df = df[df['Product'] == selected_product]
 
-    total_calls = df['calls_count'].sum()
     total_deals = len(df)
-    total_success = df['is_success'].sum()
+    success_deals = df['is_success'].sum()
+    open_deals = df['is_open'].sum()
 
-    return total_calls, total_deals, total_success
+    return total_deals, success_deals, open_deals
