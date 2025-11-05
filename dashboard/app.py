@@ -14,7 +14,7 @@ deals, calls, contacts, spend = load_data()
 deals, agg_product, agg_edu = prepare_data(deals, calls)
 
 colors = get_my_palette(as_dict=True)
-CALLS_COLOR = colors["Cornflower"][4]
+OPEN_COLOR = colors["Cornflower"][4]
 DEALS_COLOR = colors["Lime Green"][4]
 SUCCESS_COLOR = colors["Tomato"][4]
 
@@ -44,9 +44,9 @@ app.layout = dbc.Container([
     ),
 
     dbc.Row([
-        dbc.Col(html.Div(id="kpi_calls"), width=4),
         dbc.Col(html.Div(id="kpi_deals"), width=4),
         dbc.Col(html.Div(id="kpi_success"), width=4),
+        dbc.Col(html.Div(id="kpi_open"), width=4),
     ], style={"marginBottom": "30px"}),
 
     dcc.Graph(id="product_graph", style={"marginBottom": "40px"}),
@@ -62,10 +62,11 @@ app.layout = dbc.Container([
     Input('product_filter', 'value')
 )
 def update_dashboard(selected_product):
-    total_calls, total_deals, total_success = compute_kpi(deals, selected_product)
-    calls_card = make_card("Calls", int(total_calls), CALLS_COLOR)
-    deals_card = make_card("Deals", int(total_deals), DEALS_COLOR)
-    success_card = make_card("Success Deals", int(total_success), SUCCESS_COLOR)
+    total_deals, success_deals, open_deals = compute_kpi(deals, selected_product)
+
+deals_card = make_card("All Deals", int(total_deals), DEALS_COLOR)
+success_card = make_card("Success Deals", int(success_deals), SUCCESS_COLOR)
+open_card = make_card("Open Deals", int(open_deals), OPEN_COLOR)
 
     if selected_product == "Total":
         dfp = agg_product.groupby("Deal Created Month", as_index=False).agg(
@@ -85,7 +86,7 @@ def update_dashboard(selected_product):
 
     fig_edu = build_education_chart(df_edu, "Education Type")
 
-    return calls_card, deals_card, success_card, fig_product, fig_edu
+    return deals_card, success_card, open_card, fig_product, fig_edu
 
 
 if __name__ == "__main__":
