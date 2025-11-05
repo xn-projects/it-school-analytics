@@ -1,11 +1,10 @@
 import plotly.graph_objects as go
-from utils.my_palette import get_my_palette
+from utils import get_my_palette
 
 colors = get_my_palette(as_dict=True)
 BASE_COLOR = colors["Cornflower"][3]
 SUCCESS_COLOR = colors["Lime Green"][3]
 TREND_COLOR = colors["Tomato"][3]
-
 
 def build_product_chart(df):
     fig = go.Figure()
@@ -37,18 +36,9 @@ def build_product_chart(df):
     ))
 
     fig.update_layout(
-        title={'text': "Deals & Conversion by Product", 'x': 0.5, 'font': dict(size=18)},
         barmode='overlay',
         template='plotly_white',
-        yaxis=dict(title="Number of Deals"),
-        yaxis2=dict(
-            title="Conversion (%)",
-            overlaying='y',
-            side='right'
-        ),
-        hovermode="x unified",
-        height=480,
-        margin=dict(l=40, r=60, t=60, b=40)
+        yaxis2=dict(overlaying='y', side='right')
     )
 
     return fig
@@ -80,27 +70,15 @@ def build_education_chart(df_edu):
         name='Conversion %',
         yaxis='y2',
         line=dict(color=TREND_COLOR, width=2.5, dash='dot'),
-        marker=dict(size=6, color=TREND_COLOR),
+        marker=dict(size=6, color=TREND_COLOR)
     ))
 
     fig.update_layout(
-        title={'text': "Deals & Conversion by Education Type", 'x': 0.5, 'font': dict(size=18)},
+        title="Education Type: Deals / Success / Conversion",
+        title_x=0.5,
         barmode='overlay',
         template='plotly_white',
-        xaxis=dict(
-            title="Month",
-            tickangle=-45,
-            tickformat="%b %Y",
-        ),
-        yaxis=dict(title="Number of Deals"),
-        yaxis2=dict(
-            title="Conversion (%)",
-            overlaying='y',
-            side='right',
-        ),
-        hovermode="x unified",
-        height=480,
-        margin=dict(l=40, r=60, t=60, b=40)
+        yaxis2=dict(overlaying='y', side='right')
     )
 
     return fig
