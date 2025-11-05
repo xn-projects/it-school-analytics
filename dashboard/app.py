@@ -90,20 +90,23 @@ app.layout = dbc.Container([
     ],
     [
         Input('product_filter', 'value'),
-        Input('edu_filter', 'value')
+        Input('edu-filter', 'value')
     ]
 )
 def update_dashboard(selected_product, selected_edu):
     df = deals.copy()
 
-    df_timeseries = get_product_timeseries(df, selected_product)
-    product_chart = build_product_chart(df_timeseries)
+    if selected_edu != 'Total':
+        df = df[df['Education Type'] == selected_edu]
 
-    total_deals, success_deals, open_deals, closed_deals = compute_kpi(df, selected_product)
+    if selected_product != 'Total':
+        df = df[df['Product'] == selected_product]
+
+    total_deals, success_deals, open_deals, closed_deals = compute_kpi(df)
     cards = make_kpi_cards(total_deals, success_deals, open_deals, closed_deals)
 
-    agg = aggregate_product(df)
-    product_chart = build_product_chart(agg)
+    df_timeseries = get_product_timeseries(df, selected_product)
+    product_chart = build_product_chart(df_timeseries)
 
     sankey_chart = build_sankey_chart(df)
 
