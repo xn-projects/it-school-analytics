@@ -63,24 +63,14 @@ def compute_kpi(deals, selected_product=None):
     return total_deals, success_deals, open_deals, closed_deals
 
 
-def get_product_timeseries(df, selected_product):
+def get_product_timeseries(df):
     df = df.copy()
 
-    df['Stage'] = df['Stage'].astype(str).str.strip().str.lower()
+    df['Stage'] = df['Stage'].astype(str).str.lower().str.strip()
     df['is_success'] = (df['Stage'] == 'payment done').astype(int)
-
-    mask = (
-        (df['Product'] != 'Unknown') &
-        (df['Education Type'] != 'Unknown') &
-        (df['Payment Type'] != 'Unknown')
-    )
-    df = df.loc[mask].copy()
 
     df['Created Time'] = pd.to_datetime(df['Created Time'], errors='coerce')
     df['Deal Created Month'] = df['Created Time'].dt.to_period('M').dt.to_timestamp()
-
-    if selected_product != 'Total':
-        df = df[df['Product'] == selected_product]
 
     agg = df.groupby('Deal Created Month').agg(
         deals_count=('Id', 'count'),
