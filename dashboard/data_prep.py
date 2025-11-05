@@ -26,13 +26,12 @@ def prepare_data(deals):
     ].copy()
 
     deals['is_success'] = deals['Stage'].eq('payment done').astype(int)
-    deals['is_open'] = deals['Stage'].ne('payment done').astype(int)
 
     deals['Deal Created Month'] = pd.to_datetime(deals['Deal Created Month']).dt.to_period('M').dt.to_timestamp()
 
     agg_product = (
         deals.groupby(['Deal Created Month', 'Product'])
-        .agg(deals_count=('id', 'count'),
+        .agg(deals_count=('Id', 'count'),
              success_count=('is_success', 'sum'))
         .reset_index()
     )
@@ -40,7 +39,7 @@ def prepare_data(deals):
 
     agg_edu = (
         deals.groupby(['Deal Created Month', 'Education Type', 'Product'])
-        .agg(deals_count=('id', 'count'),
+        .agg(deals_count=('Id', 'count'),
              success_count=('is_success', 'sum'))
         .reset_index()
     )
@@ -57,6 +56,7 @@ def compute_kpi(deals, selected_product=None):
 
     total_deals = len(df)
     success_deals = df['is_success'].sum()
-    open_deals = df['is_open'].sum()
+    open_deals = df['Created Time'].notna().sum()
+    closed_deals = df['Closing Date'].notna().sum()
 
-    return total_deals, success_deals, open_deals
+    return total_deals, success_deals, open_deals, closed_deals
