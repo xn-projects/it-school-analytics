@@ -66,11 +66,10 @@ def compute_kpi(deals, selected_product=None):
 def get_product_timeseries(df, selected_product):
     df = df.copy()
 
-    df['Stage'] = df['Stage'].str.lower().str.strip()
-    df['is_success'] = (df['Stage'] == 'payment done').astype(int)
-
     df['Created Time'] = pd.to_datetime(df['Created Time'], errors='coerce')
     df['Deal Created Month'] = df['Created Time'].dt.to_period('M').dt.to_timestamp()
+
+    df['is_success'] = (df['Stage'].str.lower() == 'payment done').astype(int)
 
     if selected_product != 'Total':
         df = df[df['Product'] == selected_product]
