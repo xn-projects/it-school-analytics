@@ -1,6 +1,10 @@
+import os
 import pandas as pd
 
-def load_data(path='../data/clean/data_all.xlsx'):
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(BASE_DIR, '..', 'data', 'clean', 'data_all.xlsx')
+
+def load_data(path=DATA_PATH):
     deals = pd.read_excel(path, sheet_name='deals')
     calls = pd.read_excel(path, sheet_name='calls')
     contacts = pd.read_excel(path, sheet_name='contacts')
