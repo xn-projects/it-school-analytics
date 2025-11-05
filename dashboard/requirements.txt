@@ -1,0 +1,10 @@
+dash==2.11.1
+dash-bootstrap-components==1.4.1
+pandas
+plotly
+openpyxl
+gunicorn
+
+Werkzeug==2.2.3
+Flask==2.2.5
+Flask-Cors==3.0.10
