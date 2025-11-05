@@ -69,7 +69,7 @@ def update_dashboard(selected_product):
     else:
         dfp = agg_product[agg_product['Product'] == selected_product]
     fig_product = build_product_chart(dfp)
-
+    
     df_edu = deals.copy()
     if selected_product != "Total":
         df_edu = df_edu[df_edu['Product'] == selected_product]
@@ -83,6 +83,7 @@ def update_dashboard(selected_product):
     fig_edu = build_education_chart(agg_edu_filtered, "Education Type")
 
     return calls_card, deals_card, success_card, fig_product, fig_edu
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8050))
