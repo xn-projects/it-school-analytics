@@ -4,6 +4,7 @@ pandas
 plotly
 openpyxl
 gunicorn
+dataframe_image
 
 matplotlib
 seaborn
