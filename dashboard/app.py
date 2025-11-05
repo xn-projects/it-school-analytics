@@ -96,11 +96,8 @@ app.layout = dbc.Container([
 def update_dashboard(selected_product, selected_edu):
     df = deals.copy()
 
-    if selected_edu != 'Total':
-        df = df[df['Education Type'] == selected_edu]
-
-    if selected_product != 'Total':
-        df = df[df['Product'] == selected_product]
+    df_timeseries = get_product_timeseries(deals, selected_product)
+    fig_product = build_product_chart(df_timeseries)
 
     total_deals, success_deals, open_deals, closed_deals = compute_kpi(df, selected_product)
     cards = make_kpi_cards(total_deals, success_deals, open_deals, closed_deals)
