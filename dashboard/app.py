@@ -5,25 +5,20 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import pandas as pd
 
-from .data_prep import load_data, prepare_data, compute_kpi
-from .charts import build_product_chart, build_education_chart
 from utils.my_palette import get_my_palette
+from utils.data_prep import load_data, prepare_data, compute_kpi
+from .charts import build_product_chart, build_education_chart
 
 
 deals, calls, contacts, spend = load_data()
 deals, agg_product, agg_edu = prepare_data(deals, calls)
 
-print(">>> deals rows:", len(deals))
-print(">>> calls rows:", len(calls))
-print(">>> agg_product rows:", len(agg_product))
-print(">>> agg_edu rows:", len(agg_edu))
-
-products = ['Total'] + sorted(agg_product['Product'].unique())
-
 colors = get_my_palette(as_dict=True)
 CALLS_COLOR = colors["Cornflower"][4]
 DEALS_COLOR = colors["Lime Green"][4]
 SUCCESS_COLOR = colors["Tomato"][4]
+
+products = ['Total'] + sorted(agg_product['Product'].unique())
 
 def make_card(title, value, color):
     return dbc.Card(
@@ -38,7 +33,7 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
 server = app.server
 
 app.layout = dbc.Container([
-    html.H2("Sales Dashboard", style={"textAlign": "center", "marginTop": "20px"}),
+    html.H2("IT school analytics Dashboard", style={"textAlign": "center", "marginTop": "20px"}),
 
     dcc.Dropdown(
         id="product_filter",
@@ -73,32 +68,22 @@ def update_dashboard(selected_product):
     success_card = make_card("Success Deals", int(total_success), SUCCESS_COLOR)
 
     if selected_product == "Total":
-        dfp = agg_product.groupby("Deal Created Month").sum(numeric_only=True).reset_index()
-        dfp['conversion'] = (dfp['success_count'] / dfp['deals_count'] * 100).fillna(0)
+        dfp = agg_product.groupby("Deal Created Month", as_index=False).agg(
+            deals_count=('deals_count', 'sum'),
+            success_count=('success_count', 'sum')
+        )
+        dfp['conversion'] = dfp['success_count'] / dfp['deals_count'] * 100
     else:
         dfp = agg_product[agg_product['Product'] == selected_product]
 
-    print("\n================ DEBUG PRODUCT ================")
-    print(">>> Selected product:", selected_product)
-    print(">>> agg_product unique products:", agg_product['Product'].unique())
-    print(">>> dfp rows:", len(dfp))
-    print(">>> dfp head:")
-    print(dfp.head())
-
-    
     fig_product = build_product_chart(dfp)
 
     if selected_product == "Total":
-        agg_edu_filtered = agg_edu.copy()
+        df_edu = agg_edu.copy()
     else:
-        agg_edu_filtered = agg_edu[agg_edu['Product'] == selected_product]
+        df_edu = agg_edu[agg_edu['Product'] == selected_product]
 
-    print("\n================ DEBUG EDUCATION ================")
-    print(">>> agg_edu_filtered rows:", len(agg_edu_filtered))
-    print(agg_edu_filtered.head())
-
-
-    fig_edu = build_education_chart(agg_edu_filtered, "Education Type")
+    fig_edu = build_education_chart(df_edu, "Education Type")
 
     return calls_card, deals_card, success_card, fig_product, fig_edu
 
