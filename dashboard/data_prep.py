@@ -5,16 +5,12 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(BASE_DIR, '..', 'data', 'clean', 'data_all.xlsx')
 
 def load_data(path=DATA_PATH):
-    print("Reading data from:", os.path.abspath(path))
-
     deals = pd.read_excel(path, sheet_name='deals')
     calls = pd.read_excel(path, sheet_name='calls')
     contacts = pd.read_excel(path, sheet_name='contacts')
     spend = pd.read_excel(path, sheet_name='spend')
 
-    print("Rows:", len(deals), len(calls), len(contacts), len(spend))
     return deals, calls, contacts, spend
-
 
 
 def prepare_data(deals, calls):
@@ -23,37 +19,35 @@ def prepare_data(deals, calls):
     deals['Education Type'] = deals['Education Type'].astype(str).str.strip().fillna('Unknown')
     deals['Payment Type'] = deals['Payment Type'].astype(str).str.strip().fillna('Unknown')
 
+    deals['Id'] = deals['Id'].astype(str)
+    calls['Id'] = calls['Id'].astype(str)
+
     deals = deals[
         (deals['Product'] != 'Unknown') &
         (deals['Education Type'] != 'Unknown') &
         (deals['Payment Type'] != 'Unknown')
     ].copy()
 
-    deals['is_success'] = (deals['Stage'] == 'payment done').astype(int)
-
     deals['Created Time'] = pd.to_datetime(deals['Created Time'], errors='coerce')
     deals['Deal Created Month'] = deals['Created Time'].dt.to_period('M').dt.to_timestamp()
+
+    deals['is_success'] = (deals['Stage'] == 'payment done').astype(int)
+
+    calls_count = calls.groupby('Id').size().reset_index(name='calls_count')
+    deals = deals.merge(calls_count, on='Id', how='left')
+    deals['calls_count'] = deals['calls_count'].fillna(0)
 
     agg_product = deals.groupby(['Deal Created Month', 'Product']).agg(
         deals_count=('Id', 'count'),
         success_count=('is_success', 'sum')
     ).reset_index()
-    agg_product['conversion'] = (
-        agg_product['success_count'] / agg_product['deals_count'] * 100
-    ).fillna(0)
+    agg_product['conversion'] = (agg_product['success_count'] / agg_product['deals_count'] * 100).fillna(0)
 
-    agg_edu = deals.groupby(['Deal Created Month', 'Education Type']).agg(
+    agg_edu = deals.groupby(['Deal Created Month', 'Product', 'Education Type']).agg(
         deals_count=('Id', 'count'),
         success_count=('is_success', 'sum')
     ).reset_index()
-    agg_edu['conversion'] = (
-        agg_edu['success_count'] / agg_edu['deals_count'] * 100
-    ).fillna(0)
-
-    calls_unique = calls.drop_duplicates(subset=['Id'])
-    calls_count = calls_unique.groupby('Id').size().reset_index(name='calls_count')
-    deals = deals.merge(calls_count, on='Id', how='left')
-    deals['calls_count'] = deals['calls_count'].fillna(0)
+    agg_edu['conversion'] = (agg_edu['success_count'] / agg_edu['deals_count'] * 100).fillna(0)
 
     return deals, agg_product, agg_edu
 
