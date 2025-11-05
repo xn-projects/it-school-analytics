@@ -99,9 +99,6 @@ def update_dashboard(selected_product, selected_edu):
     if selected_edu != 'Total':
         df = df[df['Education Type'] == selected_edu]
 
-    if selected_product != 'Total':
-        df = df[df['Product'] == selected_product]
-
     total_deals, success_deals, open_deals, closed_deals = compute_kpi(df)
     cards = make_kpi_cards(total_deals, success_deals, open_deals, closed_deals)
 
