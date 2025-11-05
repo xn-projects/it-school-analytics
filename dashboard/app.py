@@ -24,9 +24,6 @@ agg_product_total['conversion'] = (agg_product_total['success_count'] / agg_prod
 agg_product_total['Product'] = 'Total'
 
 colors = get_my_palette(as_dict=True)
-OPEN_COLOR = colors["Cornflower"][4]
-DEALS_COLOR = colors["Lime Green"][4]
-SUCCESS_COLOR = colors["Tomato"][4]
 
 products = ["Total"] + sorted(agg_product['Product'].unique())
 
@@ -40,12 +37,15 @@ def make_card(title, value, color):
     )
 
 
-def make_kpi_cards(total, closed, open_):
+def make_kpi_cards(total, success, opened, closed):
+    colors = get_my_palette(as_dict=True)
+
     return dbc.Row([
-        dbc.Col(make_card("Total Deals", total, DEALS_COLOR), md=4),
-        dbc.Col(make_card("Closed (Payment Done)", closed, SUCCESS_COLOR), md=4),
-        dbc.Col(make_card("Open Deals", open_, OPEN_COLOR), md=4),
-    ])
+        dbc.Col(make_card("Total Deals", total, colors["Cornflower"][4]), md=3),
+        dbc.Col(make_card("Successful Deals", success, colors["Lime Green"][4]), md=3),
+        dbc.Col(make_card("Opened Deals", opened, colors["Yellowsoft"][4]), md=3),
+        dbc.Col(make_card("Closed Deals", closed, colors["Tomato"][4]), md=3),
+    ], className="mb-4")
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
 server = app.server
@@ -75,25 +75,21 @@ app.layout = dbc.Container([
     Output('sankey_graph', 'figure'),
     Input('product_filter', 'value')
 )
-def update_dashboard(selected_product):
-    total_deals, closed_deals, open_deals = compute_kpi(deals, selected_product)
-    cards = make_kpi_cards(total_deals, closed_deals, open_deals)
 
-    if selected_product == "Total":
-        dfp = agg_product_total.copy()
-    else:
-        dfp = agg_product[agg_product['Product'] == selected_product]
+def update_dashboard(selected_product):
+    total_deals, success_deals, open_deals, closed_deals = compute_kpi(deals, selected_product)
+    cards = make_kpi_cards(total_deals, success_deals, open_deals, closed_deals)
+
+    dfp = agg_product_total.copy() if selected_product == "Total" \
+        else agg_product[agg_product['Product'] == selected_product]
     fig_product = build_product_chart(dfp)
 
-    if selected_product == "Total":
-        df_edu = agg_edu.copy()
-    else:
-        df_edu = agg_edu[agg_edu['Product'] == selected_product]
+    df_edu = agg_edu.copy() if selected_product == "Total" \
+        else agg_edu[agg_edu['Product'] == selected_product]
     fig_edu = build_education_chart(df_edu, "Education Type")
 
-    df_for_sankey = deals.copy()
-    if selected_product != "Total":
-        df_for_sankey = df_for_sankey[df_for_sankey['Product'] == selected_product]
+    df_for_sankey = deals.copy() if selected_product == "Total" \
+        else deals[deals['Product'] == selected_product]
     fig_sankey = build_sankey_chart(df_for_sankey)
 
     return cards, fig_product, fig_edu, fig_sankey
