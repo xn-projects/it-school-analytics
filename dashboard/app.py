@@ -6,7 +6,7 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 
 from utils.my_palette import get_my_palette
-from utils.data_prep import load_data, prepare_data, compute_kpi
+from .data_prep import load_data, prepare_data, compute_kpi
 from .charts import build_product_chart, build_education_chart
 
 
