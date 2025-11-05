@@ -38,9 +38,20 @@ def build_product_chart(df):
     ))
 
     fig.update_layout(
-        barmode='overlay',
-        template='plotly_white',
-        yaxis2=dict(overlaying='y', side='right')
+    barmode='overlay',
+    template='plotly_white',
+    yaxis=dict(
+        title=dict(text="Number of Deals", font=dict(color=BASE_COLOR)),
+        tickfont=dict(color=BASE_COLOR),
+        showgrid=True
+        ),
+    yaxis2=dict(
+        title=dict(text="Conversion (%)", font=dict(color=TREND_COLOR)),
+        overlaying='y',
+        side='right',
+        tickfont=dict(color=TREND_COLOR),
+        showgrid=False
+        )
     )
 
     return fig
