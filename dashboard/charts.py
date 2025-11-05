@@ -96,16 +96,14 @@ def build_education_chart(df_edu, edu_type):
             showgrid=True
         ),
         yaxis=dict(
-            title="Number of Deals",
-            titlefont=dict(color=BASE_COLOR),
+            title=dict(text="Number of Deals", font=dict(color=BASE_COLOR)),
             tickfont=dict(color=BASE_COLOR),
             showgrid=True
         ),
         yaxis2=dict(
-            title="Conversion (%)",
+            title=dict(text="Conversion (%)", font=dict(color=TREND_COLOR)),
             overlaying='y',
             side='right',
-            titlefont=dict(color=TREND_COLOR),
             tickfont=dict(color=TREND_COLOR),
             showgrid=False
         ),
