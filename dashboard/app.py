@@ -93,5 +93,6 @@ def update_dashboard(selected_product):
 
     return calls_card, deals_card, success_card, fig_product, fig_edu
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8050, debug=True)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8050))
+    app.run_server(host="0.0.0.0", port=port)
