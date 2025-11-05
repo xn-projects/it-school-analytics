@@ -20,8 +20,16 @@ agg_product_total = (
     )
     .reset_index()
 )
-agg_product_total['conversion'] = (agg_product_total['success_count'] / agg_product_total['deals_count'] * 100).fillna(0)
-agg_product_total['Product'] = 'Total'
+
+agg_product_total['conversion'] = (
+    agg_product_total['success_count'] / agg_product_total['deals_count'] * 100
+).fillna(0)
+
+agg_product_total['Product'] = "Total"
+
+agg_product_total = agg_product_total[
+    ['Deal Created Month', 'Product', 'deals_count', 'success_count', 'conversion']
+]
 
 colors = get_my_palette(as_dict=True)
 
