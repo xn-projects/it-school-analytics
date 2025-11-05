@@ -4,8 +4,8 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import pandas as pd
 
-from data_prep import load_data, prepare_data, compute_kpi
-from charts import build_product_chart, build_education_chart
+from .data_prep import load_data, prepare_data, compute_kpi
+from .charts import build_product_chart, build_education_chart
 from utils.my_palette import get_my_palette
 
 
