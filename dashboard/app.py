@@ -54,39 +54,34 @@ app.layout = dbc.Container([
 ], fluid=True)
 
 @app.callback(
-    Output('kpi_calls', 'children'),
-    Output('kpi_deals', 'children'),
-    Output('kpi_success', 'children'),
+    Output('kpi_cards', 'children'),
     Output('product_graph', 'figure'),
     Output('education_graph', 'figure'),
+    Output('sankey_graph', 'figure'),
     Input('product_filter', 'value')
 )
 def update_dashboard(selected_product):
-    total_deals, success_deals, open_deals = compute_kpi(deals, selected_product)
-
-deals_card = make_card("All Deals", int(total_deals), DEALS_COLOR)
-success_card = make_card("Success Deals", int(success_deals), SUCCESS_COLOR)
-open_card = make_card("Open Deals", int(open_deals), OPEN_COLOR)
+    total_deals, closed_deals, open_deals = compute_kpi(deals, selected_product)
+    cards = make_kpi_cards(total_deals, closed_deals, open_deals)
 
     if selected_product == "Total":
-        dfp = agg_product.groupby("Deal Created Month", as_index=False).agg(
-            deals_count=('deals_count', 'sum'),
-            success_count=('success_count', 'sum')
-        )
-        dfp['conversion'] = dfp['success_count'] / dfp['deals_count'] * 100
+        dfp = agg_product_total.copy()
     else:
         dfp = agg_product[agg_product['Product'] == selected_product]
-
     fig_product = build_product_chart(dfp)
 
     if selected_product == "Total":
         df_edu = agg_edu.copy()
     else:
         df_edu = agg_edu[agg_edu['Product'] == selected_product]
-
     fig_edu = build_education_chart(df_edu, "Education Type")
 
-    return deals_card, success_card, open_card, fig_product, fig_edu
+    df_for_sankey = deals.copy()
+    if selected_product != "Total":
+        df_for_sankey = df_for_sankey[df_for_sankey['Product'] == selected_product]
+    fig_sankey = build_sankey_chart(df_for_sankey)
+
+    return cards, fig_product, fig_edu, fig_sankey
 
 
 if __name__ == "__main__":
