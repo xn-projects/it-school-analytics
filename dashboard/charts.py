@@ -6,8 +6,6 @@ BASE_COLOR = colors["Cornflower"][3]
 SUCCESS_COLOR = colors["Lime Green"][3]
 TREND_COLOR = colors["Tomato"][3]
 
-print("PALETTE:", get_my_palette(as_dict=True))
-
 def build_product_chart(df):
     fig = go.Figure()
 
@@ -30,7 +28,7 @@ def build_product_chart(df):
     fig.add_trace(go.Scatter(
         x=df['Deal Created Month'],
         y=df['conversion'],
-        mode='lines+markers',
+        mode='lines',
         name='Conversion %',
         yaxis='y2',
         line=dict(color=TREND_COLOR, width=2.5, dash='dot'),
@@ -58,10 +56,6 @@ def build_product_chart(df):
 
 
 def build_education_chart(df_edu, edu_type):
-    """
-    df_edu — срез данных по конкретному Education Type
-    edu_type — строка (название типа обучения)
-    """
     fig = go.Figure()
 
     fig.add_trace(go.Bar(
@@ -85,7 +79,7 @@ def build_education_chart(df_edu, edu_type):
     fig.add_trace(go.Scatter(
         x=df_edu['Deal Created Month'],
         y=df_edu['conversion'],
-        mode='lines+markers',
+        mode='lines',
         name='Conversion %',
         yaxis='y2',
         line=dict(color=TREND_COLOR, width=2.5, dash='dot'),
