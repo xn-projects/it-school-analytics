@@ -6,7 +6,7 @@ import pandas as pd
 
 from .data_prep import load_data, prepare_data, compute_kpi
 from .charts import build_product_chart, build_education_chart
-from utils.my_palette import get_my_palette
+from ..utils.my_palette import get_my_palette
 
 
 deals, calls, contacts, spend = load_data()
