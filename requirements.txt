@@ -5,19 +5,16 @@ plotly
 openpyxl
 gunicorn
 dataframe_image
-datetime
-logging
-os
-re
-time
-json
-warnings
-requests
 
 matplotlib
 seaborn
+folium
+networkx
+numpy
+requests
 
 Werkzeug==2.2.3
 Flask==2.2.5
 Flask-Cors==3.0.10
+
 setuptools>=65.5.0
