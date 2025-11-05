@@ -28,6 +28,9 @@ def make_card(title, value, color):
         style={"borderRadius": "12px"}
     )
 
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
+server = app.server
+
 app.layout = dbc.Container([
     html.H2("Sales Dashboard", style={"textAlign": "center", "marginTop": "20px"}),
 
@@ -57,6 +60,7 @@ app.layout = dbc.Container([
     Output('education_graph', 'figure'),
     Input('product_filter', 'value')
 )
+
 def update_dashboard(selected_product):
     total_calls, total_deals, total_success = compute_kpi(deals, selected_product)
     calls_card = make_card("Calls", int(total_calls), CALLS_COLOR)
