@@ -27,7 +27,8 @@ def prepare_data(deals):
 
     deals['is_success'] = deals['Stage'].eq('payment done').astype(int)
 
-    deals['Deal Created Month'] = pd.to_datetime(deals['Deal Created Month']).dt.to_period('M').dt.to_timestamp()
+    deals['Created Time'] = pd.to_datetime(deals['Created Time'], errors='coerce')
+    deals['Deal Created Month'] = deals['Created Time'].dt.to_period('M').dt.to_timestamp()
 
     agg_product = (
         deals.groupby(['Deal Created Month', 'Product'])
