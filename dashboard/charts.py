@@ -1,10 +1,12 @@
 import plotly.graph_objects as go
-from ..utils.my_palette import get_my_palette
+from utils.my_palette import get_my_palette
 
 colors = get_my_palette(as_dict=True)
 BASE_COLOR = colors["Cornflower"][3]
 SUCCESS_COLOR = colors["Lime Green"][3]
 TREND_COLOR = colors["Tomato"][3]
+
+print("PALETTE:", get_my_palette(as_dict=True))
 
 def build_product_chart(df):
     fig = go.Figure()
