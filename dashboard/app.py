@@ -43,14 +43,11 @@ app.layout = dbc.Container([
         style={"width": "300px", "margin": "0 auto 30px auto"}
     ),
 
-    dbc.Row([
-        dbc.Col(html.Div(id="kpi_deals"), width=4),
-        dbc.Col(html.Div(id="kpi_success"), width=4),
-        dbc.Col(html.Div(id="kpi_open"), width=4),
-    ], style={"marginBottom": "30px"}),
-
+    html.Div(id="kpi_cards", style={"marginBottom": "30px"}),
+    
     dcc.Graph(id="product_graph", style={"marginBottom": "40px"}),
-    dcc.Graph(id="education_graph")
+    dcc.Graph(id="education_graph", style={"marginBottom": "40px"}),
+    dcc.Graph(id="sankey_graph")
 ], fluid=True)
 
 @app.callback(
