@@ -13,7 +13,17 @@ def load_data(path=DATA_PATH):
 
 
 def prepare_data(deals, calls):
-    deals['Stage'] = deals['Stage'].astype(str).str.lower().str.strip()
+    deals['Stage'] = deals['Stage'].astype(str).str.strip().str.lower()
+    deals['Product'] = deals['Product'].astype(str).str.strip().fillna('Unknown')
+    deals['Education Type'] = deals['Education Type'].astype(str).str.strip().fillna('Unknown')
+    deals['Payment Type'] = deals['Payment Type'].astype(str).str.strip().fillna('Unknown')
+
+    deals = deals[
+        (deals['Product'] != 'Unknown') &
+        (deals['Education Type'] != 'Unknown') &
+        (deals['Payment Type'] != 'Unknown')
+    ].copy()
+
     deals['is_success'] = (deals['Stage'] == 'payment done').astype(int)
 
     deals['Created Time'] = pd.to_datetime(deals['Created Time'], errors='coerce')
@@ -23,17 +33,21 @@ def prepare_data(deals, calls):
         deals_count=('Id', 'count'),
         success_count=('is_success', 'sum')
     ).reset_index()
-    agg_product['conversion'] = (agg_product['success_count'] / agg_product['deals_count'] * 100).fillna(0)
+    agg_product['conversion'] = (
+        agg_product['success_count'] / agg_product['deals_count'] * 100
+    ).fillna(0)
 
     agg_edu = deals.groupby(['Deal Created Month', 'Education Type']).agg(
         deals_count=('Id', 'count'),
         success_count=('is_success', 'sum')
     ).reset_index()
-    agg_edu['conversion'] = (agg_edu['success_count'] / agg_edu['deals_count'] * 100).fillna(0)
+    agg_edu['conversion'] = (
+        agg_edu['success_count'] / agg_edu['deals_count'] * 100
+    ).fillna(0)
 
     calls_unique = calls.drop_duplicates(subset=['Id'])
-    calls_count_by_product = calls_unique.groupby('Id').size().reset_index(name='calls_count')
-    deals = deals.merge(calls_count_by_product, on='Id', how='left')
+    calls_count = calls_unique.groupby('Id').size().reset_index(name='calls_count')
+    deals = deals.merge(calls_count, on='Id', how='left')
     deals['calls_count'] = deals['calls_count'].fillna(0)
 
     return deals, agg_product, agg_edu
