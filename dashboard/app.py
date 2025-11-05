@@ -7,18 +7,28 @@ import pandas as pd
 
 from utils.my_palette import get_my_palette
 from .data_prep import load_data, prepare_data, compute_kpi
-from .charts import build_product_chart, build_education_chart
-
+from .charts import build_product_chart, build_education_chart, build_sankey_chart
 
 deals, calls, contacts, spend = load_data()
 deals, agg_product, agg_edu = prepare_data(deals)
+
+agg_product_total = (
+    agg_product.groupby('Deal Created Month')
+    .agg(
+        deals_count=('deals_count', 'sum'),
+        success_count=('success_count', 'sum')
+    )
+    .reset_index()
+)
+agg_product_total['conversion'] = (agg_product_total['success_count'] / agg_product_total['deals_count'] * 100).fillna(0)
+agg_product_total['Product'] = 'Total'
 
 colors = get_my_palette(as_dict=True)
 OPEN_COLOR = colors["Cornflower"][4]
 DEALS_COLOR = colors["Lime Green"][4]
 SUCCESS_COLOR = colors["Tomato"][4]
 
-products = ['Total'] + sorted(agg_product['Product'].unique())
+products = ["Total"] + sorted(agg_product['Product'].unique())
 
 def make_card(title, value, color):
     return dbc.Card(
@@ -29,11 +39,19 @@ def make_card(title, value, color):
         style={"borderRadius": "12px"}
     )
 
+
+def make_kpi_cards(total, closed, open_):
+    return dbc.Row([
+        dbc.Col(make_card("Total Deals", total, DEALS_COLOR), md=4),
+        dbc.Col(make_card("Closed (Payment Done)", closed, SUCCESS_COLOR), md=4),
+        dbc.Col(make_card("Open Deals", open_, OPEN_COLOR), md=4),
+    ])
+
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
 server = app.server
 
 app.layout = dbc.Container([
-    html.H2("IT school analytics Dashboard", style={"textAlign": "center", "marginTop": "20px"}),
+    html.H2("IT School Analytics Dashboard", style={"textAlign": "center", "marginTop": "20px"}),
 
     dcc.Dropdown(
         id="product_filter",
