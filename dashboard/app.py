@@ -77,12 +77,25 @@ def update_dashboard(selected_product):
     else:
         dfp = agg_product[agg_product['Product'] == selected_product]
 
+    print("\n================ DEBUG PRODUCT ================")
+    print(">>> Selected product:", selected_product)
+    print(">>> agg_product unique products:", agg_product['Product'].unique())
+    print(">>> dfp rows:", len(dfp))
+    print(">>> dfp head:")
+    print(dfp.head())
+
+    
     fig_product = build_product_chart(dfp)
 
     if selected_product == "Total":
         agg_edu_filtered = agg_edu.copy()
     else:
         agg_edu_filtered = agg_edu[agg_edu['Product'] == selected_product]
+
+    print("\n================ DEBUG EDUCATION ================")
+    print(">>> agg_edu_filtered rows:", len(agg_edu_filtered))
+    print(agg_edu_filtered.head())
+
 
     fig_edu = build_education_chart(agg_edu_filtered, "Education Type")
 
