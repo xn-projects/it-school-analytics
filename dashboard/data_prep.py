@@ -14,13 +14,13 @@ def load_data(path=DATA_PATH):
 
 
 def prepare_data(deals, calls):
+    deals['Id'] = deals['Id'].astype(str)
+    calls['Id'] = calls['Id'].astype(str)
+
     deals['Stage'] = deals['Stage'].astype(str).str.strip().str.lower()
     deals['Product'] = deals['Product'].astype(str).str.strip().fillna('Unknown')
     deals['Education Type'] = deals['Education Type'].astype(str).str.strip().fillna('Unknown')
     deals['Payment Type'] = deals['Payment Type'].astype(str).str.strip().fillna('Unknown')
-
-    deals['Id'] = deals['Id'].astype(str)
-    calls['Id'] = calls['Id'].astype(str)
 
     deals = deals[
         (deals['Product'] != 'Unknown') &
@@ -28,10 +28,10 @@ def prepare_data(deals, calls):
         (deals['Payment Type'] != 'Unknown')
     ].copy()
 
+    deals['is_success'] = (deals['Stage'] == 'payment done').astype(int)
+
     deals['Created Time'] = pd.to_datetime(deals['Created Time'], errors='coerce')
     deals['Deal Created Month'] = deals['Created Time'].dt.to_period('M').dt.to_timestamp()
-
-    deals['is_success'] = (deals['Stage'] == 'payment done').astype(int)
 
     calls_count = calls.groupby('Id').size().reset_index(name='calls_count')
     deals = deals.merge(calls_count, on='Id', how='left')
