@@ -44,7 +44,7 @@ def build_product_chart(df):
     return fig
 
 
-def build_education_chart(df_edu):
+def build_education_chart(df_edu, edu_type):
     fig = go.Figure()
 
     fig.add_trace(go.Bar(
@@ -74,7 +74,7 @@ def build_education_chart(df_edu):
     ))
 
     fig.update_layout(
-        title="Education Type: Deals / Success / Conversion",
+        title=f"{edu_type}: Deals, Payment Done and Conversion",
         title_x=0.5,
         barmode='overlay',
         template='plotly_white',
