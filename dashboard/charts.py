@@ -1,5 +1,5 @@
 import plotly.graph_objects as go
-from utils.my_palette i import get_my_palette
+from utils.my_palette import get_my_palette
 
 colors = get_my_palette(as_dict=True)
 BASE_COLOR = colors["Cornflower"][3]
