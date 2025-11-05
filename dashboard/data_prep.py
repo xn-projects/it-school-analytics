@@ -5,11 +5,15 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(BASE_DIR, '..', 'data', 'clean', 'data_all.xlsx')
 
 def load_data(path=DATA_PATH):
+    print("Reading data from:", os.path.abspath(path))
+
     deals = pd.read_excel(path, sheet_name='deals')
     calls = pd.read_excel(path, sheet_name='calls')
     contacts = pd.read_excel(path, sheet_name='contacts')
     spend = pd.read_excel(path, sheet_name='spend')
-    return deals, calls, contacts, spend
+
+    print("Rows:", len(deals), len(calls), len(contacts), len(spend))
+
 
 
 def prepare_data(deals, calls):
