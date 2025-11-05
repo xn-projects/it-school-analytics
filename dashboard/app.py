@@ -10,13 +10,12 @@ from utils.my_palette import get_my_palette
 
 
 deals, calls, contacts, spend = load_data()
+deals, agg_product, agg_edu = prepare_data(deals, calls)
 
 print(">>> deals rows:", len(deals))
 print(">>> calls rows:", len(calls))
 print(">>> agg_product rows:", len(agg_product))
 print(">>> agg_edu rows:", len(agg_edu))
-
-deals, agg_product, agg_edu = prepare_data(deals, calls)
 
 products = ['Total'] + sorted(agg_product['Product'].unique())
 
