@@ -65,7 +65,6 @@ app.layout = dbc.Container([
     Output('education_graph', 'figure'),
     Input('product_filter', 'value')
 )
-
 def update_dashboard(selected_product):
     total_calls, total_deals, total_success = compute_kpi(deals, selected_product)
     calls_card = make_card("Calls", int(total_calls), CALLS_COLOR)
@@ -77,17 +76,13 @@ def update_dashboard(selected_product):
         dfp['conversion'] = (dfp['success_count'] / dfp['deals_count'] * 100).fillna(0)
     else:
         dfp = agg_product[agg_product['Product'] == selected_product]
-    fig_product = build_product_chart(dfp)
-    
-    df_edu = deals.copy()
-    if selected_product != "Total":
-        df_edu = df_edu[df_edu['Product'] == selected_product]
 
-    agg_edu_filtered = df_edu.groupby(['Deal Created Month', 'Education Type']).agg(
-        deals_count=('Id', 'count'),
-        success_count=('is_success', 'sum')
-    ).reset_index()
-    agg_edu_filtered['conversion'] = (agg_edu_filtered['success_count'] / agg_edu_filtered['deals_count'] * 100).fillna(0)
+    fig_product = build_product_chart(dfp)
+
+    if selected_product == "Total":
+        agg_edu_filtered = agg_edu.copy()
+    else:
+        agg_edu_filtered = agg_edu[agg_edu['Product'] == selected_product]
 
     fig_edu = build_education_chart(agg_edu_filtered, "Education Type")
 
