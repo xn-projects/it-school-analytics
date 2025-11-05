@@ -15,42 +15,38 @@ deals, agg_product, agg_edu = prepare_data(deals, calls)
 products = ['Total'] + sorted(agg_product['Product'].unique())
 
 colors = get_my_palette(as_dict=True)
-CALLS_COLOR = colors['Cornflower'][4]
-DEALS_COLOR = colors['Lime Green'][4]
-SUCCESS_COLOR = colors['Tomato'][4]
+CALLS_COLOR = colors["Cornflower"][4]
+DEALS_COLOR = colors["Lime Green"][4]
+SUCCESS_COLOR = colors["Tomato"][4]
 
 def make_card(title, value, color):
     return dbc.Card(
         dbc.CardBody([
-            html.H6(title, style={'textAlign': 'center'}),
-            html.H3(f'{value:,}', style={'textAlign': 'center', 'color': color})
+            html.H6(title, style={"textAlign": "center"}),
+            html.H3(f"{value:,}", style={"textAlign": "center", "color": color})
         ]),
-        style={'borderRadius': '12px'}
+        style={"borderRadius": "12px"}
     )
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
-server = app.server
-
-
 app.layout = dbc.Container([
-    html.H2("Sales Dashboard", style={'textAlign': 'center', 'marginTop': '20px'}),
+    html.H2("Sales Dashboard", style={"textAlign": "center", "marginTop": "20px"}),
 
     dcc.Dropdown(
-        id='product_filter',
-        options=[{'label': p, 'value': p} for p in products],
-        value='Total',
+        id="product_filter",
+        options=[{"label": p, "value": p} for p in products],
+        value="Total",
         clearable=False,
-        style={'width': '300px', 'margin': '0 auto 30px auto'}
+        style={"width": "300px", "margin": "0 auto 30px auto"}
     ),
 
     dbc.Row([
-        dbc.Col(html.Div(id='kpi_calls'), width=4),
-        dbc.Col(html.Div(id='kpi_deals'), width=4),
-        dbc.Col(html.Div(id='kpi_success'), width=4),
-    ], style={'marginBottom': '30px'}),
+        dbc.Col(html.Div(id="kpi_calls"), width=4),
+        dbc.Col(html.Div(id="kpi_deals"), width=4),
+        dbc.Col(html.Div(id="kpi_success"), width=4),
+    ], style={"marginBottom": "30px"}),
 
-    dcc.Graph(id='product_graph', style={'marginBottom': '40px'}),
-    dcc.Graph(id='education_graph')
+    dcc.Graph(id="product_graph", style={"marginBottom": "40px"}),
+    dcc.Graph(id="education_graph")
 ], fluid=True)
 
 @app.callback(
