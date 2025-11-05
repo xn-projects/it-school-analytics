@@ -9,7 +9,7 @@ from .charts import build_product_chart, build_education_chart
 from utils.my_palette import get_my_palette
 
 
-deals, calls, contacts, spend = load_data('../data/clean/data_all.xlsx')
+deals, calls, contacts, spend = load_data()
 deals, agg_product, agg_edu = prepare_data(deals, calls)
 
 products = ['Total'] + sorted(agg_product['Product'].unique())
