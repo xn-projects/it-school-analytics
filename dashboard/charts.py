@@ -45,6 +45,10 @@ def build_product_chart(df):
 
 
 def build_education_chart(df_edu, edu_type):
+    """
+    df_edu — срез данных по конкретному Education Type
+    edu_type — строка (название типа обучения)
+    """
     fig = go.Figure()
 
     fig.add_trace(go.Bar(
@@ -52,7 +56,8 @@ def build_education_chart(df_edu, edu_type):
         y=df_edu['deals_count'],
         name='All Deals',
         marker_color=BASE_COLOR,
-        opacity=0.5
+        opacity=0.5,
+        hovertemplate="Month: %{x|%b %Y}<br>Deals: %{y}<extra></extra>"
     ))
 
     fig.add_trace(go.Bar(
@@ -60,7 +65,8 @@ def build_education_chart(df_edu, edu_type):
         y=df_edu['success_count'],
         name='Payment Done',
         marker_color=SUCCESS_COLOR,
-        opacity=0.9
+        opacity=0.9,
+        hovertemplate="Month: %{x|%b %Y}<br>Payment Done: %{y}<extra></extra>"
     ))
 
     fig.add_trace(go.Scatter(
@@ -70,7 +76,8 @@ def build_education_chart(df_edu, edu_type):
         name='Conversion %',
         yaxis='y2',
         line=dict(color=TREND_COLOR, width=2.5, dash='dot'),
-        marker=dict(size=6, color=TREND_COLOR)
+        marker=dict(size=6, color=TREND_COLOR),
+        hovertemplate="Month: %{x|%b %Y}<br>Conversion: %{y:.1f}%<extra></extra>"
     ))
 
     fig.update_layout(
@@ -78,7 +85,39 @@ def build_education_chart(df_edu, edu_type):
         title_x=0.5,
         barmode='overlay',
         template='plotly_white',
-        yaxis2=dict(overlaying='y', side='right')
+
+        xaxis=dict(
+            title="Month (Created)",
+            tickangle=-45,
+            tickformat="%b %Y",
+            tickfont=dict(size=9),
+            showgrid=True
+        ),
+        yaxis=dict(
+            title="Number of Deals",
+            titlefont=dict(color=BASE_COLOR),
+            tickfont=dict(color=BASE_COLOR),
+            showgrid=True
+        ),
+        yaxis2=dict(
+            title="Conversion (%)",
+            overlaying='y',
+            side='right',
+            titlefont=dict(color=TREND_COLOR),
+            tickfont=dict(color=TREND_COLOR),
+            showgrid=False
+        ),
+        legend=dict(
+            orientation='h',
+            yanchor='bottom',
+            y=1.02,
+            xanchor='center',
+            x=0.5,
+            font=dict(size=9)
+        ),
+        margin=dict(l=60, r=80, t=70, b=50),
+        height=500,
+        width=950
     )
 
     return fig
