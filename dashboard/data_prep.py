@@ -13,6 +13,7 @@ def load_data(path=DATA_PATH):
     spend = pd.read_excel(path, sheet_name='spend')
 
     print("Rows:", len(deals), len(calls), len(contacts), len(spend))
+    return deals, calls, contacts, spend
 
 
 
