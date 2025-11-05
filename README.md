@@ -1,6 +1,12 @@
 
 ```
 📦 it-school-analytics/
+├── 📁 dashboard/
+│   ├── __init__.py
+│   ├── app.py
+│   ├── charts.py
+│   └── data_prep.py
+│
 ├── 📁 data/
 │   ├── 📁 clean/
 │   │   ├── calls_clean.xlsx
@@ -54,5 +60,7 @@
 │   ├── my_palette.py
 │   └── product_analysis.py
 │
-└── 📄 README.md
+├── Procfile
+├── 📄 README.md
+└── requirements.txt
 ```
