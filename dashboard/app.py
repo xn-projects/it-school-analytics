@@ -11,7 +11,7 @@ from .charts import build_product_chart, build_education_chart
 
 
 deals, calls, contacts, spend = load_data()
-deals, agg_product, agg_edu = prepare_data(deals, calls)
+deals, agg_product, agg_edu = prepare_data(deals)
 
 colors = get_my_palette(as_dict=True)
 OPEN_COLOR = colors["Cornflower"][4]
