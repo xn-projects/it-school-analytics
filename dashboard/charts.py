@@ -2,9 +2,9 @@ import plotly.graph_objects as go
 from utils.my_palette import get_my_palette
 
 colors = get_my_palette(as_dict=True)
-BASE_COLOR = colors['Cornflower'][3]
-SUCCESS_COLOR = colors['Lime Green'][3]
-TREND_COLOR = colors['Tomato'][3]
+base_color = colors["Cornflower"][3]
+success_color = colors["Lime Green"][3]
+trend_color = colors["Tomato"][3]
 
 def build_product_chart(df):
     df = df.sort_values('Deal Created Month')
@@ -15,38 +15,57 @@ def build_product_chart(df):
         x=df['Deal Created Month'],
         y=df['deals_count'],
         name='All Deals',
-        marker_color=BASE_COLOR,
-        opacity=0.5
+        marker_color=base_color,
+        opacity=0.5,
+        hovertemplate='Month: %{x|%b %Y}<br>Deals: %{y}<extra></extra>'
     ))
 
     fig.add_trace(go.Bar(
         x=df['Deal Created Month'],
         y=df['success_count'],
         name='Payment Done',
-        marker_color=SUCCESS_COLOR,
-        opacity=0.9
+        marker_color=success_color,
+        opacity=0.9,
+        hovertemplate='Month: %{x|%b %Y}<br>Payment Done: %{y}<extra></extra>'
     ))
 
     fig.add_trace(go.Scatter(
         x=df['Deal Created Month'],
         y=df['conversion'],
-        mode='lines',
+        mode='lines+markers',
         name='Conversion %',
         yaxis='y2',
-        line=dict(color=TREND_COLOR, width=2.5, dash='dot')
+        line=dict(color=trend_color, width=2.5, dash='dot'),
+        marker=dict(size=6, color=trend_color),
+        hovertemplate='Month: %{x|%b %Y}<br>Conversion: %{y:.1f}%<extra></extra>'
     ))
 
     fig.update_layout(
-        barmode='group',
+        barmode='overlay',
         template='plotly_white',
-        xaxis=dict(title="Month", tickformat="%b %Y"),
-        yaxis=dict(title="Number of Deals"),
-        yaxis2=dict(
-            title="Conversion (%)",
-            overlaying='y',
-            side='right'
+        height=500,
+        margin=dict(l=60, r=80, t=70, b=50),
+        xaxis=dict(
+            title='Month (Created)',
+            tickangle=-45,
+            tickformat='%b %Y',
+            tickfont=dict(size=9),
+            showgrid=True
         ),
-        height=450
+        yaxis=dict(
+            title='Number of Deals',
+            titlefont=dict(color=base_color),
+            tickfont=dict(color=base_color),
+            showgrid=True
+        ),
+        yaxis2=dict(
+            title='Conversion (%)',
+            overlaying='y',
+            side='right',
+            titlefont=dict(color=trend_color),
+            tickfont=dict(color=trend_color),
+            showgrid=False
+        )
     )
 
     return fig
