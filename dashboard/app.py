@@ -22,20 +22,20 @@ edu_options = ["Total"] + sorted(deals["Education Type"].unique())
 def make_card(title, value, color):
     return dbc.Card(
         dbc.CardBody([
-            html.H6(title, style={"textAlign": "center"}),
-            html.H3(f"{value:,}", style={"textAlign": "center", "color": color})
+            html.H6(title, style={'textAlign': 'center'}),
+            html.H3(f'{value:,}', style={'textAlign': 'center', 'color': color})
         ]),
-        style={"borderRadius": "12px"}
+        style={'borderRadius': '12px'}
     )
 
 
-def make_kpi_cards(total, success, opened, closed):
+def make_kpi_cards(total, success, lost, progress):
     return dbc.Row([
-        dbc.Col(make_card("Total Deals", total, colors["Cornflower"][4]), md=3),
-        dbc.Col(make_card("Successful Deals", success, colors["Lime Green"][4]), md=3),
-        dbc.Col(make_card("Opened Deals", opened, colors["Yellowsoft"][4]), md=3),
-        dbc.Col(make_card("Closed Deals", closed, colors["Tomato"][4]), md=3),
-    ], className="mb-4")
+        dbc.Col(make_card('Total Deals', total, colors["Cornflower"][4]), md=3),
+        dbc.Col(make_card('Successful Deals', success, colors["Lime Green"][4]), md=3),
+        dbc.Col(make_card('Lost Deals', lost, colors["Tomato"][4]), md=3),
+        dbc.Col(make_card('Closed', progress, colors["Yellowsoft"][4]), md=3),
+    ], className='mb-4')
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
