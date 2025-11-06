@@ -8,16 +8,13 @@ from utils.my_palette import get_my_palette
 from .charts import build_sankey_chart, build_success_sunburst
 from .data_prep import load_data, prepare_data, compute_kpi
 
-# Load data
 deals, calls, contacts, spend = load_data()
 deals = prepare_data(deals)
 
 colors = get_my_palette(as_dict=True)
 
-# Dropdown options
 product_options = ["Total"] + sorted(deals["Product"].unique())
 edu_options = ["Total"] + sorted(deals["Education Type"].unique())
-
 
 def make_card(title, value, color):
     return dbc.Card(
@@ -34,7 +31,7 @@ def make_kpi_cards(total, success, lost, progress):
         dbc.Col(make_card('Total Deals', total, colors["Cornflower"][4]), md=3),
         dbc.Col(make_card('Successful Deals', success, colors["Lime Green"][4]), md=3),
         dbc.Col(make_card('Lost Deals', lost, colors["Tomato"][4]), md=3),
-        dbc.Col(make_card('Closed', progress, colors["Yellowsoft"][4]), md=3),
+        dbc.Col(make_card('Closed Deals', closed, colors["Yellowsoft"][4]), md=3),
     ], className='mb-4')
 
 
@@ -67,7 +64,6 @@ app.layout = dbc.Container([
 
 ], fluid=True)
 
-
 @app.callback(
     [
         Output("kpi_cards", "children"),
@@ -95,7 +91,6 @@ def update_dashboard(selected_product, selected_edu):
     sunburst_chart = build_success_sunburst(df)
 
     return cards, sankey_fig,  sunburst_chart
-
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8050))
