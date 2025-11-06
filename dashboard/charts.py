@@ -3,9 +3,6 @@ from utils.my_palette import get_my_palette
 import plotly.express as px
 
 colors = get_my_palette(as_dict=True)
-BASE_COLOR = colors["Cornflower"][3]
-SUCCESS_COLOR = colors["Lime Green"][3]
-TREND_COLOR = colors["Tomato"][3]
 
 def build_sankey_chart(df):
     df = df[['Source', 'Product', 'Stage']].copy()
