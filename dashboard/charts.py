@@ -20,16 +20,27 @@ def build_sankey_chart(df):
         .reset_index(name='count')
     )
 
-    labels = list(agg['Source'].unique()) + list(agg['Product'].unique()) + list(agg['Stage'].unique())
+    sources_unique = list(agg['Source'].unique())
+    products_unique = list(agg['Product'].unique())
+    stages_unique = list(agg['Stage'].unique())
+
+    labels = sources_unique + products_unique + stages_unique
     label_index = {label: i for i, label in enumerate(labels)}
 
+    node_colors = []
+    node_colors += [colors["Cornflower"][i % 5] for i in range(len(sources_unique))]
+    node_colors += [colors["Lime Green"][i % 5] for i in range(len(products_unique))]
+    node_colors += [colors["Tomato"][i % 5] for i in range(len(stages_unique))]
+
+    labels = [f'<b>{label}</b>' for label in labels]
+
     stage_colors = {
-        'payment done': colors["Lime Green"][3],
-        'in progress': colors["Yellowsoft"][2],
-        'lost': colors["Tomato"][2],
-        'call delayed': colors["Lavender"][1],
-        'waiting for payment': colors["Cornflower"][2],
-        'other': colors["Neutral"][2]
+        'payment done': colors['Lime Green'][3],
+        'in progress': colors['Yellowsoft'][2],
+        'lost': colors['Tomato'][2],
+        'call delayed': colors['Lavender'][1],
+        'waiting for payment': colors['Cornflower'][2],
+        'other': colors['Neutral'][2]
     }
 
     sources, targets, values, link_colors = [], [], [], []
@@ -42,28 +53,24 @@ def build_sankey_chart(df):
 
         col = stage_colors.get(st, stage_colors['other'])
 
-        # Source → Product (цвет по Stage!)
         sources.append(label_index[s])
         targets.append(label_index[p])
         values.append(c)
         link_colors.append(col)
 
-        # Product → Stage
         sources.append(label_index[p])
         targets.append(label_index[st])
         values.append(c)
         link_colors.append(col)
 
-    # Nodes окрашиваем нейтрально (фокус на потоках)
-    node_colors = [colors["Neutral"][2]] * len(labels)
-
     fig = go.Figure(go.Sankey(
         node=dict(
             pad=20,
-            thickness=20,
-            line=dict(color="white", width=1),
+            thickness=22,
+            line=dict(color='white', width=1),
             label=labels,
-            color=node_colors
+            color=node_colors,
+            font=dict(size=13, color="black")
         ),
         link=dict(
             source=sources,
@@ -74,17 +81,15 @@ def build_sankey_chart(df):
     ))
 
     fig.update_layout(
-        title_text="Deal Flow: Source → Product → Stage",
+        title_text='<b>Deal Flow: Source → Product → Stage</b>',
         title_x=0.5,
-        template="plotly_white",
+        template='plotly_white',
         height=650,
         margin=dict(t=70, l=40, r=40, b=40)
     )
 
     return fig
-
-
-
+    
 
 def build_success_sunburst(df):
     df = df.copy()
