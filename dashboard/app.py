@@ -5,8 +5,8 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 
 from utils.my_palette import get_my_palette
-from charts import build_sankey_chart
-from data_prep import load_data, prepare_data, compute_kpi
+from .charts import build_sankey_chart
+from .data_prep import load_data, prepare_data, compute_kpi
 
 # Load data
 deals, calls, contacts, spend = load_data()
