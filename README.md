@@ -1,6 +1,11 @@
 
 ```
 📦 it-school-analytics/
+├── 📁 analytics/
+│   ├── 📁 figures/
+│   │   └── (figures for analytics)
+│   └── 03_analyse.py
+│
 ├── 📁 dashboard/
 │   ├── __init__.py
 │   ├── app.py
