@@ -84,8 +84,8 @@ def update_dashboard(selected_product, selected_edu):
     if selected_product != "Total":
         df = df[df["Product"] == selected_product]
 
-    total, success, opened, closed = compute_kpi(df)
-    cards = make_kpi_cards(total, success, opened, closed)
+    total, success, lost, closed = compute_kpi(df)
+    cards = make_kpi_cards(total, success, lost, closed)
 
     sankey_fig = build_sankey_chart(df)
     sunburst_chart = build_success_sunburst(df)
