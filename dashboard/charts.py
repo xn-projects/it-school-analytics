@@ -24,10 +24,15 @@ def build_sankey_chart(df):
     labels = sources_unique + products_unique + stages_unique
     label_index = {label: i for i, label in enumerate(labels)}
 
-    node_colors = []
-    node_colors += [colors["Cornflower"][i % 5] for i in range(len(sources_unique))]
-    node_colors += [colors["Lime Green"][i % 5] for i in range(len(products_unique))]
-    node_colors += [colors["Tomato"][i % 5] for i in range(len(stages_unique))]
+    corn = colors['Cornflower']
+    lime = colors['Lime Green']
+    tom = colors['Tomato']
+
+    node_colors = (
+        [corn[i % len(corn)] for i in range(len(sources_unique))] +
+        [lime[i % len(lime)] for i in range(len(products_unique))] +
+        [tom[i % len(tom)] for i in range(len(stages_unique))]
+    )
 
     labels = [f'<b>{label}</b>' for label in labels]
 
@@ -93,13 +98,15 @@ def build_success_sunburst(df):
 
     df['Stage'] = df['Stage'].astype(str).str.lower().str.strip()
     df = df[df['Stage'] == 'payment done']
+    if df.empty:
+        return go.Figure()
 
-    df['German Level'] = df['German Level'].fillna('Unknown').astype(str)
-    df['Product'] = df['Product'].fillna('Unknown').astype(str)
+    df['German Level'] = df['German Level'].fillna('Unknown').astype(str).str.strip()
+    df['Product'] = df['Product'].fillna('Unknown').astype(str).str.strip()
 
     color_groups = get_my_palette(as_dict=True)
 
-    colormap = {
+    level_colormap = {
         'A0': color_groups['Neutral'][3],
         'A1': color_groups['Lavender'][4],
         'A2': color_groups['Tomato'][4],
@@ -110,35 +117,57 @@ def build_success_sunburst(df):
         'Unknown': color_groups['Neutral'][1],
     }
 
+    product_palette = (
+        color_groups['Cornflower'] +
+        color_groups['Lime Green'] +
+        color_groups['Tomato'] +
+        color_groups['Yellowsoft'] +
+        color_groups['Lavender']
+    )
+
+    products = df['Product'].unique().tolist()
+    product_colors = {p: product_palette[i % len(product_palette)] for i, p in enumerate(products)}
+
     agg = (
-        df.groupby(['German Level', 'Product'])
+        df.groupby(['Product', 'German Level'])
         .size()
         .reset_index(name='count')
     )
 
-    labels = agg['German Level'].tolist() + (agg['Product'] + " (" + agg['count'].astype(str) + ")").tolist()
-    parents = ([''] * len(agg['German Level'])) + agg['German Level'].tolist()
-    values = ([agg.groupby('German Level')['count'].sum().loc[level] for level in agg['German Level']]) + agg['count'].tolist()
+    labels = []
+    parents = []
+    values = []
+    colors = []
 
-    colors = (
-        [colormap.get(level, colormap['Unknown']) for level in agg['German Level']]
-        + [colormap.get(level, colormap['Unknown']) for level in agg['German Level']]
-    )
+    for product in products:
+        product_total = agg.loc[agg['Product'] == product, 'count'].sum()
+
+        labels.append(f'<b>{product}</b>')
+        parents.append("")
+        values.append(product_total)
+        colors.append(product_colors[product])
+
+        sub = agg[agg['Product'] == product]
+        for _, row in sub.iterrows():
+            labels.append(row['German Level'])
+            parents.append(f'<b>{product}</b>')
+            values.append(row['count'])
+            colors.append(level_colormap.get(row['German Level'], level_colormap['Unknown']))
 
     fig = go.Figure(go.Sunburst(
         labels=labels,
         parents=parents,
         values=values,
-        branchvalues="total",
+        branchvalues='total',
         marker=dict(
             colors=colors,
-            line=dict(width=1, color="white")
+            line=dict(width=1, color='white')
         ),
         insidetextorientation='auto'
     ))
 
     fig.update_layout(
-        title="Successful Deals Breakdown: Language Level → Product",
+        title='<b>Successful Deals Breakdown: Product → German Level</b>',
         title_x=0.5,
         height=650,
         margin=dict(t=60, l=40, r=40, b=40)
