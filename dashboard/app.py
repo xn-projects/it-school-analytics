@@ -26,7 +26,7 @@ def make_card(title, value, color):
     )
 
 
-def make_kpi_cards(total, success, lost, progress):
+def make_kpi_cards(total, success, lost, closed):
     return dbc.Row([
         dbc.Col(make_card('Total Deals', total, colors["Cornflower"][4]), md=3),
         dbc.Col(make_card('Successful Deals', success, colors["Lime Green"][4]), md=3),
