@@ -5,7 +5,7 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 
 from utils.my_palette import get_my_palette
-from .charts import build_sankey_chart
+from .charts import build_sankey_chart, build_success_sunburst
 from .data_prep import load_data, prepare_data, compute_kpi
 
 # Load data
@@ -63,6 +63,7 @@ app.layout = dbc.Container([
     html.Div(id="kpi_cards"),
 
     dcc.Graph(id="sankey_graph", style={"marginBottom": "40px"}),
+    dcc.Graph(id="sunburst_graph", style={"marginBottom": "40px"}),
 
 ], fluid=True)
 
@@ -70,7 +71,8 @@ app.layout = dbc.Container([
 @app.callback(
     [
         Output("kpi_cards", "children"),
-        Output("sankey_graph", "figure")
+        Output("sankey_graph", "figure"),
+        Output("sunburst_graph", "figure"),
     ],
     [
         Input("product_filter", "value"),
@@ -90,8 +92,9 @@ def update_dashboard(selected_product, selected_edu):
     cards = make_kpi_cards(total, success, opened, closed)
 
     sankey_fig = build_sankey_chart(df)
+    sunburst_chart = build_success_sunburst(df)
 
-    return cards, sankey_fig
+    return cards, sankey_fig,  sunburst_chart
 
 
 if __name__ == "__main__":
