@@ -98,6 +98,7 @@ def build_success_sunburst(df):
 
     df['German Level'] = df['German Level'].fillna('Unknown').astype(str).str.strip()
     df['Product'] = df['Product'].fillna('Unknown').astype(str).str.strip()
+    df = df[df['German Level'] != 'Unknown']
 
     color_groups = get_my_palette(as_dict=True)
 
