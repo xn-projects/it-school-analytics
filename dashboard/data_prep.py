@@ -42,22 +42,3 @@ def compute_kpi(df):
     closed_deals = df['Closing Date'].notna().sum()
 
     return total_deals, success_deals, open_deals, closed_deals
-
-
-def get_product_timeseries(df):
-    df = df.copy()
-
-    df['Stage'] = df['Stage'].astype(str).str.lower().str.strip()
-    df['is_success'] = (df['Stage'] == 'payment done').astype(int)
-
-    df['Created Time'] = pd.to_datetime(df['Created Time'], errors='coerce')
-    df['Deal Created Month'] = df['Created Time'].dt.to_period('M').dt.to_timestamp()
-
-    agg = df.groupby('Deal Created Month').agg(
-        deals_count=('Id', 'count'),
-        success_count=('is_success', 'sum')
-    ).reset_index()
-
-    agg['conversion'] = (agg['success_count'] / agg['deals_count'] * 100).fillna(0)
-
-    return agg
