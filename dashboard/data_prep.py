@@ -38,7 +38,7 @@ def prepare_data(df_deals):
 def compute_kpi(df):
     total_deals = len(df)
     success_deals = (df['Stage'].str.lower() == 'payment done').sum()
-    lost_deals = df['Stage']..str.lower() == 'lost').sum()
+    lost_deals = df['Stage'].str.lower() == 'lost').sum()
     closed_deals = df['Closing Date'].notna().sum()
 
     return total_deals, success_deals, lost_deals, closed_deals
