@@ -1,4 +1,17 @@
+# IT School Analytics
 
+This project provides a complete data analytics pipeline and interactive dashboard for analyzing CRM data from an IT school.  
+The goal is to explore business metrics such as leads, call performance, deals conversion, product metrics, and marketing spending efficiency.
+
+---
+
+## Live Dashboard
+
+[Open the Dashboard](https://it-school-analytics.onrender.com) 
+
+---
+
+## Project Structure
 ```
 📦 it-school-analytics/
 ├── 📁 analytics/
