@@ -24,15 +24,10 @@ def build_sankey_chart(df):
     labels = sources_unique + products_unique + stages_unique
     label_index = {label: i for i, label in enumerate(labels)}
 
-    corn = colors['Cornflower']
-    lime = colors['Lime Green']
-    tom = colors['Tomato']
-
-    node_colors = (
-        [corn[i % len(corn)] for i in range(len(sources_unique))] +
-        [lime[i % len(lime)] for i in range(len(products_unique))] +
-        [tom[i % len(tom)] for i in range(len(stages_unique))]
-    )
+    node_colors = []
+    node_colors += [colors["Cornflower"][i % 5] for i in range(len(sources_unique))]
+    node_colors += [colors["Lime Green"][i % 5] for i in range(len(products_unique))]
+    node_colors += [colors["Tomato"][i % 5] for i in range(len(stages_unique))]
 
     labels = [f'<b>{label}</b>' for label in labels]
 
@@ -72,7 +67,6 @@ def build_sankey_chart(df):
             line=dict(color='white', width=1),
             label=labels,
             color=node_colors,
-            font=dict(size=13, color="black")
         ),
         link=dict(
             source=sources,
@@ -87,11 +81,12 @@ def build_sankey_chart(df):
         title_x=0.5,
         template='plotly_white',
         height=650,
-        margin=dict(t=70, l=40, r=40, b=40)
+        margin=dict(t=70, l=40, r=40, b=40),
+        font=dict(size=13, color="black")
     )
 
     return fig
-    
+
 
 def build_success_sunburst(df):
     df = df.copy()
@@ -142,7 +137,7 @@ def build_success_sunburst(df):
     for product in products:
         product_total = agg.loc[agg['Product'] == product, 'count'].sum()
 
-        labels.append(f'<b>{product}</b>')
+        labels.append(product)
         parents.append("")
         values.append(product_total)
         colors.append(product_colors[product])
@@ -150,7 +145,7 @@ def build_success_sunburst(df):
         sub = agg[agg['Product'] == product]
         for _, row in sub.iterrows():
             labels.append(row['German Level'])
-            parents.append(f'<b>{product}</b>')
+            parents.append(product)
             values.append(row['count'])
             colors.append(level_colormap.get(row['German Level'], level_colormap['Unknown']))
 
@@ -163,7 +158,8 @@ def build_success_sunburst(df):
             colors=colors,
             line=dict(width=1, color='white')
         ),
-        insidetextorientation='auto'
+        insidetextorientation='auto',
+        textfont=dict(size=14, weight='bold')
     ))
 
     fig.update_layout(
