@@ -1,5 +1,6 @@
 import plotly.graph_objects as go
 from utils.my_palette import get_my_palette
+import plotly.express as px
 
 colors = get_my_palette(as_dict=True)
 BASE_COLOR = colors["Cornflower"][3]
@@ -78,6 +79,67 @@ def build_sankey_chart(df):
         template="plotly_white",
         height=650,
         margin=dict(t=70, l=40, r=40, b=40)
+    )
+
+    return fig
+
+
+
+
+def build_success_sunburst(df):
+    df = df.copy()
+
+    df['Stage'] = df['Stage'].astype(str).str.lower().str.strip()
+    df = df[df['Stage'] == 'payment done']
+
+    df['German Level'] = df['German Level'].fillna('Unknown').astype(str)
+    df['Product'] = df['Product'].fillna('Unknown').astype(str)
+
+    color_groups = get_my_palette(as_dict=True)
+
+    colormap = {
+        'A0': color_groups['Neutral'][3],
+        'A1': color_groups['Lavender'][4],
+        'A2': color_groups['Tomato'][4],
+        'B1': color_groups['Lime Green'][4],
+        'B2': color_groups['Cornflower'][3],
+        'C1': color_groups['Yellowsoft'][4],
+        'C2': color_groups['Lime Green'][2],
+        'Unknown': color_groups['Neutral'][1],
+    }
+
+    agg = (
+        df.groupby(['German Level', 'Product'])
+        .size()
+        .reset_index(name='count')
+    )
+
+    labels = agg['German Level'].tolist() + (agg['Product'] + " (" + agg['count'].astype(str) + ")").tolist()
+    parents = ([''] * len(agg['German Level'])) + agg['German Level'].tolist()
+    values = ([agg.groupby('German Level')['count'].sum().loc[level] for level in agg['German Level']]) + agg['count'].tolist()
+
+    colors = (
+        [colormap.get(level, colormap['Unknown']) for level in agg['German Level']]
+        + [colormap.get(level, colormap['Unknown']) for level in agg['German Level']]
+    )
+
+    fig = go.Figure(go.Sunburst(
+        labels=labels,
+        parents=parents,
+        values=values,
+        branchvalues="total",
+        marker=dict(
+            colors=colors,
+            line=dict(width=1, color="white")
+        ),
+        insidetextorientation='auto'
+    ))
+
+    fig.update_layout(
+        title="Successful Deals Breakdown: Language Level → Product",
+        title_x=0.5,
+        height=650,
+        margin=dict(t=60, l=40, r=40, b=40)
     )
 
     return fig
