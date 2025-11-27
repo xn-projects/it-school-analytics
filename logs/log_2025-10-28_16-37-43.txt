@@ -1,0 +1,115 @@
+2025-10-28 16:37:43,556 — [INFO] Logging started. File: logs/log_2025-10-28_16-37-43.txt
+2025-10-28 16:37:43,561 — [INFO] Repository successfully loaded and ready
+2025-10-28 16:37:43,601 — [INFO] ==================================================
+2025-10-28 16:37:43,603 — [INFO] === Downloading source Excel files ===
+2025-10-28 16:37:43,607 — [INFO] ==================================================
+2025-10-28 16:37:44,086 — [INFO] File calls_clean.xlsx downloaded to data/raw/calls_clean.xlsx
+2025-10-28 16:37:44,388 — [INFO] File contacts_clean.xlsx downloaded to data/raw/contacts_clean.xlsx
+2025-10-28 16:37:44,776 — [INFO] File deals_clean.xlsx downloaded to data/raw/deals_clean.xlsx
+2025-10-28 16:37:45,039 — [INFO] File spend_clean.xlsx downloaded to data/raw/spend_clean.xlsx
+2025-10-28 16:37:45,041 — [INFO] Downloaded 4 files successfully.
+2025-10-28 16:37:45,084 — [INFO] ==================================================
+2025-10-28 16:37:45,090 — [INFO] === Reading Excel files ===
+2025-10-28 16:37:45,094 — [INFO] ==================================================
+2025-10-28 16:38:19,815 — [INFO] All files successfully loaded into DataFrames.
+2025-10-28 16:38:19,824 — [INFO] ==================================================
+2025-10-28 16:38:19,825 — [INFO] === Descriptive statistics for Calls Data ===
+2025-10-28 16:38:19,826 — [INFO] ==================================================
+2025-10-28 16:38:19,932 — [INFO] calls: Processed 2 numeric columns successfully.
+2025-10-28 16:38:19,934 — [INFO] Numeric columns: Call Duration (in seconds), Scheduled in CRM
+2025-10-28 16:38:22,093 — [INFO] Plot saved as notebooks/figures/call_duration_orig_vs_log.png
+2025-10-28 16:38:22,426 — [INFO] Plot Call Duration Distribution — Original vs Log saved successfully.
+2025-10-28 16:38:24,498 — [INFO] Plot saved as notebooks/figures/call_duration_distribution.png
+2025-10-28 16:38:24,656 — [INFO] Plot Call Duration Distribution — Original vs Log saved successfully.
+2025-10-28 16:38:24,695 — [INFO] calls: Compared distributions (Call Duration (in seconds) → Call Duration (log)).
+2025-10-28 16:38:25,241 — [INFO] Plot saved as notebooks/figures/call_change.png
+2025-10-28 16:38:25,359 — [INFO] Plot call_change.png saved successfully.
+2025-10-28 16:38:26,145 — [INFO] Calls: Processed 6 categorical columns successfully.
+2025-10-28 16:38:26,148 — [INFO] Categorical columns: Id, Call Owner Name, CONTACTID, Call Type, Call Status, Outgoing Call Status
+2025-10-28 16:38:27,538 — [INFO] Plot saved as notebooks/figures/call_owners.png
+2025-10-28 16:38:27,793 — [INFO] Plot Top 15 Call Owners by Calls (Exclusive & Unique Clients) saved successfully.
+2025-10-28 16:38:27,804 — [INFO] ==================================================
+2025-10-28 16:38:27,807 — [INFO] === Descriptive statistics for Contacts Data ===
+2025-10-28 16:38:27,809 — [INFO] ==================================================
+2025-10-28 16:38:27,819 — [WARNING] contacts: No numeric columns found.
+2025-10-28 16:38:27,923 — [INFO] Contacts: Processed 2 categorical columns successfully.
+2025-10-28 16:38:27,925 — [INFO] Categorical columns: Id, Contact Owner Name
+2025-10-28 16:38:28,726 — [INFO] Plot saved as notebooks/figures/contacts_owners.png
+2025-10-28 16:38:28,917 — [INFO] Plot Top 15 Contact Owners by Frequency saved successfully.
+2025-10-28 16:38:28,927 — [INFO] ==================================================
+2025-10-28 16:38:28,930 — [INFO] === Descriptive statistics for Spend Data ===
+2025-10-28 16:38:28,932 — [INFO] ==================================================
+2025-10-28 16:38:29,003 — [INFO] spend: Processed 3 numeric columns successfully.
+2025-10-28 16:38:29,004 — [INFO] Numeric columns: Impressions, Spend, Clicks
+2025-10-28 16:38:32,357 — [INFO] Plot saved as notebooks/figures/spend_all_metrics_orig_vs_log.png
+2025-10-28 16:38:33,016 — [INFO] Plot Spend Metrics — Original vs Log saved successfully.
+2025-10-28 16:38:36,286 — [INFO] Plot saved as notebooks/figures/spend_violin_all_metrics.png
+2025-10-28 16:38:36,922 — [INFO] Plot Spend Metrics — Violin Distributions saved successfully.
+2025-10-28 16:38:40,695 — [INFO] Plot saved as notebooks/figures/spend_correlation_matrix.png
+2025-10-28 16:38:41,312 — [INFO] Plot Spend — Correlation Matrix saved successfully.
+2025-10-28 16:38:41,338 — [INFO] spend: Compared distributions (Impressions → Impressions (log)).
+2025-10-28 16:38:41,876 — [INFO] Plot saved as notebooks/figures/impressions_change.png
+2025-10-28 16:38:42,011 — [INFO] Plot impressions_change.png saved successfully.
+2025-10-28 16:38:42,033 — [INFO] spend: Compared distributions (Clicks → Clicks (log)).
+2025-10-28 16:38:42,548 — [INFO] Plot saved as notebooks/figures/click_change.png
+2025-10-28 16:38:42,677 — [INFO] Plot click_change.png saved successfully.
+2025-10-28 16:38:42,695 — [INFO] spend: Compared distributions (Spend → Spend (log)).
+2025-10-28 16:38:43,239 — [INFO] Plot saved as notebooks/figures/spend_change.png
+2025-10-28 16:38:43,368 — [INFO] Plot spend_change.png saved successfully.
+2025-10-28 16:38:43,425 — [INFO] Spend: Processed 4 categorical columns successfully.
+2025-10-28 16:38:43,428 — [INFO] Categorical columns: Source, Campaign, AdGroup, Ad
+2025-10-28 16:38:45,410 — [INFO] Plot saved as notebooks/figures/category_spend_distribution.png
+2025-10-28 16:38:45,498 — [INFO] ==================================================
+2025-10-28 16:38:45,501 — [INFO] === Descriptive statistics for Deals Data ===
+2025-10-28 16:38:45,502 — [INFO] ==================================================
+2025-10-28 16:38:45,594 — [INFO] deals: Processed 7 numeric columns successfully.
+2025-10-28 16:38:45,596 — [INFO] Numeric columns: Course duration, Months of study, Initial Amount Paid, Offer Total Amount, SLA Seconds, SLA Minutes, SLA Hours
+2025-10-28 16:38:48,247 — [INFO] Plot saved as notebooks/figures/deals_all_metrics_orig_vs_log.png
+2025-10-28 16:38:48,905 — [INFO] Plot Deals Metrics — Original vs Log saved successfully.
+2025-10-28 16:38:50,838 — [INFO] Plot saved as notebooks/figures/deals_violin_all_metrics.png
+2025-10-28 16:38:51,124 — [INFO] Plot Deals Metrics — Violin Distributions saved successfully.
+2025-10-28 16:38:51,721 — [INFO] Plot saved as notebooks/figures/deals_correlation_matrix_custom.png
+2025-10-28 16:38:51,873 — [INFO] deals: Compared distributions (Initial Amount Paid → Initial Amount Paid (log)).
+2025-10-28 16:38:52,402 — [INFO] Plot saved as notebooks/figures/iap_change.png
+2025-10-28 16:38:52,552 — [INFO] Plot iap_change.png saved successfully.
+2025-10-28 16:38:52,573 — [INFO] deals: Compared distributions (SLA Hours → SLA Hours (log)).
+2025-10-28 16:38:53,127 — [INFO] Plot saved as notebooks/figures/sla_change.png
+2025-10-28 16:38:53,370 — [INFO] Plot sla_change.png saved successfully.
+2025-10-28 16:38:53,887 — [INFO] Deals: Processed 16 categorical columns successfully.
+2025-10-28 16:38:53,888 — [INFO] Categorical columns: Id, Deal Owner Name, Quality, Stage, Lost Reason, Page, Campaign, Content, Term, Source, Payment Type, Product, Education Type, Contact Name, City, German Level
+2025-10-28 16:38:55,202 — [INFO] Plot saved as notebooks/figures/stages_by_marketing_sources.png
+2025-10-28 16:38:55,249 — [INFO] ==================================================
+2025-10-28 16:38:55,254 — [INFO] === Quality — Category Summary ===
+2025-10-28 16:38:55,258 — [INFO] ==================================================
+2025-10-28 16:38:55,953 — [INFO] Table saved as notebooks/figures/Quality_summary.png
+2025-10-28 16:38:55,962 — [INFO] ==================================================
+2025-10-28 16:38:55,963 — [INFO] === Stage — Category Summary ===
+2025-10-28 16:38:55,964 — [INFO] ==================================================
+2025-10-28 16:38:57,429 — [INFO] Table saved as notebooks/figures/Stage_summary.png
+2025-10-28 16:38:57,443 — [INFO] ==================================================
+2025-10-28 16:38:57,447 — [INFO] === Source — Category Summary ===
+2025-10-28 16:38:57,449 — [INFO] ==================================================
+2025-10-28 16:38:58,561 — [INFO] Table saved as notebooks/figures/Source_summary.png
+2025-10-28 16:38:58,586 — [INFO] ==================================================
+2025-10-28 16:38:58,592 — [INFO] === Product — Category Summary ===
+2025-10-28 16:38:58,595 — [INFO] ==================================================
+2025-10-28 16:38:58,929 — [INFO] Table saved as notebooks/figures/Product_summary.png
+2025-10-28 16:38:59,247 — [INFO] Plot saved as notebooks/figures/category_distribution.png
+2025-10-28 16:39:04,051 — [INFO] Plot saved as notebooks/figures/stages_quality.png
+2025-10-28 16:39:05,774 — [INFO] ==================================================
+2025-10-28 16:39:05,784 — [INFO] === Saving results ===
+2025-10-28 16:39:05,786 — [INFO] ==================================================
+2025-10-28 16:39:06,865 — [INFO] Table saved as notebooks/figures/calls_stats_num.png
+2025-10-28 16:39:07,037 — [INFO] Table saved as notebooks/figures/calls_compare.png
+2025-10-28 16:39:07,435 — [INFO] Table saved as notebooks/figures/calls_stats_cat.png
+2025-10-28 16:39:07,589 — [INFO] Table saved as notebooks/figures/contacts_stats_cat.png
+2025-10-28 16:39:08,161 — [INFO] Table saved as notebooks/figures/spend_stats_num.png
+2025-10-28 16:39:08,335 — [INFO] Table saved as notebooks/figures/compare_imp.png
+2025-10-28 16:39:08,507 — [INFO] Table saved as notebooks/figures/compare_clicks.png
+2025-10-28 16:39:08,685 — [INFO] Table saved as notebooks/figures/compare_spend.png
+2025-10-28 16:39:08,918 — [INFO] Table saved as notebooks/figures/spend_stats_cat.png
+2025-10-28 16:39:10,613 — [INFO] Table saved as notebooks/figures/deals_stats_num.png
+2025-10-28 16:39:10,803 — [INFO] Table saved as notebooks/figures/compare_iap.png
+2025-10-28 16:39:10,976 — [INFO] Table saved as notebooks/figures/compare_sla.png
+2025-10-28 16:39:12,443 — [INFO] Table saved as notebooks/figures/deals_stats_cat.png
+2025-10-28 16:39:12,444 — [INFO] All files successfully saved in 6.65 sec.
