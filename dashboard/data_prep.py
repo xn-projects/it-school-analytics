@@ -43,3 +43,86 @@ def compute_kpi(df):
     ].sum()
 
     return total_deals, success_deals, conversion_rate, lost_deals, closed_deals, revenue
+
+
+def prepare_campaign_summary(deals, spend):
+    
+    df_deals = deals.copy()
+    df_spend = spend.copy()
+
+    df_deals['Is Successful'] = df_deals['Stage'].str.lower().eq('payment done')
+
+    deals_total = (
+        df_deals.groupby('Source')
+        .agg({
+            'Contact Name': 'count',
+            'Campaign': 'nunique',
+            'Offer Total Amount': 'sum',
+            'Initial Amount Paid': 'sum'
+        })
+        .rename(columns={
+            'Contact Name': 'Deals Count',
+            'Campaign': 'Campaigns Count',
+            'Offer Total Amount': 'Total Offer Amount',
+            'Initial Amount Paid': 'Total Paid'
+        })
+    )
+
+    deals_success = (
+        df_deals[df_deals['Is Successful']]
+        .groupby('Source')
+        .agg({
+            'Contact Name': 'count',
+            'Offer Total Amount': 'sum',
+            'Initial Amount Paid': 'sum'
+        })
+        .rename(columns={
+            'Contact Name': 'Successful Deals',
+            'Offer Total Amount': 'Total Offer Amount (Success)',
+            'Initial Amount Paid': 'Total Paid (Success)'
+        })
+    )
+
+    spend_grouped = (
+        df_spend.groupby('Source')
+        .agg({
+            'Impressions': 'sum',
+            'Clicks': 'sum',
+            'Spend': 'sum'
+        })
+    )
+
+    campaign_summary = (
+        deals_total
+        .merge(deals_success, on='Source', how='outer')
+        .merge(spend_grouped, on='Source', how='outer')
+        .fillna(0)
+        .reset_index()
+    )
+
+    campaign_summary['CR (%)'] = (
+        campaign_summary['Successful Deals'] / campaign_summary['Deals Count'] * 100
+    ).replace([np.inf, -np.inf], np.nan).fillna(0).round(2)
+
+    campaign_summary['CTR (%)'] = (
+        campaign_summary['Clicks'] / campaign_summary['Impressions'] * 100
+    ).replace([np.inf, -np.inf], np.nan).fillna(0).round(2)
+
+    campaign_summary['CPC (€)'] = (
+        campaign_summary['Spend'] / campaign_summary['Clicks']
+    ).replace([np.inf, -np.inf], np.nan).fillna(0).round(2)
+
+    campaign_summary['CPL (€)'] = (
+        campaign_summary['Spend'] / campaign_summary['Deals Count']
+    ).replace([np.inf, -np.inf], np.nan).fillna(0).round(2)
+
+    campaign_summary['CPA (€)'] = (
+        campaign_summary['Spend'] / campaign_summary['Successful Deals']
+    ).replace([np.inf, -np.inf], np.nan).fillna(0).round(2)
+
+    campaign_summary['ROI (%)'] = (
+        (campaign_summary['Total Paid (Success)'] - campaign_summary['Spend']) /
+        campaign_summary['Spend'] * 100
+    ).replace([np.inf, -np.inf], np.nan).fillna(0).round(2)
+
+    return campaign_summary
