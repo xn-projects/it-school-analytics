@@ -1,0 +1,28 @@
+.date-picker {
+  width: 100% !important;
+}
+
+.DateRangePicker {
+  width: 100% !important;
+}
+
+.DateRangePickerInput {
+  width: 100% !important;
+  height: 38px !important;
+}
+
+.DateInput {
+  width: 45% !important;
+}
+
+.DateInput_input {
+  width: 100% !important;
+  height: 36px !important;
+  padding: 6px 12px !important;
+  font-size: 14px !important;
+}
+
+.DateRangePickerInput_arrow {
+  width: 10% !important;
+  text-align: center;
+}
