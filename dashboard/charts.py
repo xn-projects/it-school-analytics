@@ -159,6 +159,7 @@ def build_payment_pie(df):
         template='plotly_white',
         height=500,
         margin=dict(l=40, r=40, t=60, b=40),
+        showlegend=False,
         font=dict(size=12, color='#333')
     )
 
