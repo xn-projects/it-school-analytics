@@ -12,6 +12,7 @@ from .data_prep import load_data, prepare_data, compute_kpi, prepare_campaign_su
 
 deals, calls, contacts, spend = load_data()
 deals = prepare_data(deals)
+campaign_summary = prepare_campaign_summary(deals, spend)
 
 colors = get_my_palette(as_dict=True)
 
