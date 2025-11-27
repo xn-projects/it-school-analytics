@@ -38,7 +38,7 @@ Unit economics - Web Developer
 
 Unit economics - UX/UI Design
 
-![UX/UI Design](figures/ux:ui_design.png)
+![UX/UI Design](figures/ux_ui_design.png)
 
 ---
 
