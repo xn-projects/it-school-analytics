@@ -101,27 +101,20 @@ def build_sankey_chart(df):
 
 def build_payment_pie(df):
     df = df.copy()
-    print('=== PIE DEBUG ===')
-    print('Rows in df:', len(df))
-    print('Unique stages:', df['Stage'].astype(str).str.lower().unique())
-    print('Unique payment types:', df['Payment Type'].astype(str).unique())
 
-    success_df = df[df['is_success'] == 1].copy()
-    print('Success rows:', len(success_df))
-    
+    success_df = df[df['is_success'] == 1]
+
     if success_df.empty:
         fig = go.Figure()
         fig.update_layout(title='No successful deals', height=500)
         return fig
 
     agg = (
-        success_df.groupby('Payment Type')
+        success_df
+        .groupby('Payment Type')
         .size()
         .reset_index(name='success_deals')
     )
-
-    total_success = agg['success_deals'].sum()
-    agg['pct'] = (agg['success_deals'] / total_success * 100).round(1)
 
     palette = get_my_palette(as_dict=True)
 
