@@ -184,14 +184,20 @@ def build_campaign_scatter(campaign_summary):
 
     fig = px.scatter(
         df_plot,
-        x=df_plot['Deals Count'],
-        y=df_plot['cr_safe'],
-        size=df_plot['size_safe'],
-        color=df_plot['ROI (%)'],
-        hover_name=df_plot['Source'],
-        text=df_plot['Source'],
+        x='Deals Count',
+        y='cr_safe',
+        size='size_safe',
+        color='ROI (%)',
+        hover_name='Source',
+        text='Source',
         color_continuous_scale=color_scale,
         title='Campaign Effectiveness Landscape: Deals, Conversion, and ROI',
+        labels={
+            'Deals Count': 'Number of Deals',
+            'CR (%)': 'Conversion Rate (CR, %)',
+            'ROI (%)': 'Return on Investment (ROI, %)',
+            'Successful Deals': 'Successful Deals'
+        },
         size_max=55,
         height=500
     )
