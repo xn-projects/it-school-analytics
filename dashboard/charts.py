@@ -101,9 +101,7 @@ def build_sankey_chart(df):
 def build_payment_pie(df):
     df = df.copy()
     
-    success_df = df[
-        df['Stage'].astype(str).str.lower().str.strip() == 'payment done'
-    ].copy()
+    success_df = df[df['Stage'] == 'payment done'].copy()
 
     if success_df.empty:
         fig = go.Figure()
@@ -115,7 +113,6 @@ def build_payment_pie(df):
         .size()
         .reset_index(name='success_deals')
     )
-    agg = agg[agg['success_deals'] > 0]
     
     total_success = agg['success_deals'].sum()
     agg['pct'] = (agg['success_deals'] / total_success * 100).round(1)
