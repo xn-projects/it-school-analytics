@@ -101,9 +101,14 @@ def build_sankey_chart(df):
 
 def build_payment_pie(df):
     df = df.copy()
+    print('=== PIE DEBUG ===')
+    print('Rows in df:', len(df))
+    print('Unique stages:', df['Stage'].astype(str).str.lower().unique())
+    print('Unique payment types:', df['Payment Type'].astype(str).unique())
 
-    success_df = df[df['Stage'].str.lower().str.strip() == 'payment done'].copy()
-
+    success_df = df[df['is_success'] == 1].copy()
+    print('Success rows:', len(success_df))
+    
     if success_df.empty:
         fig = go.Figure()
         fig.update_layout(title='No successful deals', height=500)
