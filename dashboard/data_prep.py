@@ -16,7 +16,8 @@ def load_data(path=DATA_PATH):
 
 def prepare_data(df_deals):
     df = df_deals.copy()
-
+    
+    df['Stage'] = df['Stage'].astype(str).str.lower()
     df['Created Time'] = pd.to_datetime(df['Created Time'], errors='coerce')
     df['Deal Created Month'] = df['Created Time'].dt.to_period('M').dt.to_timestamp()
     df['Offer Total Amount'] = pd.to_numeric(df['Offer Total Amount'], errors='coerce').fillna(0)
