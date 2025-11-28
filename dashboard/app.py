@@ -211,19 +211,9 @@ def update_dashboard(selected_product, selected_edu, start_date, end_date):
     )
 
     sankey_fig = build_sankey_chart(df)
-    
-    show_total = (
-        selected_product == 'All Courses' and
-        selected_edu == 'All Schedules' and
-        start_date == str(min_date.date()) and
-        end_date == str(max_date.date())
-    )
-
-    pie_source = deals if show_total else df
-    pie_chart = build_payment_pie(pie_source)
-    
-    fresh_summary = prepare_campaign_summary(df, spend)
-    campaign_fig = build_campaign_scatter(fresh_summary)
+    pie_chart = build_payment_pie(df)
+    campaign_summary = prepare_campaign_summary(df, spend)
+    campaign_fig = build_campaign_scatter(campaign_summary)
 
     return cards, sankey_fig, pie_chart, campaign_fig
 
