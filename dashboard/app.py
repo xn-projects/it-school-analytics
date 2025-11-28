@@ -12,7 +12,6 @@ from .data_prep import load_data, prepare_data, compute_kpi, prepare_campaign_su
 
 deals, calls, contacts, spend = load_data()
 deals = prepare_data(deals)
-campaign_summary = prepare_campaign_summary(deals, spend)
 
 colors = get_my_palette(as_dict=True)
 
@@ -213,7 +212,8 @@ def update_dashboard(selected_product, selected_edu, start_date, end_date):
 
     sankey_fig = build_sankey_chart(df)
     pie_chart = build_payment_pie(df)
-    campaign_fig = build_campaign_scatter(campaign_summary)
+    fresh_summary = prepare_campaign_summary(df, spend)
+    campaign_fig = build_campaign_scatter(fresh_summary)
 
     return cards, sankey_fig, pie_chart, campaign_fig
 
