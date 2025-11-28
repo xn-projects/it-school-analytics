@@ -111,11 +111,12 @@ def build_payment_pie(df):
         return fig
 
     agg = (
-        success_df.groupby('Payment Type')
+        success_df.groupby('Payment Type', observed=True)
         .size()
         .reset_index(name='success_deals')
     )
-
+    agg = agg[agg['success_deals'] > 0]
+    
     total_success = agg['success_deals'].sum()
     agg['pct'] = (agg['success_deals'] / total_success * 100).round(1)
 
@@ -135,11 +136,11 @@ def build_payment_pie(df):
         textinfo='none',
         marker=dict(colors=color_list),
         customdata=np.stack([agg['pct']], axis=-1),
-        hovertemplate='%{label}<br>%{value} deals<br>%{customdata[0]}%<extra></extra>'
+        hovertemplate='%{label}<br>%{value} deals'
     ))
 
     fig.update_traces(
-        texttemplate='%{label}<br>%{customdata[0]}%',
+        texttemplate='%{label}',
         textposition='inside'
     )
 
