@@ -98,11 +98,12 @@ def build_sankey_chart(df):
 
     return fig
 
-
 def build_payment_pie(df):
     df = df.copy()
-
-    success_df = df[df['is_success'] == 1]
+    
+    success_df = df[
+        df['Stage'].astype(str).str.lower().str.strip() == 'payment done'
+    ].copy()
 
     if success_df.empty:
         fig = go.Figure()
@@ -110,14 +111,15 @@ def build_payment_pie(df):
         return fig
 
     agg = (
-        success_df
-        .groupby('Payment Type')
+        success_df.groupby('Payment Type')
         .size()
         .reset_index(name='success_deals')
     )
 
-    palette = get_my_palette(as_dict=True)
+    total_success = agg['success_deals'].sum()
+    agg['pct'] = (agg['success_deals'] / total_success * 100).round(1)
 
+    palette = get_my_palette(as_dict=True)
     color_list = [
         palette['Lime Green'][2],
         palette['Cornflower'][3],
@@ -130,12 +132,19 @@ def build_payment_pie(df):
         labels=agg['Payment Type'],
         values=agg['success_deals'],
         hole=0.35,
-        textinfo='label+percent',
-        marker=dict(colors=color_list)
+        textinfo='none',
+        marker=dict(colors=color_list),
+        customdata=np.stack([agg['pct']], axis=-1),
+        hovertemplate='%{label}<br>%{value} deals<br>%{customdata[0]}%<extra></extra>'
     ))
 
+    fig.update_traces(
+        texttemplate='%{label}<br>%{customdata[0]}%',
+        textposition='inside'
+    )
+
     fig.update_layout(
-        title='Successful Deals by Payment Type',
+        title='Share of Payment Types (Successful Deals)',
         template='plotly_white',
         height=500,
         margin=dict(l=40, r=40, t=60, b=40),
