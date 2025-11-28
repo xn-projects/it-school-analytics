@@ -102,12 +102,6 @@ def build_sankey_chart(df):
 def build_payment_pie(df):
     df = df.copy()
 
-    df = df[
-        (df['Product'] != 'Unknown') &
-        (df['Payment Type'] != 'Unknown') &
-        (df['Stage'] != 'Unknown')
-    ].copy()
-
     success_df = df[df['Stage'].str.lower().str.strip() == 'payment done'].copy()
 
     agg = (
