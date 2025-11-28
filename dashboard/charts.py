@@ -108,23 +108,23 @@ def build_payment_pie(df):
         (df['Stage'] != 'Unknown')
     ].copy()
 
+    success_df = df[df['Stage'].str.lower().str.strip() == 'payment done'].copy()
+
     agg = (
-        df.groupby('Payment Type')
+        success_df.groupby('Payment Type')
         .agg(
-            total_deals=('Id', 'count'),
-            success_count=('is_success', 'sum')
+            success_deals=('Id', 'count')
         )
         .reset_index()
     )
 
-    agg['success_rate'] = (
-        agg['success_count'] / agg['total_deals']
-    ).replace([float('inf')], 0).fillna(0)
-
-    if agg.empty:
-        fig = px.pie(title='Success Rate by Payment Type')
-        fig.update_layout(height=480)
+    if agg.empty or agg['success_deals'].sum() == 0:
+        fig = px.pie(title='Successful Deals by Payment Type')
+        fig.update_layout(height=500, showlegend=False)
         return fig
+
+    total_success = agg['success_deals'].sum()
+    agg['pct'] = (agg['success_deals'] / total_success * 100).round(1)
 
     palette = get_my_palette(as_dict=True)
 
@@ -139,7 +139,7 @@ def build_payment_pie(df):
     fig = px.pie(
         agg,
         names='Payment Type',
-        values='success_rate',
+        values='success_deals',
         color='Payment Type',
         color_discrete_sequence=color_list,
         hole=0.4,
@@ -147,12 +147,9 @@ def build_payment_pie(df):
     )
 
     fig.update_traces(
-        textinfo='label+percent',
-        pull=[
-            0.05 if x == agg['success_rate'].max() else 0
-            for x in agg['success_rate']
-        ],
-        textfont_size=14
+        texttemplate='%{label}<br>%{value} deals<br>%{customdata[0]}%',
+        customdata=np.stack((agg['pct'],), axis=-1),
+        textfont_size=12
     )
 
     fig.update_layout(
