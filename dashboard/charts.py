@@ -104,18 +104,16 @@ def build_payment_pie(df):
 
     success_df = df[df['Stage'].str.lower().str.strip() == 'payment done'].copy()
 
+    if success_df.empty:
+        fig = go.Figure()
+        fig.update_layout(title='No successful deals', height=500)
+        return fig
+
     agg = (
         success_df.groupby('Payment Type')
-        .agg(
-            success_deals=('Id', 'count')
-        )
-        .reset_index()
+        .size()
+        .reset_index(name='success_deals')
     )
-
-    if agg.empty or agg['success_deals'].sum() == 0:
-        fig = px.pie(title='Successful Deals by Payment Type')
-        fig.update_layout(height=500, showlegend=False)
-        return fig
 
     total_success = agg['success_deals'].sum()
     agg['pct'] = (agg['success_deals'] / total_success * 100).round(1)
@@ -130,28 +128,20 @@ def build_payment_pie(df):
         palette['Lime Green'][0],
     ]
 
-    fig = px.pie(
-        agg,
-        names='Payment Type',
-        values='success_deals',
-        color='Payment Type',
-        color_discrete_sequence=color_list,
-        hole=0.4,
-        title='Success Rate by Payment Type'
-    )
-
-    fig.update_traces(
-        texttemplate='%{label}<br>%{value} deals<br>%{customdata[0]}%',
-        customdata=np.stack((agg['pct'],), axis=-1),
-        textfont_size=12
-    )
+    fig = go.Figure(go.Pie(
+        labels=agg['Payment Type'],
+        values=agg['success_deals'],
+        hole=0.35,
+        textinfo='label+percent',
+        marker=dict(colors=color_list)
+    ))
 
     fig.update_layout(
+        title='Successful Deals by Payment Type',
         template='plotly_white',
         height=500,
         margin=dict(l=40, r=40, t=60, b=40),
-        showlegend=False,
-        font=dict(size=12, color='#333')
+        showlegend=False
     )
 
     return fig
@@ -187,25 +177,19 @@ def build_campaign_scatter(campaign_summary):
         fig.update_layout(height=500)
         return fig
 
-    df_plot['size_safe'] = df_plot['Successful Deals'].clip(lower=1)
+    df_plot['size_safe'] = df_plot['Successful Deals'].clip(lower=3)
     df_plot['cr_safe'] = df_plot['CR (%)'].clip(lower=0.1)
 
     fig = px.scatter(
         df_plot,
-        x='Deals Count',
-        y='cr_safe',
-        size='size_safe',
-        color='ROI (%)',
-        hover_name='Source',
-        text='Source',
+        x=df_plot['Deals Count'],
+        y=df_plot['cr_safe'],
+        size=df_plot['size_safe'],
+        color=df_plot['ROI (%)'],
+        hover_name=df_plot['Source'],
+        text=df_plot['Source'],
         color_continuous_scale=color_scale,
         title='Campaign Effectiveness Landscape: Deals, Conversion, and ROI',
-        labels={
-            'Deals Count': 'Number of Deals',
-            'CR (%)': 'Conversion Rate (CR, %)',
-            'ROI (%)': 'Return on Investment (ROI, %)',
-            'Successful Deals': 'Successful Deals'
-        },
         size_max=55,
         height=500
     )
