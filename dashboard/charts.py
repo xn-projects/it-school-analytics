@@ -159,6 +159,11 @@ def build_payment_pie(df):
 
 def build_campaign_scatter(campaign_summary):
 
+    print("=== CAMPAIGN SUMMARY DEBUG ===")
+    print(campaign_summary[['Source', 'Deals Count', 'Successful Deals', 'CR (%)', 'ROI (%)']])
+    print("Deals min/max:", campaign_summary['Deals Count'].min(), campaign_summary['Deals Count'].max())
+    print("Success min/max:", campaign_summary['Successful Deals'].min(), campaign_summary['Successful Deals'].max())
+
     lavender = get_my_palette(group='Lavender')
     tomato = get_my_palette(group='Tomato')
     lime = get_my_palette(group='Lime Green')
