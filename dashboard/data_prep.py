@@ -30,7 +30,7 @@ def compute_kpi(df):
 
 
 def prepare_campaign_summary(deals, spend):
-    
+
     df_deals = deals.copy()
     df_spend = spend.copy()
 
