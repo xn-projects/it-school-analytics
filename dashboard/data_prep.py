@@ -35,6 +35,7 @@ def prepare_campaign_summary(deals, spend):
     df_spend = spend.copy()
 
     df_deals['Is Successful'] = df_deals['Stage'].str.lower().eq('payment done')
+    df_spend = df_spend[df_spend['Source'].isin(df_deals['Source'].unique())]
 
     deals_total = (
         df_deals.groupby('Source')
