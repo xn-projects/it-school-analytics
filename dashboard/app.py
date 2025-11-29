@@ -8,10 +8,9 @@ import dash_bootstrap_components as dbc
 
 from utils.my_palette import get_my_palette
 from .charts import build_sankey_chart, build_payment_pie, build_campaign_scatter
-from .data_prep import load_data, prepare_data, compute_kpi, prepare_campaign_summary
+from .data_prep import load_data, compute_kpi, prepare_campaign_summary
 
 deals, calls, contacts, spend = load_data()
-deals = prepare_data(deals)
 
 colors = get_my_palette(as_dict=True)
 
