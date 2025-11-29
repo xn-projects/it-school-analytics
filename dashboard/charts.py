@@ -105,8 +105,18 @@ def build_sankey_chart(df):
 def build_payment_pie(df):
     df = df.copy()
 
-    for col in ['Payment Type', 'Stage']:
-        df[col] = df[col].fillna('Unknown').astype(str).str.strip().str.lower()
+    df['Stage'] = (df['Stage']
+        .fillna('')
+        .astype(str)
+        .str.strip()
+        .str.lower())
+
+    df['Payment Type'] = (df['Payment Type']
+        .fillna('Unknown')
+        .astype(str)
+        .str.strip()
+        .replace({'': 'Unknown'})
+    )
 
     df_success = df[df['Stage'] == 'payment done'].copy()
 
@@ -120,6 +130,7 @@ def build_payment_pie(df):
         .size()
         .reset_index(name='success_deals')
     )
+    agg = agg[agg['Payment Type'] != 'Unknown']
     
     total_success = agg['success_deals'].sum()
 
