@@ -105,28 +105,37 @@ def build_sankey_chart(df):
 def build_payment_pie(df):
     df = df.copy()
 
-    df['Payment Type'] = (
-        df['Payment Type']
-        .astype(str)
-        .str.strip()
-        .replace({'nan': 'Unknown', '': 'Unknown'})
-    )
+    for col in ['Product', 'Payment Type', 'Stage']:
+        df[col] = df[col].fillna('Unknown').astype(str).str.strip()
 
-    if df.empty:
-        fig = go.Figure()
-        fig.update_layout(title='No data', height=500)
-        return fig
+    df = df[
+        (df['Product'] != 'Unknown') &
+        (df['Payment Type'] != 'Unknown') &
+        (df['Stage'] != 'Unknown')
+    ].copy()
+
+    df['is_success'] = df['Stage'].str.lower().eq('payment done').astype(int)
 
     agg = (
         df.groupby('Payment Type')
-        .size()
-        .reset_index(name='deals_count')
+        .agg(
+            total_deals=('Id', 'count'),
+            success_count=('is_success', 'sum')
+        )
+        .reset_index()
     )
 
-    total = agg['deals_count'].sum()
-    agg['pct'] = (agg['deals_count'] / total * 100).round(1)
+    agg['success_rate'] = (
+        agg['success_count'] / agg['total_deals']
+    ).replace([float('inf')], 0).fillna(0)
+
+    if agg.empty:
+        fig = px.pie(title='Success Rate by Payment Type')
+        fig.update_layout(height=480)
+        return fig
 
     palette = get_my_palette(as_dict=True)
+
     color_list = [
         palette['Lime Green'][2],
         palette['Cornflower'][3],
@@ -135,33 +144,38 @@ def build_payment_pie(df):
         palette['Lime Green'][0],
     ]
 
-    fig = go.Figure(go.Pie(
-        labels=agg['Payment Type'],
-        values=agg['deals_count'],
-        hole=0.35,
-        textinfo='none',
-        marker=dict(colors=color_list),
-        hovertemplate='%{label}<br>%{value} deals'
-    ))
+    fig = px.pie(
+        agg,
+        names='Payment Type',
+        values='success_rate',
+        color='Payment Type',
+        color_discrete_sequence=color_list,
+        hole=0.4,
+        title='Success Rate by Payment Type'
+    )
 
     fig.update_traces(
-        texttemplate='%{label}',
-        textposition='inside'
+        textinfo='label+percent',
+        pull=[
+            0.05 if x == agg['success_rate'].max() else 0
+            for x in agg['success_rate']
+        ],
+        textfont_size=14
     )
 
     fig.update_layout(
-        title='Share of Payment Types (All Deals)',
         template='plotly_white',
         height=500,
         margin=dict(l=40, r=40, t=60, b=40),
-        showlegend=False
+        showlegend=True,
+        font=dict(size=12, color='#333')
     )
 
     return fig
     
 
 def build_campaign_scatter(campaign_summary):
-    
+
     lavender = get_my_palette(group='Lavender')
     tomato = get_my_palette(group='Tomato')
     lime = get_my_palette(group='Lime Green')
@@ -185,7 +199,7 @@ def build_campaign_scatter(campaign_summary):
         fig.update_layout(height=500)
         return fig
 
-    df_plot['size_safe'] = df_plot['Successful Deals'].clip(lower=3)
+    df_plot['size_safe'] = df_plot['Successful Deals'].clip(lower=1)
     df_plot['cr_safe'] = df_plot['CR (%)'].clip(lower=0.1)
 
     fig = px.scatter(
