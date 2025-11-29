@@ -105,33 +105,27 @@ def build_sankey_chart(df):
 def build_payment_pie(df):
     df = df.copy()
 
-    for col in ['Product', 'Payment Type', 'Stage']:
-        df[col] = df[col].fillna('Unknown').astype(str).str.strip()
+    for col in ['Payment Type', 'Stage']:
+        df[col] = df[col].fillna('Unknown').astype(str).str.strip().str.lower()
 
-    df = df[
-        (df['Product'] != 'Unknown') &
-        (df['Payment Type'] != 'Unknown') &
-        (df['Stage'] != 'Unknown')
-    ].copy()
+    df_success = df[df['Stage'] == 'payment done'].copy()
 
-    df['is_success'] = df['Stage'].str.lower().eq('payment done').astype(int)
-
-    agg = (
-        df.groupby('Payment Type')
-        .agg(
-            total_deals=('Id', 'count'),
-            success_count=('is_success', 'sum')
-        )
-        .reset_index()
-    )
-
-    if agg.empty:
-        fig = px.pie(title='Success Rate by Payment Type')
+    if df_success.empty:
+        fig = px.pie(title='No Successful Deals')
         fig.update_layout(height=480)
         return fig
 
-    palette = get_my_palette(as_dict=True)
+    agg = (
+        df_success.groupby('Payment Type')
+        .size()
+        .reset_index(name='success_deals')
+    )
+    
+    total_success = agg['success_deals'].sum()
 
+    agg['success_rate'] = (agg['success_deals'] / total_success * 100).round(1)
+
+    palette = get_my_palette(as_dict=True)
     color_list = [
         palette['Lime Green'][2],
         palette['Cornflower'][3],
@@ -147,7 +141,7 @@ def build_payment_pie(df):
         color='Payment Type',
         color_discrete_sequence=color_list,
         hole=0.4,
-        title='Success Rate by Payment Type'
+        title='Successful Deals by Payment Type'
     )
 
     fig.update_traces(
