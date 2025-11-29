@@ -7,10 +7,11 @@ import plotly.express as px
 colors = get_my_palette(as_dict=True)
 
 def build_sankey_chart(df):
+
     df = df.copy()
 
     for col in ['Source', 'Product', 'Stage']:
-        df[col] = df[col].fillna('Unknown').astype(str).str.strip()
+        df[col] = df[col].astype(str).str.strip().fillna('Unknown')
 
     df = df[
         (df['Source'] != 'Unknown') &
@@ -24,17 +25,14 @@ def build_sankey_chart(df):
         .reset_index(name='count')
     )
 
-    agg['source_label'] = 'SRC: ' + agg['Source']
-    agg['product_label'] = 'PRD: ' + agg['Product']
-    agg['stage_label'] = 'STG: ' + agg['Stage']
-
     labels = (
-        list(agg['source_label'].unique()) +
-        list(agg['product_label'].unique()) +
-        list(agg['stage_label'].unique())
+        list(agg['Source'].unique()) +
+        list(agg['Product'].unique()) +
+        list(agg['Stage'].unique())
     )
-    label_index = {l: i for i, l in enumerate(labels)}
+    label_index = {label: i for i, label in enumerate(labels)}
 
+    colors = get_my_palette(as_dict=True)
     stage_colors = {
         'payment done': colors['Lime Green'][3],
         'in progress': colors['Yellowsoft'][2],
@@ -46,9 +44,14 @@ def build_sankey_chart(df):
 
     sources, targets, values, colors_links = [], [], [], []
 
-    for _, row in agg.iterrows():
-        sources.append(label_index[row['source_label']])
-        targets.append(label_index[row['product_label']])
+    group_sp = (
+        agg.groupby(['Source', 'Product', 'Stage'])['count']
+        .sum()
+        .reset_index()
+    )
+    for _, row in group_sp.iterrows():
+        sources.append(label_index[row['Source']])
+        targets.append(label_index[row['Product']])
         values.append(row['count'])
 
         stage_name = row['Stage'].strip().lower()
@@ -56,8 +59,8 @@ def build_sankey_chart(df):
         colors_links.append(color)
 
     for _, row in agg.iterrows():
-        sources.append(label_index[row['product_label']])
-        targets.append(label_index[row['stage_label']])
+        sources.append(label_index[row['Product']])
+        targets.append(label_index[row['Stage']])
         values.append(row['count'])
 
         stage_name = row['Stage'].strip().lower()
@@ -72,7 +75,7 @@ def build_sankey_chart(df):
             line=dict(color='white', width=1),
             label=labels,
             color=[colors['Lavender'][3], colors['Cornflower'][3], colors['Tomato'][3],
-                   colors['Lime Green'][3], colors['Yellowsoft'][3]] * (len(labels)//5 + 1)
+                colors['Lime Green'][3], colors['Yellowsoft'][3]] * (len(labels)//5 + 1)
         ),
         link=dict(
             source=sources,
