@@ -204,7 +204,7 @@ def build_campaign_scatter(campaign_summary):
 
     fig = px.scatter(
         df_plot,
-        x='deals safe',
+        x='deals_safe',
         y='cr_safe',
         size='size_safe',
         color='ROI (%)',
