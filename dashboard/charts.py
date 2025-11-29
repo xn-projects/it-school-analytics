@@ -186,13 +186,14 @@ def build_campaign_scatter(campaign_summary):
         fig = px.scatter(title='Campaign Effectiveness (no data)')
         fig.update_layout(height=500)
         return fig
-
+        
+    df_plot['deals_safe'] = df_plot['Deals Count'].replace(0, 0.1)
     df_plot['size_safe'] = df_plot['Successful Deals'].clip(lower=1)
     df_plot['cr_safe'] = df_plot['CR (%)'].clip(lower=0.1)
 
     fig = px.scatter(
         df_plot,
-        x='Deals Count',
+        x='deals safe',
         y='cr_safe',
         size='size_safe',
         color='ROI (%)',
@@ -260,7 +261,7 @@ def build_campaign_scatter(campaign_summary):
     fig.add_hline(
         y=median_y,
         line_dash='dot',
-        line_color=get_my_palette(group='Cornflower')[3],
+        line_color=get_my_palette(group='Tomato')[3],
         annotation_text='Median CR',
         annotation_position='top right',
         layer='below'
