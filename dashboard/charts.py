@@ -125,10 +125,6 @@ def build_payment_pie(df):
         .reset_index()
     )
 
-    agg['success_rate'] = (
-        agg['success_count'] / agg['total_deals']
-    ).replace([float('inf')], 0).fillna(0)
-
     if agg.empty:
         fig = px.pie(title='Success Rate by Payment Type')
         fig.update_layout(height=480)
@@ -191,8 +187,6 @@ def build_campaign_scatter(campaign_summary):
 
     for col in ['Deals Count', 'Successful Deals', 'CR (%)', 'ROI (%)']:
         df_plot[col] = pd.to_numeric(df_plot[col], errors='coerce').fillna(0)
-
-    df_plot = df_plot[df_plot['Deals Count'].fillna(0).astype(float) >= 0]
 
     if df_plot.empty:
         fig = px.scatter(title='Campaign Effectiveness (no data)')
