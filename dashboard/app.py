@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 
 from utils.my_palette import get_my_palette
-from .charts import build_sankey_chart, build_payment_pie, build_campaign_scatter
+from .charts import build_sankey_chart, build_payment_pie, build_campaign_scatter, build_campaign_scatter_new
 from .data_prep import load_data, compute_kpi, prepare_campaign_summary
 
 deals, calls, contacts, spend = load_data()
@@ -158,9 +158,10 @@ app.layout = dbc.Container([
                         'fontWeight': '600'
                     }
                 ),
-
+                
                 dbc.Row([
-                    dbc.Col(dcc.Graph(id='campaign_scatter'), md=6)
+                    dbc.Col(dcc.Graph(id='campaign_scatter'), md=6),
+                    dbc.Col(dcc.Graph(id='campaign_scatter_new'), md=6),
                 ])
             ]
         )
@@ -173,6 +174,7 @@ app.layout = dbc.Container([
         Output('sankey_graph', 'figure'),
         Output('pie_graph', 'figure'),
         Output('campaign_scatter', 'figure'),
+        Output('campaign_scatter_new', 'figure'),
     ],
     [
         Input('product_filter', 'value'),
@@ -213,8 +215,9 @@ def update_dashboard(selected_product, selected_edu, start_date, end_date):
     pie_chart = build_payment_pie(df)
     campaign_summary = prepare_campaign_summary(deals, spend)
     campaign_fig = build_campaign_scatter(campaign_summary)
+    campaign_fig_new = build_campaign_scatter_new(campaign_summary)
 
-    return cards, sankey_fig, pie_chart, campaign_fig
+    return cards, sankey_fig, pie_chart, campaign_fig, campaign_fig_new
 
 
 if __name__ == '__main__':
