@@ -148,7 +148,7 @@ def build_payment_pie(df):
     fig = px.pie(
         agg,
         names='Payment Type',
-        values='success_rate',
+        values='success_deals',
         color='Payment Type',
         color_discrete_sequence=color_list,
         hole=0.4,
@@ -158,8 +158,8 @@ def build_payment_pie(df):
     fig.update_traces(
         textinfo='label+percent',
         pull=[
-            0.05 if x == agg['success_rate'].max() else 0
-            for x in agg['success_rate']
+            0.05 if x == agg['success_deals'].max() else 0
+            for x in agg['success_deals']
         ],
         textfont_size=14
     )
@@ -193,18 +193,19 @@ def build_campaign_scatter(campaign_summary):
     for col in ['Deals Count', 'Successful Deals', 'CR (%)', 'ROI (%)']:
         df_plot[col] = pd.to_numeric(df_plot[col], errors='coerce').fillna(0)
 
+    df_plot = df_plot[df_plot['Deals Count'].fillna(0).astype(float) >= 0]
+
     if df_plot.empty:
         fig = px.scatter(title='Campaign Effectiveness (no data)')
         fig.update_layout(height=500)
         return fig
-        
-    df_plot['deals_safe'] = df_plot['Deals Count'].replace(0, 0.1)
+
     df_plot['size_safe'] = df_plot['Successful Deals'].clip(lower=1)
     df_plot['cr_safe'] = df_plot['CR (%)'].clip(lower=0.1)
 
     fig = px.scatter(
         df_plot,
-        x='deals_safe',
+        x='Deals Count',
         y='cr_safe',
         size='size_safe',
         color='ROI (%)',
@@ -266,7 +267,7 @@ def build_campaign_scatter(campaign_summary):
         line_dash='dot',
         line_color=get_my_palette(group='Cornflower')[3],
         annotation_text='Median Deals',
-        annotation_position='bottom left',
+        annotation_position='bottom right',
         layer='below'
     )
     fig.add_hline(
