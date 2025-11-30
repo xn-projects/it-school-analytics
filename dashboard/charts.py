@@ -142,7 +142,6 @@ def build_payment_pie(df):
         palette['Cornflower'][3],
         palette['Tomato'][2],
         palette['Lavender'][1],
-        palette['Lime Green'][0],
     ]
 
     fig = px.pie(
@@ -158,7 +157,7 @@ def build_payment_pie(df):
     fig.update_traces(
         textinfo='label+percent',
         pull=[
-            0.05 if x == agg['success_deals'].max() else 0
+            0.03 if x == agg['success_deals'].max() else 0
             for x in agg['success_deals']
         ],
         textfont_size=14
