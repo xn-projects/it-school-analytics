@@ -195,6 +195,19 @@ def build_campaign_scatter(campaign_summary):
 
     df_plot = df_plot[df_plot['Deals Count'].fillna(0).astype(float) >= 0]
 
+    print("=== DEBUG: df_plot shape ===")
+    print(df_plot.shape)
+    print(df_plot.head())
+
+    print("\n=== DEBUG: dtypes ===")
+    print(df_plot[['Deals Count', 'CR (%)', 'ROI (%)']].dtypes)
+
+    print("\n=== DEBUG: unique ROI (%) ===")
+    print(df_plot['ROI (%)'].unique())
+
+    print("\n=== DEBUG: color_scale ===")
+    print(color_scale)
+
     if df_plot.empty:
         fig = px.scatter(title='Campaign Effectiveness (no data)')
         fig.update_layout(height=500)
