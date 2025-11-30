@@ -1,21 +1,22 @@
-dash==2.11.1
-dash-bootstrap-components==1.4.1
-pandas
-plotly
+dash==2.17.1
+dash-bootstrap-components==1.6.0
+plotly==6.5.0
+
+pandas>=2.1
+numpy>=1.25
 openpyxl
-gunicorn
+networkx
+requests
+
 dataframe_image
 IPython
-
 matplotlib
 seaborn
 folium
-networkx
-numpy
-requests
 
-Werkzeug==2.2.3
-Flask==2.2.5
-Flask-Cors==3.0.10
+Flask>=2.2.5
+Werkzeug>=2.2.3
+Flask-Cors>=3.0.10
 
+gunicorn
 setuptools>=65.5.0
