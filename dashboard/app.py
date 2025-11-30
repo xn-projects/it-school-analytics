@@ -211,7 +211,7 @@ def update_dashboard(selected_product, selected_edu, start_date, end_date):
 
     sankey_fig = build_sankey_chart(df)
     pie_chart = build_payment_pie(df)
-    campaign_summary = prepare_campaign_summary(df, spend)
+    campaign_summary = prepare_campaign_summary(deals, spend)
     campaign_fig = build_campaign_scatter(campaign_summary)
 
     return cards, sankey_fig, pie_chart, campaign_fig
