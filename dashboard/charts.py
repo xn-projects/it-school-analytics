@@ -210,6 +210,7 @@ def build_campaign_scatter(campaign_summary):
         color='ROI (%)',
         hover_name='Source',
         text='Source',
+        custom_data=['Successful Deals'],
         color_continuous_scale=color_scale,
         title='Campaign Effectiveness Landscape: Deals, Conversion, and ROI',
         labels={
@@ -232,7 +233,7 @@ def build_campaign_scatter(campaign_summary):
             'Deals: %{x}<br>'
             'CR: %{y:.1f}%<br>'
             'ROI: %{marker.color:.1f}%<br>'
-            'Successful Deals: %{marker.size}<extra></extra>'
+            'Successful Deals: %{customdata[0]}<extra></extra>'
         )
     )
 
