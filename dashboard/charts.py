@@ -279,29 +279,82 @@ def build_campaign_scatter(campaign_summary):
         layer='below'
     )
 
-    fig.add_annotation(
-        x=median_x * 4, y=median_y * 3,
-        text='High Volume / High CR',
-        showarrow=False,
-        font=dict(size=11, weight='bold')
+    return fig
+
+
+def build_campaign_scatter_new(campaign_summary):
+
+    df_plot = campaign_summary.copy()
+
+    for col in ['Spend', 'Successful Deals', 'Total Paid (Success)']:
+        if col in df_plot.columns:
+            df_plot[col] = pd.to_numeric(df_plot[col], errors='coerce').fillna(0)
+
+    df_plot.rename(columns={
+        'Total Paid (Success)': 'Revenue',
+        'Successful Deals': 'Leads'
+    }, inplace=True)
+
+    df_plot = df_plot[df_plot['Spend'] >= 0]
+
+    df_plot['size_safe'] = df_plot['Revenue'].clip(lower=1)
+
+    palette = get_my_palette(as_dict=True)
+    discrete_colors = [
+        palette['Tomato'][3],
+        palette['Cornflower'][3],
+        palette['Lime Green'][3],
+        palette['Lavender'][3],
+        palette['Yellowsoft'][3],
+        palette['Neutral'][3]
+    ]
+
+    fig = px.scatter(
+        df_plot,
+        x='Spend',
+        y='Leads',
+        size='size_safe',
+        color='Source',
+        text='Source',
+        custom_data=['Revenue', 'Leads'],
+        color_discrete_sequence=discrete_colors,
+        size_max=55,
+        height=500,
+        title='Source Matrix: Spend vs Successful Leads vs Revenue'
     )
-    fig.add_annotation(
-        x=median_x * 0.65, y=median_y * 3,
-        text='Low Volume / High CR',
-        showarrow=False,
-        font=dict(size=11, weight='bold')
+
+    fig.update_traces(
+        marker=dict(
+            line=dict(width=1, color='white'),
+            sizemin=10
+        ),
+        textposition='top center',
+        opacity=1.0,
+        hovertemplate=(
+            '<b>%{hovertext}</b><br>'
+            'Spend: €%{x:,.0f}<br>'
+            'Successful Leads: %{y}<br>'
+            'Revenue: €%{customdata[0]:,.0f}<extra></extra>'
+        )
     )
-    fig.add_annotation(
-        x=median_x * 4, y=median_y * 0.2,
-        text='High Volume / Low CR',
-        showarrow=False,
-        font=dict(size=11, weight='bold')
-    )
-    fig.add_annotation(
-        x=median_x * 0.65, y=median_y * 0.2,
-        text='Low Volume / Low CR',
-        showarrow=False,
-        font=dict(size=11, weight='bold')
+
+    fig.update_layout(
+        template='plotly_white',
+        plot_bgcolor='white',
+        hoverlabel=dict(bgcolor='white'),
+        font=dict(size=12, color='#333'),
+        xaxis=dict(
+            title='Spend (€)',
+            gridcolor='rgba(0,0,0,0.15)',
+            zeroline=False
+        ),
+        yaxis=dict(
+            title='Successful Leads',
+            gridcolor='rgba(0,0,0,0.15)',
+            zeroline=False
+        ),
+        margin=dict(l=60, r=60, t=70, b=60),
+        showlegend=False
     )
 
     return fig
