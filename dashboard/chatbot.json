@@ -1,0 +1,300 @@
+{
+  "dashboard": {
+    "id": "it_school_analytics",
+    "title": {
+      "ru": "Аналитика IT-школы",
+      "en": "IT School Analytics",
+      "de": "IT-Schul-Analytik"
+    },
+    "description": {
+      "ru": "Дашборд предназначен для анализа продаж, конверсии клиентов и динамики выручки IT-школы.",
+      "en": "This dashboard analyzes sales performance, customer conversion, and revenue dynamics of the IT School.",
+      "de": "Dieses Dashboard analysiert die Verkaufsleistung, die Kundenkonversion und die Umsatzentwicklung der IT-Schule."
+    }
+  },
+  "pages": [
+    {
+      "id": "sales_analytics",
+      "title": {
+        "ru": "Аналитика продаж",
+        "en": "Sales Analytics",
+        "de": "Verkaufsanalytik"
+      },
+      "filters": [
+        {
+          "id": "course",
+          "type": "dropdown",
+          "label": {
+            "ru": "Курс",
+            "en": "Course",
+            "de": "Kurs"
+          },
+          "options": {
+            "ru": [
+              "Цифровой Маркетинг",
+              "Веб Разработчик",
+              "UX/UI дизайн"
+            ],
+            "en": [
+              "Digital Marketing",
+              "Web Developer",
+              "UX/UI Design"
+            ],
+            "de": [
+              "Digital Marketing",
+              "Web Developer",
+              "UX/UI Design"
+            ]
+          }
+        },
+        {
+          "id": "schedule",
+          "type": "dropdown",
+          "label": {
+            "ru": "Расписание",
+            "en": "Schedule",
+            "de": "Zeitplan"
+          },
+          "options": {
+            "ru": [
+              "Утро",
+              "Вечер"
+            ],
+            "en": [
+              "Morning",
+              "Evening"
+            ],
+            "de": [
+              "Morgen",
+              "Abend"
+            ]
+          }
+        },
+        {
+          "id": "date_range",
+          "type": "date_range",
+          "label": {
+            "ru": "Период",
+            "en": "Date Range",
+            "de": "Zeitraum"
+          },
+          "range": {
+            "from": "2023-07-01",
+            "to": "2024-12-11",
+            "label": {
+              "ru": [
+                "С 1 июля 2023 года по 11 декабря 2024 года",
+                "Можно внутри этого периода выбрать любой диапазон для анализа"
+              ],
+              "en": [
+                "From July 1, 2023 to December 11, 2024",
+                "Any sub-range within this period can be selected for analysis"
+              ],
+              "de": [
+                "Vom 1. Juli 2023 bis zum 11. Dezember 2024",
+                "Innerhalb dieses Zeitraums kann ein beliebiger Zeitraum für die Analyse ausgewählt werden"
+              ]
+            }
+          }
+        }
+      ],
+      "charts": [
+        {
+          "id": "kpi_overview",
+          "type": "kpi_cards",
+          "title": {
+            "ru": "Ключевые показатели продаж",
+            "en": "Key Sales Metrics",
+            "de": "Zentrale Verkaufskennzahlen"
+          },
+          "metrics": [
+            {
+              "id": "total_deals",
+              "label": {
+                "ru": "Всего сделок",
+                "en": "Total Deals",
+                "de": "Gesamtanzahl der Deals"
+              }
+            },
+            {
+              "id": "successful_deals",
+              "label": {
+                "ru": "Успешные сделки",
+                "en": "Successful Deals",
+                "de": "Erfolgreiche Deals"
+              }
+            },
+            {
+              "id": "conversion_rate",
+              "label": {
+                "ru": "Коэффициент конверсии",
+                "en": "Conversion Rate",
+                "de": "Konversionsrate"
+              }
+            },
+            {
+              "id": "lost_deals",
+              "label": {
+                "ru": "Потерянные сделки",
+                "en": "Lost Deals",
+                "de": "Verlorene Deals"
+              }
+            },
+            {
+              "id": "closed_deals",
+              "label": {
+                "ru": "Закрытые сделки",
+                "en": "Closed Deals",
+                "de": "Abgeschlossene Deals"
+              }
+            },
+            {
+              "id": "revenue",
+              "label": {
+                "ru": "Выручка",
+                "en": "Revenue",
+                "de": "Umsatz"
+              }
+            }
+          ],
+          "description": {
+            "ru": "Карточки KPI отражают общее количество сделок, успешные и потерянные сделки, уровень конверсии и суммарную выручку.",
+            "en": "KPI cards display total deals, successful and lost deals, conversion rate, and total revenue.",
+            "de": "KPI-Karten zeigen die Gesamtanzahl der Deals, erfolgreiche und verlorene Abschlüsse, die Konversionsrate und den Gesamtumsatz."
+          }
+        },
+        {
+          "id": "deal_flow",
+          "type": "sankey",
+          "title": {
+            "ru": "Поток сделок: источник → продукт → этап",
+            "en": "Deal Flow: Source → Product → Stage",
+            "de": "Deal-Flow: Quelle → Produkt → Phase"
+          },
+          "description": {
+            "ru": "Диаграмма Sankey показывает движение лидов от источников привлечения через продукты к финальным этапам обработки сделки.",
+            "en": "The Sankey diagram visualizes lead movement from acquisition sources through products to final deal stages.",
+            "de": "Das Sankey-Diagramm visualisiert den Fluss von Leads von Akquisequellen über Produkte bis zu den finalen Deal-Phasen."
+          },
+          "insights": {
+            "ru": [
+              "Большая часть лидов поступает из платных рекламных каналов.",
+              "Наибольшие потери сделок происходят до этапа оплаты."
+            ],
+            "en": [
+              "Most leads originate from paid advertising channels.",
+              "The highest deal losses occur before the payment stage."
+            ],
+            "de": [
+              "Der Großteil der Leads stammt aus bezahlten Werbekanälen.",
+              "Die meisten Deal-Verluste treten vor der Zahlungsphase auf."
+            ]
+          }
+        },
+        {
+          "id": "payments_distribution",
+          "type": "donut_chart",
+          "title": {
+            "ru": "Успешные сделки по типу оплаты",
+            "en": "Successful Deals by Payment Type",
+            "de": "Erfolgreiche Deals nach Zahlungsart"
+          },
+          "description": {
+            "ru": "Кольцевая диаграмма показывает распределение успешных сделок по типу оплаты.",
+            "en": "The donut chart shows the distribution of successful deals by payment type.",
+            "de": "Das Donut-Diagramm zeigt die Verteilung erfolgreicher Deals nach Zahlungsart."
+          },
+          "insights": {
+            "ru": [
+              "Основную долю выручки формируют рекуррентные платежи."
+            ],
+            "en": [
+              "Recurring payments account for the majority of revenue."
+            ],
+            "de": [
+              "Wiederkehrende Zahlungen machen den Großteil des Umsatzes aus."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "marketing_analytics",
+      "title": {
+        "ru": "Маркетинговая аналитика",
+        "en": "Marketing Analytics",
+        "de": "Marketing-Analytik"
+      },
+      "charts": [
+        {
+          "id": "campaign_landscape",
+          "type": "bubble_chart",
+          "title": {
+            "ru": "Эффективность кампаний: сделки, конверсия и ROI",
+            "en": "Campaign Effectiveness: Deals, Conversion, and ROI",
+            "de": "Kampagneneffektivität: Deals, Conversion und ROI"
+          },
+          "description": {
+            "ru": "Пузырьковая диаграмма отображает количество сделок, коэффициент конверсии и рентабельность инвестиций для каждого канала.",
+            "en": "The bubble chart displays the number of deals, conversion rate, and ROI for each marketing channel.",
+            "de": "Das Blasendiagramm zeigt die Anzahl der Deals, die Konversionsrate und den ROI für jeden Marketingkanal."
+          },
+          "insights": {
+            "ru": [
+              "Канал Organic сочетает высокое количество сделок и высокий уровень конверсии.",
+              "Webinar демонстрирует одну из самых высоких конверсий при относительно небольшом объёме сделок.",
+              "Facebook Ads и Google Ads обеспечивают наибольшее количество сделок, однако их конверсия находится на уровне медианы.",
+              "SMM показывает конверсию выше медианы при среднем количестве сделок.",
+              "TikTok Ads и YouTube Ads располагаются ниже медианы по уровню конверсии.",
+              "Offline и Partnership характеризуются низкими показателями как по количеству сделок, так и по конверсии."
+            ],
+            "en": [
+              "The Organic channel combines a high number of deals with a high conversion rate.",
+              "Webinar shows one of the highest conversion rates despite a relatively low deal volume.",
+              "Facebook Ads and Google Ads generate the highest number of deals, while their conversion rates are around the median.",
+              "SMM demonstrates a conversion rate above the median with a moderate number of deals.",
+              "TikTok Ads and YouTube Ads are positioned below the median conversion rate.",
+              "Offline and Partnership channels show low values in both deal volume and conversion rate."
+            ],
+            "de": [
+              "Der Organic-Kanal kombiniert eine hohe Anzahl an Deals mit einer hohen Konversionsrate.",
+              "Webinar weist eine der höchsten Konversionsraten bei vergleichsweise geringem Deal-Volumen auf.",
+              "Facebook Ads und Google Ads erzielen die höchste Anzahl an Deals, während ihre Konversionsrate etwa auf Median-Niveau liegt.",
+              "SMM zeigt eine über dem Median liegende Konversionsrate bei einer mittleren Anzahl an Deals.",
+              "TikTok Ads und YouTube Ads liegen unter dem Median der Konversionsrate.",
+              "Offline- und Partnership-Kanäle weisen niedrige Werte sowohl bei der Deal-Anzahl als auch bei der Konversionsrate auf."
+            ]
+          }
+        },
+        {
+          "id": "source_matrix",
+          "type": "bubble_chart",
+          "title": {
+            "ru": "Матрица источников: расходы, лиды и выручка",
+            "en": "Source Matrix: Spend, Leads, and Revenue",
+            "de": "Quellenmatrix: Kosten, Leads und Umsatz"
+          },
+          "description": {
+            "ru": "Диаграмма показывает взаимосвязь между маркетинговыми расходами, количеством успешных лидов и выручкой.",
+            "en": "The chart illustrates the relationship between marketing spend, successful leads, and revenue.",
+            "de": "Das Diagramm zeigt den Zusammenhang zwischen Marketingausgaben, erfolgreichen Leads und Umsatz."
+          },
+          "insights": {
+            "ru": [
+              "Google Ads и Facebook Ads обеспечивают наибольшую выручку.",
+              "Органический трафик демонстрирует высокую эффективность при низких затратах."
+            ],
+            "en": [
+              "Google Ads and Facebook Ads generate the highest revenue.",
+              "Organic traffic shows high efficiency with low costs."
+            ],
+            "de": [
+              "Google Ads und Facebook Ads erzielen den höchsten Umsatz.",
+              "Organischer Traffic zeigt eine hohe Effizienz bei niedrigen Kosten."
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
