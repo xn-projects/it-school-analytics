@@ -84,7 +84,15 @@ assistant_panel = dbc.Card(
                         clearable=False,
                         className='mb-2'
                     ),
+                    dcc.Input(
+                        id='assistant-input',
+                        type='text',
+                        placeholder='Ask a question about the dashboard...',
+                        className='mb-2',
+                        style={'width': '100%'}
+                    ),
 
+                    dbc.Button('Send', id='assistant-send', color='primary', className='mb-2'),
                     dbc.Button('Show Filters', id='btn-filters', className='me-2'),
                     dbc.Button('Show KPI', id='btn-kpi', className='me-2'),
                     dbc.Button('Show Insights', id='btn-insights'),
@@ -145,6 +153,7 @@ app.layout = dbc.Container([
         style={'marginBottom': '25px'}
     ),
     assistant_panel,
+    dcc.Store(id='assistant-history', data=[]),
     dbc.Tabs([
 
         dbc.Tab(
