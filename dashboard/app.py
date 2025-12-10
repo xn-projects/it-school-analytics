@@ -9,6 +9,7 @@ import dash_bootstrap_components as dbc
 from utils.my_palette import get_my_palette
 from .charts import build_sankey_chart, build_payment_pie, build_campaign_scatter, build_campaign_scatter_new
 from .data_prep import load_data, compute_kpi, prepare_campaign_summary
+from chatbot_engine import (get_sales_filters_text, get_sales_kpi_text, get_marketing_insights_text)
 
 deals, calls, contacts, spend = load_data()
 
@@ -59,6 +60,55 @@ def make_kpi_cards(total, success, conversion_rate, lost, closed, revenue):
     ], className='mb-4')
 
 
+assistant_panel = dbc.Card(
+    [
+        dbc.Button(
+            'Analytics Assistant',
+            id='assistant-toggle',
+            color='secondary',
+            className='mb-2',
+            n_clicks=0
+        ),
+
+        dbc.Collapse(
+            dbc.CardBody(
+                [
+                    dcc.Dropdown(
+                        id='assistant-lang',
+                        options=[
+                            {'label': 'Русский', 'value': 'ru'},
+                            {'label': 'English', 'value': 'en'},
+                            {'label': 'Deutsch', 'value': 'de'},
+                        ],
+                        value='en',
+                        clearable=False,
+                        className='mb-2'
+                    ),
+
+                    dbc.Button('Show Filters', id='btn-filters', className='me-2'),
+                    dbc.Button('Show KPI', id='btn-kpi', className='me-2'),
+                    dbc.Button('Show Insights', id='btn-insights'),
+
+                    html.Hr(),
+
+                    html.Pre(
+                        id='assistant-output',
+                        style={
+                            'whiteSpace': 'pre-wrap',
+                            'fontSize': '14px',
+                            'maxHeight': '300px',
+                            'overflowY': 'auto'
+                        }
+                    )
+                ]
+            ),
+            id='assistant-collapse',
+            is_open=False
+        )
+    ],
+    style={'marginBottom': '20px'}
+)
+
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
 server = app.server
 
@@ -94,7 +144,7 @@ app.layout = dbc.Container([
         ),
         style={'marginBottom': '25px'}
     ),
-
+    assistant_panel,
     dbc.Tabs([
 
         dbc.Tab(
@@ -167,6 +217,43 @@ app.layout = dbc.Container([
         )
     ])
 ], fluid=True)
+
+@app.callback(
+    Output('assistant-collapse', 'is_open'),
+    Input('assistant-toggle', 'n_clicks'),
+    State('assistant-collapse', 'is_open'),
+)
+def toggle_assistant(n, is_open):
+    if n:
+        return not is_open
+    return is_open
+
+@app.callback(
+    Output('assistant-output', 'children'),
+    [
+        Input('btn-filters', 'n_clicks'),
+        Input('btn-kpi', 'n_clicks'),
+        Input('btn-insights', 'n_clicks'),
+    ],
+    State('assistant-lang', 'value'),
+)
+def update_assistant(filters, kpi, insights, lang):
+    ctx = dash.callback_context
+    if not ctx.triggered:
+        return ''
+
+    button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+    if button_id == 'btn-filters':
+        return get_sales_filters_text(lang)
+
+    if button_id == 'btn-kpi':
+        return get_sales_kpi_text(lang)
+
+    if button_id == 'btn-insights':
+        return get_marketing_insights_text(lang)
+
+    return ''
 
 @app.callback(
     [
