@@ -391,3 +391,23 @@ def get_marketing_insights_text(lang: str) -> str:
             output.append('')
 
     return '\n'.join(output)
+
+
+def handle_user_message(text: str, lang: str, page_id: str) -> str:
+    t = text.lower()
+
+    if page_id == 'sales_analytics':
+        if 'kpi' in t or 'metrics' in t:
+            return get_sales_kpi_text(lang)
+        if 'filter' in t:
+            return get_sales_filters_text(lang)
+
+    if page_id == 'marketing_analytics':
+        if 'insight' in t or 'campaign' in t:
+            return get_marketing_insights_text(lang)
+
+    return {
+        'ru': 'Я могу рассказать про фильтры, KPI или выводы по графикам.',
+        'en': 'I can explain filters, KPIs, or chart insights.',
+        'de': 'Ich kann Filter, KPIs oder Diagramm-Erkenntnisse erklären.'
+    }[lang]
