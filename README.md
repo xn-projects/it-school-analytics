@@ -5,9 +5,42 @@ The goal is to explore business metrics such as leads, call performance, deals c
 
 ---
 
-## Live Dashboard
+## Interactive CRM Analytics Dashboard
 
 [Open the Dashboard](https://it-school-analytics.onrender.com) 
+
+---
+## Analysis Documentation Map
+
+### Dataset Understanding
+
+High-level overview of the CRM structure, entities, and business context.
+
+[CRM Dataset Documentation](docs/crm_dataset_documentation.md)
+
+### Data Cleaning & Preparation
+
+Step-by-step transformation of raw CRM data into clean, analysis-ready datasets.
+
+- [Data Preparation](notebooks/01_1_data_preparation.md)
+- [Calls Cleaning](notebooks/01_2_calls_cleaning.md)
+- [Contacts Cleaning](notebooks/01_3_contacts_cleaning.md)
+- [Spend Cleaning](notebooks/01_4_spend_cleaning.md)
+- [Deals Cleaning](notebooks/01_5_deals_cleaning.md)
+
+### Descriptive Analytics
+
+Exploration of key CRM metrics and baseline business performance.
+- [Calls Description](notebooks/02_1_calls_descriptive_stats.md)
+- [Contacts Description](notebooks/02_2_contacts_descriptive_stats.md)
+- [Spend Description](notebooks/02_3_spend_descriptive_stats.md)
+- [Deals Description](notebooks/02_4_deals_descriptive_stats.md)
+
+### Product Analytics
+
+Product-level performance and monetization insights.
+
+[Product Analysis](product_analytics/04_product_analyse.md)
 
 ---
 
