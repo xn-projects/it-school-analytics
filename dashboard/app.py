@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import dash
 from dash import dcc, html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 
 from utils.my_palette import get_my_palette
