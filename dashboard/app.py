@@ -106,7 +106,7 @@ assistant_panel = dbc.Card(
                         clearable=False,
                         className='mb-2'
                     ),
-                    html.Div(id="assistant-buttons", className="mb-2"),
+                    html.Div(id='assistant-buttons', className='mb-2'),
                     html.Hr(),
                     html.Pre(
                         id='assistant-output',
