@@ -11,6 +11,28 @@ from .charts import build_sankey_chart, build_payment_pie, build_campaign_scatte
 from .data_prep import load_data, compute_kpi, prepare_campaign_summary
 from .chatbot_engine import get_sales_filters_text, get_sales_kpi_text, get_marketing_insights_text, get_sales_insights_text
 
+
+BUTTON_LABELS = {
+    'ru': {
+        'filters': 'Объяснить фильтры',
+        'kpi': 'Объяснить KPI',
+        'sales': 'Объяснить графики продаж',
+        'marketing': 'Объяснить маркетинговые графики'
+    },
+    'en': {
+        'filters': 'Explain Filters',
+        'kpi': 'Explain KPI',
+        'sales': 'Explain Sales Charts',
+        'marketing': 'Explain Marketing Charts'
+    },
+    'de': {
+        'filters': 'Filter erklären',
+        'kpi': 'KPI erklären',
+        'sales': 'Verkaufsdiagramme erklären',
+        'marketing': 'Marketingdiagramme erklären'
+    }
+}
+
 deals, calls, contacts, spend = load_data()
 
 colors = get_my_palette(as_dict=True)
@@ -84,14 +106,8 @@ assistant_panel = dbc.Card(
                         clearable=False,
                         className='mb-2'
                     ),
-                    
-                    dbc.Button('Show Filters', id='btn-filters', className='me-2'),
-                    dbc.Button('Show KPI', id='btn-kpi', className='me-2'),
-                    dbc.Button('Show Sales Insights', id='btn-sales-insights', className='me-2'),
-                    dbc.Button('Show Marketing Insights', id='btn-insights'),
-
+                    html.Div(id="assistant-buttons", className="mb-2"),
                     html.Hr(),
-
                     html.Pre(
                         id='assistant-output',
                         style={
@@ -219,6 +235,21 @@ app.layout = dbc.Container([
     ])
 ], fluid=True)
 
+
+@app.callback(
+    Output('assistant-buttons', 'children'),
+    Input('assistant-lang', 'value')
+)
+def update_buttons(lang):
+    labels = BUTTON_LABELS.get(lang, BUTTON_LABELS['en'])
+
+    return html.Div([
+        dbc.Button(labels['filters'], id='btn-filters', className='me-2'),
+        dbc.Button(labels['kpi'], id='btn-kpi', className='me-2'),
+        dbc.Button(labels['sales'], id='btn-sales-insights', className='me-2'),
+        dbc.Button(labels['marketing'], id='btn-insights', className='me-2'),
+    ])
+    
 
 @app.callback(
     Output('assistant-collapse', 'is_open'),
