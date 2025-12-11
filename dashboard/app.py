@@ -92,7 +92,6 @@ assistant_panel = dbc.Card(
                         style={'width': '100%'}
                     ),
 
-                    dbc.Button('Send', id='assistant-send', color='primary', className='mb-2'),
                     dbc.Button('Show Filters', id='btn-filters', className='me-2'),
                     dbc.Button('Show KPI', id='btn-kpi', className='me-2'),
                     dbc.Button('Show Sales Insights', id='btn-sales-insights', className='me-2'),
@@ -153,6 +152,7 @@ app.layout = dbc.Container([
         ),
         style={'marginBottom': '25px'}
     ),
+    assistant_panel,
     dbc.Tabs([
 
         dbc.Tab(
@@ -223,9 +223,9 @@ app.layout = dbc.Container([
                 ])
             ]
         )
-    ]),
-    assistant_panel
+    ])
 ], fluid=True)
+
 
 @app.callback(
     Output('assistant-collapse', 'is_open'),
