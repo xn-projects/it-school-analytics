@@ -9,7 +9,7 @@ import dash_bootstrap_components as dbc
 from utils.my_palette import get_my_palette
 from .charts import build_sankey_chart, build_payment_pie, build_campaign_scatter, build_campaign_scatter_new
 from .data_prep import load_data, compute_kpi, prepare_campaign_summary
-from .chatbot_engine import get_sales_filters_text, get_sales_kpi_text, get_marketing_insights_text, handle_user_message
+from .chatbot_engine import get_sales_filters_text, get_sales_kpi_text, get_marketing_insights_text, get_sales_insights_text
 
 deals, calls, contacts, spend = load_data()
 
@@ -95,7 +95,8 @@ assistant_panel = dbc.Card(
                     dbc.Button('Send', id='assistant-send', color='primary', className='mb-2'),
                     dbc.Button('Show Filters', id='btn-filters', className='me-2'),
                     dbc.Button('Show KPI', id='btn-kpi', className='me-2'),
-                    dbc.Button('Show Insights', id='btn-insights'),
+                    dbc.Button('Show Sales Insights', id='btn-sales-insights', className='me-2'),
+                    dbc.Button('Show Marketing Insights', id='btn-insights'),
 
                     html.Hr(),
 
@@ -152,8 +153,6 @@ app.layout = dbc.Container([
         ),
         style={'marginBottom': '25px'}
     ),
-    assistant_panel,
-    dcc.Store(id='assistant-history', data=[]),
     dbc.Tabs([
 
         dbc.Tab(
@@ -224,7 +223,8 @@ app.layout = dbc.Container([
                 ])
             ]
         )
-    ])
+    ]),
+    assistant_panel
 ], fluid=True)
 
 @app.callback(
@@ -237,16 +237,18 @@ def toggle_assistant(n, is_open):
         return not is_open
     return is_open
 
+
 @app.callback(
     Output('assistant-output', 'children'),
     [
         Input('btn-filters', 'n_clicks'),
         Input('btn-kpi', 'n_clicks'),
+        Input('btn-sales-insights', 'n_clicks'),
         Input('btn-insights', 'n_clicks'),
     ],
     State('assistant-lang', 'value'),
 )
-def update_assistant(filters, kpi, insights, lang):
+def update_assistant(filters, kpi, sales_insights, insights, lang):
     ctx = dash.callback_context
     if not ctx.triggered:
         return ''
@@ -259,30 +261,13 @@ def update_assistant(filters, kpi, insights, lang):
     if button_id == 'btn-kpi':
         return get_sales_kpi_text(lang)
 
+    if button_id == 'btn-sales-insights':
+        return get_sales_insights_text(lang)
+
     if button_id == 'btn-insights':
         return get_marketing_insights_text(lang)
 
     return ''
-
-@app.callback(
-    Output('assistant-output', 'children'),
-    Output('assistant-history', 'data'),
-    Input('assistant-send', 'n_clicks'),
-    State('assistant-input', 'value'),
-    State('assistant-history', 'data'),
-    State('assistant-lang', 'value'),
-)
-def chat_with_assistant(n, text, history, lang):
-    if not n or not text:
-        return dash.no_update, history
-
-    page_id = 'sales_analytics'
-    reply = handle_user_message(text, lang, page_id)
-
-    history.append(f'You: {text}')
-    history.append(f'Assistant: {reply}')
-
-    return '\n\n'.join(history), history
 
 
 @app.callback(
