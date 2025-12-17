@@ -2,7 +2,7 @@ import os
 import json
 
 BASE_DIR = os.path.dirname(__file__)
-JSON_PATH = os.path.join(BASE_DIR, 'chatbot.json')
+JSON_PATH = os.path.join(BASE_DIR, 'analytics_assistant.json')
 
 with open(JSON_PATH, 'r', encoding='utf-8') as f:
     DASHBOARD = json.load(f)
