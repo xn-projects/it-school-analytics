@@ -83,16 +83,16 @@
             "to": "2024-12-11",
             "label": {
               "ru": [
-                "С 1 июля 2023 года по 11 декабря 2024 года",
-                "Можно внутри этого периода выбрать любой диапазон для анализа"
+                "Данные охватывают период c 1 июля 2023 года по 11 декабря 2024 года",
+                "В рамках этого периода доступен выбор любого пользовательского диапазона для анализа"
               ],
               "en": [
-                "From July 1, 2023 to December 11, 2024",
-                "Any sub-range within this period can be selected for analysis"
+                "The data covers the period from July 1, 2023 to December 11, 2024",
+                "Within this period, any custom date range can be selected for analysis"
               ],
               "de": [
-                "Vom 1. Juli 2023 bis zum 11. Dezember 2024",
-                "Innerhalb dieses Zeitraums kann ein beliebiger Zeitraum für die Analyse ausgewählt werden"
+                "Die Daten umfassen den Zeitraum vom 1. Juli 2023 bis zum 11. Dezember 2024",
+                "Innerhalb dieses Zeitraums kann ein beliebiger benutzerdefinierter Zeitraum für die Analyse ausgewählt werden"
               ]
             }
           }
