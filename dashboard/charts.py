@@ -306,6 +306,9 @@ def build_campaign_scatter_new(campaign_summary):
 
     df_plot['size_safe'] = df_plot['Revenue'].clip(lower=1)
 
+    median_x = df_plot['Spend'].median()
+    median_y = df_plot['Leads'].median()
+    
     palette = get_my_palette(as_dict=True)
     discrete_colors = [
         palette['Tomato'][3],
@@ -315,7 +318,7 @@ def build_campaign_scatter_new(campaign_summary):
         palette['Yellowsoft'][3],
         palette['Neutral'][3]
     ]
-
+    
     fig = px.scatter(
         df_plot,
         x='Spend',
@@ -327,7 +330,8 @@ def build_campaign_scatter_new(campaign_summary):
         color_discrete_sequence=discrete_colors,
         size_max=55,
         height=500,
-        title='Source Matrix: Spend vs Successful Leads vs Revenue'
+        title='Source Matrix: Spend vs Successful Leads vs Revenue',
+        title_x=0.5
     )
 
     fig.update_traces(
@@ -341,13 +345,39 @@ def build_campaign_scatter_new(campaign_summary):
             '<b>%{hovertext}</b><br>'
             'Spend: €%{x:,.0f}<br>'
             'Successful Leads: %{y}<br>'
-            'Revenue: €%{customdata[0]:,.0f}<extra></extra>'
+            'Revenue: €%{customdata[0]:,.0f}'
+            '<extra></extra>'
         )
     )
 
+    fig.add_vline(
+        x=median_x,
+        line_dash='dot',
+        line_width=2,
+        line_color=get_my_palette(group='Cornflower')[3],
+        layer='below',
+        annotation_text='Median Spend',
+        annotation_position='bottom right',
+        annotation_font=dict(size=11, color='#333'),
+        annotation_bgcolor='rgba(255,255,255,0.85)',
+        annotation_bordercolor='rgba(0,0,0,0.15)'
+    )
+
+    fig.add_hline(
+        y=median_y,
+        line_dash='dot',
+        line_width=2,
+        line_color=get_my_palette(group='Tomato')[3],
+        layer='below',
+        annotation_text='Median Leads',
+        annotation_position='top right',
+        annotation_font=dict(size=11, color='#333'),
+        annotation_bgcolor='rgba(255,255,255,0.85)',
+        annotation_bordercolor='rgba(0,0,0,0.15)'
+    )
+
     fig.update_layout(
-        template='plotly_white',
-        plot_bgcolor='white',
+        plot_bgcolor='rgb(248,248,245)',
         hoverlabel=dict(bgcolor='white'),
         font=dict(size=12, color='#333'),
         xaxis=dict(
