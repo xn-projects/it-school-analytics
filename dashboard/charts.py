@@ -253,7 +253,14 @@ def build_campaign_scatter(campaign_summary):
             tickfont=dict(size=11)
         ),
         plot_bgcolor='rgb(248,248,245)',
-        coloraxis_colorbar=dict(title='ROI (%)'),
+        coloraxis_colorbar=dict(
+            title='ROI (%)',
+            thickness=10,
+            len=0.6,
+            tickfont=dict(size=9),
+            titlefont=dict(size=10),
+            ticks='outside'
+        ),
         font=dict(size=12, color='#333'),
         hoverlabel=dict(bgcolor='white', font_size=11),
         margin=dict(l=60, r=60, t=70, b=60)
