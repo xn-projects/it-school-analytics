@@ -330,8 +330,7 @@ def build_campaign_scatter_new(campaign_summary):
         color_discrete_sequence=discrete_colors,
         size_max=55,
         height=500,
-        title='Source Matrix: Spend vs Successful Leads vs Revenue',
-        title_x=0.5
+        title='Source Matrix: Spend vs Successful Leads vs Revenue'
     )
 
     fig.update_traces(
@@ -377,6 +376,7 @@ def build_campaign_scatter_new(campaign_summary):
     )
 
     fig.update_layout(
+        title_x=0.5,
         plot_bgcolor='rgb(248,248,245)',
         hoverlabel=dict(bgcolor='white'),
         font=dict(size=12, color='#333'),
