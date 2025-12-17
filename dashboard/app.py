@@ -9,7 +9,7 @@ import dash_bootstrap_components as dbc
 from utils.my_palette import get_my_palette
 from .charts import build_sankey_chart, build_payment_pie, build_campaign_scatter, build_campaign_scatter_new
 from .data_prep import load_data, compute_kpi, prepare_campaign_summary
-from .chatbot_engine import get_sales_filters_text, get_sales_kpi_text, get_marketing_insights_text, get_sales_insights_text
+from .assistant_engine import get_sales_filters_text, get_sales_kpi_text, get_marketing_insights_text, get_sales_insights_text
 
 
 BUTTON_LABELS = {
