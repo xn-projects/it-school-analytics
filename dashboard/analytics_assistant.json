@@ -7,8 +7,8 @@
       "de": "IT-Schul-Analytik"
     },
     "description": {
-      "ru": "Дашборд предназначен для анализа продаж, конверсии клиентов и динамики выручки IT-школы.",
-      "en": "This dashboard analyzes sales performance, customer conversion, and revenue dynamics of the IT School.",
+      "ru": "Дашборд предназначен для анализа продаж, клиентской конверсии и динамики выручки IT-школы.",
+      "en": "This dashboard analyzes sales performance, customer conversion, and revenue dynamics of the IT school.",
       "de": "Dieses Dashboard analysiert die Verkaufsleistung, die Kundenkonversion und die Umsatzentwicklung der IT-Schule."
     }
   },
@@ -29,23 +29,52 @@
             "en": "Course",
             "de": "Kurs"
           },
-          "options": {
-            "ru": [
-              "Цифровой Маркетинг",
-              "Веб Разработчик",
-              "UX/UI дизайн"
-            ],
-            "en": [
-              "Digital Marketing",
-              "Web Developer",
-              "UX/UI Design"
-            ],
-            "de": [
-              "Digital Marketing",
-              "Web Developer",
-              "UX/UI Design"
-            ]
-          }
+          "description": {
+            "ru": "Фильтр используется для выбора конкретного образовательного курса, что позволяет анализировать показатели обучения по отдельным направлениям и сравнивать их между собой.",
+            "en": "This filter is used to select a specific educational course, allowing analysis and comparison of learning metrics across different study programs.",
+            "de": "Dieser Filter dient der Auswahl eines bestimmten Bildungskurses und ermöglicht die Analyse sowie den Vergleich von Kennzahlen zwischen verschiedenen Ausbildungsrichtungen."
+          },
+          "options": [
+            {
+              "value": "digital_marketing",
+              "label": {
+                "ru": "Цифровой маркетинг",
+                "en": "Digital Marketing",
+                "de": "Digital Marketing"
+              },
+              "description": {
+                "ru": "Курс, направленный на изучение инструментов цифрового маркетинга, аналитики, продвижения продуктов и работы с онлайн-каналами.",
+                "en": "A course focused on digital marketing tools, analytics, product promotion, and working with online channels.",
+                "de": "Ein Kurs mit Schwerpunkt auf digitalen Marketing-Tools, Analytik, Produktpromotion und Online-Kanälen."
+              }
+            },
+            {
+              "value": "web_developer",
+              "label": {
+                "ru": "Веб-разработчик",
+                "en": "Web Developer",
+                "de": "Web Developer"
+              },
+              "description": {
+                "ru": "Курс, ориентированный на изучение основ веб-разработки, программирования и создания веб-приложений.",
+                "en": "A course focused on learning the fundamentals of web development, programming, and building web applications.",
+                "de": "Ein Kurs mit Fokus auf die Grundlagen der Webentwicklung, Programmierung und Erstellung von Webanwendungen."
+              }
+            },
+            {
+              "value": "ux_ui_design",
+              "label": {
+                "ru": "UX/UI дизайн",
+                "en": "UX/UI Design",
+                "de": "UX/UI Design"
+              },
+              "description": {
+                "ru": "Курс, посвящённый проектированию пользовательского опыта и интерфейсов с акцентом на удобство использования и визуальное восприятие.",
+                "en": "A course dedicated to user experience and interface design, with a focus on usability and visual perception.",
+                "de": "Ein Kurs, der dem Design von Benutzererlebnis und Benutzeroberflächen mit Fokus auf Usability und visuelle Wahrnehmung gewidmet ist."
+              }
+            }
+          ]
         },
         {
           "id": "schedule",
@@ -55,19 +84,15 @@
             "en": "Schedule",
             "de": "Zeitplan"
           },
+          "description": {
+            "ru": "Фильтр используется для разделения курсов по формату обучения в зависимости от времени проведения занятий, что позволяет анализировать показатели дневных и вечерних курсов отдельно.",
+            "en": "This filter is used to separate courses by learning format based on class schedule, allowing separate analysis of daytime and evening courses.",
+            "de": "Dieser Filter dient der Trennung von Kursen nach Unterrichtsformat basierend auf der Unterrichtszeit und ermöglicht eine separate Analyse von Tages- und Abendkursen."
+          },
           "options": {
-            "ru": [
-              "Утро",
-              "Вечер"
-            ],
-            "en": [
-              "Morning",
-              "Evening"
-            ],
-            "de": [
-              "Morgen",
-              "Abend"
-            ]
+            "ru": ["Утро", "Вечер"],
+            "en": ["Morning", "Evening"],
+            "de": ["Morgen", "Abend"]
           }
         },
         {
@@ -83,16 +108,16 @@
             "to": "2024-12-11",
             "label": {
               "ru": [
-                "Данные охватывают период c 1 июля 2023 года по 11 декабря 2024 года",
-                "В рамках этого периода доступен выбор любого пользовательского диапазона для анализа"
+                "Данные охватывают период с 1 июля 2023 года по 11 декабря 2024 года.",
+                "В рамках этого периода доступен выбор любого пользовательского диапазона для анализа."
               ],
               "en": [
-                "The data covers the period from July 1, 2023 to December 11, 2024",
-                "Within this period, any custom date range can be selected for analysis"
+                "The data covers the period from July 1, 2023 to December 11, 2024.",
+                "Within this period, any custom date range can be selected for analysis."
               ],
               "de": [
-                "Die Daten umfassen den Zeitraum vom 1. Juli 2023 bis zum 11. Dezember 2024",
-                "Innerhalb dieses Zeitraums kann ein beliebiger benutzerdefinierter Zeitraum für die Analyse ausgewählt werden"
+                "Die Daten umfassen den Zeitraum vom 1. Juli 2023 bis zum 11. Dezember 2024.",
+                "Innerhalb dieses Zeitraums kann ein beliebiger benutzerdefinierter Zeitraum für die Analyse ausgewählt werden."
               ]
             }
           }
@@ -114,6 +139,11 @@
                 "ru": "Всего сделок",
                 "en": "Total Deals",
                 "de": "Gesamtanzahl der Deals"
+              },
+              "description": {
+                "ru": "Отражает общий объём активности продаж за выбранный период.",
+                "en": "Represents the overall volume of sales activity for the selected period.",
+                "de": "Zeigt das gesamte Aktivitätsvolumen des Vertriebs im ausgewählten Zeitraum."
               }
             },
             {
@@ -122,6 +152,11 @@
                 "ru": "Успешные сделки",
                 "en": "Successful Deals",
                 "de": "Erfolgreiche Deals"
+              },
+              "description": {
+                "ru": "Количество сделок, завершившихся продажей. Показатель отражает результативность работы отдела продаж и напрямую влияет на формирование выручки.",
+                "en": "The number of deals successfully completed with a sale. This metric reflects sales performance and directly impacts revenue generation.",
+                "de": "Anzahl der Deals, die erfolgreich mit einem Verkauf abgeschlossen wurden. Diese Kennzahl spiegelt die Leistungsfähigkeit des Vertriebs wider und wirkt sich direkt auf den Umsatz aus."
               }
             },
             {
@@ -130,6 +165,11 @@
                 "ru": "Коэффициент конверсии",
                 "en": "Conversion Rate",
                 "de": "Konversionsrate"
+              },
+              "description": {
+                "ru": "Показывает долю успешных сделок от общего количества и характеризует эффективность воронки продаж.",
+                "en": "Shows the share of successful deals out of the total number, indicating sales funnel efficiency.",
+                "de": "Zeigt den Anteil erfolgreicher Abschlüsse an der Gesamtzahl und misst die Effizienz der Vertriebs-Pipeline."
               }
             },
             {
@@ -138,6 +178,11 @@
                 "ru": "Потерянные сделки",
                 "en": "Lost Deals",
                 "de": "Verlorene Deals"
+              },
+              "description": {
+                "ru": "Количество сделок, которые не были доведены до продажи. Показатель используется для анализа причин отказов и выявления слабых мест в воронке продаж.",
+                "en": "The number of deals that did not result in a sale. This metric is used to analyze loss reasons and identify weaknesses in the sales funnel.",
+                "de": "Anzahl der Deals, die nicht zu einem Verkauf geführt haben. Diese Kennzahl dient der Analyse von Verlustursachen und der Identifikation von Schwachstellen in der Vertriebs-Pipeline."
               }
             },
             {
@@ -146,6 +191,11 @@
                 "ru": "Закрытые сделки",
                 "en": "Closed Deals",
                 "de": "Abgeschlossene Deals"
+              },
+              "description": {
+                "ru": "Количество сделок, по которым принято окончательное решение — как успешное, так и неуспешное. Показатель характеризует завершённость процессов продаж.",
+                "en": "The number of deals for which a final decision has been made, including both successful and unsuccessful outcomes. This metric reflects process completion in sales.",
+                "de": "Anzahl der Deals, für die eine endgültige Entscheidung getroffen wurde – sowohl erfolgreiche als auch erfolglose. Diese Kennzahl beschreibt den Abschlussgrad der Vertriebsprozesse."
               }
             },
             {
@@ -154,13 +204,18 @@
                 "ru": "Выручка",
                 "en": "Revenue",
                 "de": "Umsatz"
+              },
+              "description": {
+                "ru": "Отражает суммарный финансовый результат успешных сделок.",
+                "en": "Represents the total financial outcome of successful deals.",
+                "de": "Stellt das gesamte finanzielle Ergebnis erfolgreicher Abschlüsse dar."
               }
             }
           ],
           "description": {
-            "ru": "Карточки KPI отражают общее количество сделок, успешные и потерянные сделки, уровень конверсии и суммарную выручку.",
-            "en": "KPI cards display total deals, successful and lost deals, conversion rate, and total revenue.",
-            "de": "KPI-Karten zeigen die Gesamtanzahl der Deals, erfolgreiche und verlorene Abschlüsse, die Konversionsrate und den Gesamtumsatz."
+            "ru": "Карточки KPI отражают ключевые показатели эффективности воронки продаж: общее количество сделок показывает активность продаж, успешные и потерянные сделки — качество работы с лидами, уровень конверсии — эффективность перехода между этапами, а суммарная выручка — финансовый результат.",
+            "en": "KPI cards represent key sales funnel performance metrics: total deals indicate sales activity, successful and lost deals reflect lead handling quality, conversion rate measures stage-to-stage efficiency, and total revenue shows the overall financial outcome.",
+            "de": "KPI-Karten stellen die wichtigsten Leistungskennzahlen der Vertriebs-Pipeline dar: Die Gesamtanzahl der Deals zeigt die Vertriebsaktivität, erfolgreiche und verlorene Abschlüsse spiegeln die Qualität der Lead-Bearbeitung wider, die Konversionsrate misst die Effizienz der Übergänge zwischen den Phasen und der Gesamtumsatz zeigt das finanzielle Ergebnis."
           }
         },
         {
@@ -172,7 +227,7 @@
             "de": "Deal-Flow: Quelle → Produkt → Phase"
           },
           "description": {
-            "ru": "Диаграмма Sankey показывает движение лидов от источников привлечения через продукты к финальным этапам обработки сделки.",
+            "ru": "Диаграмма Sankey визуализирует движение лидов от источников привлечения через продукты к финальным этапам обработки сделки.",
             "en": "The Sankey diagram visualizes lead movement from acquisition sources through products to final deal stages.",
             "de": "Das Sankey-Diagramm visualisiert den Fluss von Leads von Akquisequellen über Produkte bis zu den finalen Deal-Phasen."
           },
@@ -235,9 +290,9 @@
             "de": "Kampagneneffektivität: Deals, Conversion und ROI"
           },
           "description": {
-            "ru": "Пузырьковая диаграмма отображает количество сделок, коэффициент конверсии и рентабельность инвестиций для каждого канала.",
-            "en": "The bubble chart displays the number of deals, conversion rate, and ROI for each marketing channel.",
-            "de": "Das Blasendiagramm zeigt die Anzahl der Deals, die Konversionsrate und den ROI für jeden Marketingkanal."
+            "ru": "Пузырьковая диаграмма отображает количество сделок, коэффициент конверсии и рентабельность инвестиций для каждого маркетингового канала.",
+            "en": "The bubble chart displays the number of deals, conversion rate, and return on investment for each marketing channel.",
+            "de": "Das Blasendiagramm zeigt die Anzahl der Deals, die Konversionsrate und den Return on Investment für jeden Marketingkanal."
           },
           "insights": {
             "ru": [
@@ -276,8 +331,8 @@
           },
           "description": {
             "ru": "Диаграмма показывает взаимосвязь между маркетинговыми расходами, количеством успешных лидов и выручкой.",
-            "en": "The chart illustrates the relationship between marketing spend, successful leads, and revenue.",
-            "de": "Das Diagramm zeigt den Zusammenhang zwischen Marketingausgaben, erfolgreichen Leads und Umsatz."
+            "en": "The chart illustrates the relationship between marketing spend, the number of successful leads, and revenue.",
+            "de": "Das Diagramm zeigt den Zusammenhang zwischen Marketingausgaben, der Anzahl erfolgreicher Leads und dem Umsatz."
           },
           "insights": {
             "ru": [
