@@ -25,6 +25,7 @@ def get_sales_kpi_text(lang: str) -> str:
 
     for metric in chart.get('metrics', []):
         output.append(f"- {metric['label'][lang]}")
+        output.append(f"  {metric['description'][lang]}")
 
     return '\n'.join(output)
 
@@ -36,13 +37,25 @@ def get_sales_filters_text(lang: str) -> str:
     for flt in page.get('filters', []):
         output.append(flt['label'][lang])
 
+        if 'description' in flt:
+            output.append(f"  {flt['description'][lang]}")
+
         if flt['type'] == 'dropdown':
-            for opt in flt['options'][lang]:
-                output.append(f'- {opt}')
+            options = flt.get('options')
+
+            if isinstance(options, list):
+                for opt in options:
+                    output.append(f"- {opt['label'][lang]}")
+                    if 'description' in opt:
+                        output.append(f"  {opt['description'][lang]}")
+
+            elif isinstance(options, dict):
+                for opt in options.get(lang, []):
+                    output.append(f"- {opt}")
 
         if flt['type'] == 'date_range':
             for line in flt['range']['label'][lang]:
-                output.append(f'- {line}')
+                output.append(f"- {line}")
 
         output.append('')
 
