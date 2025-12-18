@@ -19,12 +19,12 @@ def get_sales_kpi_text(lang: str) -> str:
     chart = next(c for c in page['charts'] if c['type'] == 'kpi_cards')
 
     output = []
-    output.append(chart['title'][lang])
+    output.append(f"**{chart['title'][lang]}**")
     output.append(chart['description'][lang])
     output.append('')
 
     for metric in chart.get('metrics', []):
-        output.append(f"- {metric['label'][lang]}")
+        output.append(f"**- {metric['label'][lang]}**")
         output.append(f"  {metric['description'][lang]}")
 
     return '\n'.join(output)
@@ -35,7 +35,7 @@ def get_sales_filters_text(lang: str) -> str:
 
     output = []
     for flt in page.get('filters', []):
-        output.append(flt['label'][lang])
+        output.append(f"**{flt['label'][lang]}**")
 
         if 'description' in flt:
             output.append(f"  {flt['description'][lang]}")
@@ -45,7 +45,7 @@ def get_sales_filters_text(lang: str) -> str:
 
             if isinstance(options, list):
                 for opt in options:
-                    output.append(f"- {opt['label'][lang]}")
+                    output.append(f"**- {opt['label'][lang]}**")
                     if 'description' in opt:
                         output.append(f"  {opt['description'][lang]}")
 
@@ -69,7 +69,7 @@ def get_marketing_insights_text(lang: str) -> str:
     for chart in page['charts']:
         insights = chart.get('insights', {}).get(lang)
         if insights:
-            output.append(chart['title'][lang])
+            output.append(f"**{chart['title'][lang]}**")
             for i in insights:
                 output.append(f'- {i}')
             output.append('')
@@ -84,7 +84,7 @@ def get_sales_insights_text(lang: str) -> str:
     for chart in page['charts']:
         insights = chart.get('insights', {}).get(lang)
         if insights:
-            output.append(chart['title'][lang])
+            output.append(f"**{chart['title'][lang]}**")
             for i in insights:
                 output.append(f'- {i}')
             output.append('')
